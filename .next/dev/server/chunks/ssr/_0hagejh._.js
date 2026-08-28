@@ -20,18 +20,20 @@ function Reveal({ children, className = "", delay = 0 }) {
         className: className,
         initial: reduce ? false : {
             opacity: 0,
-            transform: "translateY(28px)"
+            transform: "translateY(58px) rotate(1.5deg)",
+            clipPath: "inset(0 0 20% 0)"
         },
         whileInView: {
             opacity: 1,
-            transform: "translateY(0px)"
+            transform: "translateY(0px) rotate(0deg)",
+            clipPath: "inset(0 0 0% 0)"
         },
         viewport: {
             once: true,
             amount: 0.18
         },
         transition: {
-            duration: 0.8,
+            duration: 1,
             delay,
             ease: [
                 0.16,
@@ -106,7 +108,7 @@ function WorkRail() {
     const section = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     const reduce = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$framer$2d$motion$2f$dist$2f$es$2f$utils$2f$reduced$2d$motion$2f$use$2d$reduced$2d$motion$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useReducedMotion"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        if (reduce || !section.current) return;
+        if (reduce || !section.current || window.matchMedia("(max-width: 767px)").matches) return;
         const context = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$gsap$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["gsap"].context(()=>{
             const scenes = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$gsap$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["gsap"].utils.toArray(".project-scene");
             scenes.forEach((scene, index)=>{

@@ -1,12 +1,5 @@
 {
-  "app": {
-    "[project]/app/about/page": [],
-    "[project]/app/ai-website-redesign/page": [],
-    "[project]/app/contact/page": [],
-    "[project]/app/page": [],
-    "[project]/app/services/page": [],
-    "[project]/app/work/page": []
-  },
+  "app": {},
   "appUsingSizeAdjust": false,
   "pages": {},
   "pagesUsingSizeAdjust": false
