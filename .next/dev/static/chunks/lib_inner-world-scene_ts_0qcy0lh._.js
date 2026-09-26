@@ -183,10 +183,25 @@ async function createInnerWorldScene(host, hero, signal) {
     }
     const geometry = repairHeadSymmetry(source.geometry);
     geometry.scale(.62, .62, .62);
+    const outerGeometry = geometry.clone();
+    const outerPosition = outerGeometry.getAttribute("position");
+    for(let index = 0; index < outerPosition.count; index++){
+        const x = outerPosition.getX(index), y = outerPosition.getY(index), z = outerPosition.getZ(index);
+        const ellipse = (x / .88) ** 2 + ((y - .94) / 1.32) ** 2;
+        if (z > .45 && ellipse < 1.18) outerPosition.setZ(index, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].lerp(z, 1.06, 1 - __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(ellipse, .92, 1.18)));
+    }
+    outerGeometry.computeVertexNormals();
     const position = geometry.getAttribute("position");
     // Hollow the scanned face while preserving the cranium, ears, neck and shoulders.
     for(let index = 0; index < position.count; index++){
-        const x = position.getX(index), y = position.getY(index), z = position.getZ(index);
+        let x = position.getX(index);
+        const y = position.getY(index), z = position.getZ(index);
+        // Blend the inward ear folds into the adjacent cranial curve. This moves
+        // protruding geometry outward instead of cutting holes in the inner wall.
+        const earWeight = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(Math.abs(x), .6, .74) * __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(y, .25, .5) * (1 - __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(y, .96, 1.25)) * __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(z, -.7, -.48) * (1 - __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(z, .42, .7));
+        const sideCurve = 1.26 * Math.sqrt(Math.max(0, 1 - ((z + .12) / 1.5) ** 2));
+        x = Math.sign(x) * __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].lerp(Math.abs(x), sideCurve, earWeight);
+        position.setX(index, x);
         const ellipse = (x / .88) ** 2 + ((y - .94) / 1.32) ** 2;
         if (z > .45 && ellipse < 1.18) {
             const blend = 1 - __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(ellipse, .92, 1.18);
@@ -197,6 +212,7 @@ async function createInnerWorldScene(host, hero, signal) {
     disposeObject(gltf.scene);
     if (signal.aborted) {
         geometry.dispose();
+        outerGeometry.dispose();
         throw new DOMException("Aborted", "AbortError");
     }
     let renderer;
@@ -208,6 +224,7 @@ async function createInnerWorldScene(host, hero, signal) {
         });
     } catch (error) {
         geometry.dispose();
+        outerGeometry.dispose();
         throw error;
     }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.25 : 1.5));
@@ -237,38 +254,47 @@ async function createInnerWorldScene(host, hero, signal) {
       vec3 hit=mix(uPortalCamera,vPortalPosition,t);
       if(pow(hit.x/.843,2.)+pow((hit.y-.94)/1.259,2.)>1.)discard;
     }`;
-    const bodyMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MeshPhysicalMaterial"]({
-        color: 0x141819,
-        metalness: .72,
-        roughness: .42,
-        clearcoat: .2,
-        envMapIntensity: .4,
-        side: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DoubleSide"]
-    });
-    bodyMaterial.onBeforeCompile = (shader)=>{
-        shader.uniforms.uThoughts = {
-            value: words
-        };
-        shader.uniforms.uTime = time;
-        shader.uniforms.uProgress = progressUniform;
-        shader.uniforms.uPortalCamera = portalCamera;
-        shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
-        shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-        shader.fragmentShader = `uniform sampler2D uThoughts; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
-        shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
+    const makeBodyMaterial = (interior)=>{
+        const bodyMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MeshPhysicalMaterial"]({
+            color: 0x141819,
+            metalness: .72,
+            roughness: .42,
+            clearcoat: .2,
+            envMapIntensity: .4,
+            side: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DoubleSide"]
+        });
+        bodyMaterial.onBeforeCompile = (shader)=>{
+            shader.uniforms.uThoughts = {
+                value: words
+            };
+            shader.uniforms.uTime = time;
+            shader.uniforms.uProgress = progressUniform;
+            shader.uniforms.uPortalCamera = portalCamera;
+            shader.uniforms.uInterior = {
+                value: interior
+            };
+            shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
+            shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
+            shader.fragmentShader = `uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+            shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
       if(faceEllipse<.91) discard;
-      // Outer ear and jaw surfaces must not project through the hollow interior.
-      // Retain the back-facing scan surfaces: these form the natural inner walls.
-      if(gl_FrontFacing && vThoughtPosition.z<1.085){
-        if(uPortalCamera.z<=1.075) discard;
-        float t=(uPortalCamera.z-1.075)/(uPortalCamera.z-vThoughtPosition.z);
-        vec3 hit=mix(uPortalCamera,vThoughtPosition,t);
-        if(pow(hit.x/.844,2.)+pow((hit.y-.94)/1.26,2.)<1.) discard;
+      bool inside=false;
+      if(vThoughtPosition.z<1.085){
+        if(uPortalCamera.z<=1.075) inside=true;
+        else {
+          float t=(uPortalCamera.z-1.075)/(uPortalCamera.z-vThoughtPosition.z);
+          vec3 hit=mix(uPortalCamera,vThoughtPosition,t);
+          inside=pow(hit.x/.844,2.)+pow((hit.y-.94)/1.26,2.)<1.;
+        }
       }
+      if(uInterior){
+        if(!inside || gl_FrontFacing) discard;
+
+      }else if(inside) discard;
     `);
-        shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", `
+            shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", `
       #include <emissivemap_fragment>
       vec2 thoughtUv=vThoughtUv;
       float row=floor(thoughtUv.y*64.);
@@ -278,9 +304,13 @@ async function createInnerWorldScene(host, hero, signal) {
       float warmth=smoothstep(.2,.65,uProgress)*.2;
       totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth);
     `);
+        };
+        bodyMaterial.customProgramCacheKey = ()=>interior ? "inner-head" : "outer-head";
+        return bodyMaterial;
     };
-    const body = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Mesh"](geometry, bodyMaterial);
-    figure.add(body);
+    const body = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Mesh"](outerGeometry, makeBodyMaterial(false));
+    const interiorBody = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Mesh"](geometry, makeBodyMaterial(true));
+    figure.add(body, interiorBody);
     const pmrem = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$module$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["PMREMGenerator"](renderer);
     const room = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$examples$2f$jsm$2f$environments$2f$RoomEnvironment$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["RoomEnvironment"]();
     const environment = pmrem.fromScene(room, .06);
@@ -412,7 +442,7 @@ async function createInnerWorldScene(host, hero, signal) {
         figure.rotation.set(-.015 + lookY * .05, lookX * .1 + Math.sin(elapsed * .12) * .012 * (1 - approach), 0);
         const cameraY = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].lerp(.25, .94 + figure.position.y, approach);
         const cameraZ = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["MathUtils"].lerp(mobile ? 9.9 : 8, 1.6, approach) - journey * 19;
-        body.visible = cameraZ > -1.8;
+        body.visible = interiorBody.visible = cameraZ > -1.8;
         edge.visible = cameraZ > 1.12;
         camera.position.set(0, cameraY, cameraZ);
         camera.lookAt(0, cameraY, cameraZ - 10);
