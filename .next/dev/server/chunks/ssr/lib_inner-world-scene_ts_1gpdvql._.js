@@ -256,7 +256,7 @@ async function createInnerWorldScene(host, hero, signal) {
     };
     const makeBodyMaterial = (interior)=>{
         const bodyMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MeshPhysicalMaterial"]({
-            color: interior ? 0x090e11 : 0x141819,
+            color: interior ? 0x010205 : 0x141819,
             metalness: interior ? .16 : .72,
             roughness: interior ? .76 : .48,
             clearcoat: interior ? .025 : .14,
@@ -277,7 +277,20 @@ async function createInnerWorldScene(host, hero, signal) {
             shader.uniforms.uReflectionPosition = reflectionPosition;
             shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
             shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-            shader.fragmentShader = `uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+            shader.fragmentShader = `
+      uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior;
+      uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress;
+      varying vec3 vThoughtPosition; varying vec2 vThoughtUv;
+      float cosmicHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      float cosmicNoise(vec2 p){
+        vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+        return mix(mix(cosmicHash(i),cosmicHash(i+vec2(1.,0.)),f.x),
+          mix(cosmicHash(i+vec2(0.,1.)),cosmicHash(i+vec2(1.,1.)),f.x),f.y);
+      }
+      float cosmicCloud(vec2 p){
+        return .5*cosmicNoise(p)+.25*cosmicNoise(p*2.03+7.1)+.125*cosmicNoise(p*4.07+19.3);
+      }
+    ` + shader.fragmentShader;
             shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
@@ -314,7 +327,21 @@ async function createInnerWorldScene(host, hero, signal) {
       totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth)*(uInterior ? .45 : 1.);
       if(uInterior){
         float glow=exp(-length(vThoughtPosition-uReflectionPosition)*2.2);
-        totalEmissiveRadiance+=vec3(.035,.065,.085)*glow;
+        // Cosmic pigment follows the real curved wall; the words remain a separate layer.
+        vec2 sky=vThoughtUv*vec2(190.,170.);
+        vec2 cell=floor(sky);
+        float seed=cosmicHash(cell);
+        vec2 starPosition=.15+.7*vec2(cosmicHash(cell+17.2),cosmicHash(cell+51.7));
+        float radius=length(fract(sky)-starPosition);
+        float star=exp(-radius*radius/(.005+fwidth(sky.x)*.016))*step(.85,seed);
+        star*=.75+.25*sin(uTime*.32+seed*63.);
+        vec2 cloudUv=vThoughtUv*10.+vec2(uTime*.003,0.);
+        float cloud=cosmicCloud(cloudUv);
+        float dust=cosmicCloud(cloudUv*3.2+cloud*2.);
+        float nebula=pow(max(0.,cloud-.18),1.4)*(.3+dust);
+        totalEmissiveRadiance+=vec3(.007,.012,.024)*glow;
+        totalEmissiveRadiance+=mix(vec3(.035,.06,.115),vec3(.075,.045,.1),dust)*nebula;
+        totalEmissiveRadiance+=vec3(.3,.36,.43)*star;
       }
     `);
         };

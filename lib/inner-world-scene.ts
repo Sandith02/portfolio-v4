@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { createCosmicGalaxy } from "./cosmic-galaxy";
 
 export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
 
@@ -170,11 +171,13 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const words = wordTexture(Math.min(renderer.capabilities.maxTextureSize, window.innerWidth < 768 ? 2048 : 4096));
   const time = { value: 0 };
   const progressUniform = { value: 0 };
+  const galaxy = createCosmicGalaxy(time, progressUniform);
+  scene.add(galaxy.mesh);
   const portalCamera = { value: new THREE.Vector3(0, .25, 8) };
   const reflectionPosition = { value: new THREE.Vector3(0, 1, .1) };
   const filmPointer = { value: new THREE.Vector2() };
   const makeBodyMaterial = (interior: boolean) => {
-  const bodyMaterial = new THREE.MeshPhysicalMaterial({ color: interior ? 0x090e11 : 0x141819, metalness: interior ? .16 : .72, roughness: interior ? .76 : .48, clearcoat: interior ? .025 : .14, clearcoatRoughness: interior ? .5 : .22, envMapIntensity: interior ? .008 : .3, side: THREE.DoubleSide });
+  const bodyMaterial = new THREE.MeshPhysicalMaterial({ color: interior ? 0x010205 : 0x141819, metalness: interior ? .16 : .72, roughness: interior ? .76 : .48, clearcoat: interior ? .025 : .14, clearcoatRoughness: interior ? .5 : .22, envMapIntensity: interior ? .008 : .3, side: THREE.DoubleSide });
   bodyMaterial.onBeforeCompile = shader => {
     shader.uniforms.uThoughts = { value: words };
     shader.uniforms.uTime = time;
@@ -184,7 +187,20 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     shader.uniforms.uReflectionPosition = reflectionPosition;
     shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-    shader.fragmentShader = `uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+    shader.fragmentShader = `
+      uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior;
+      uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress;
+      varying vec3 vThoughtPosition; varying vec2 vThoughtUv;
+      float cosmicHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      float cosmicNoise(vec2 p){
+        vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+        return mix(mix(cosmicHash(i),cosmicHash(i+vec2(1.,0.)),f.x),
+          mix(cosmicHash(i+vec2(0.,1.)),cosmicHash(i+vec2(1.,1.)),f.x),f.y);
+      }
+      float cosmicCloud(vec2 p){
+        return .5*cosmicNoise(p)+.25*cosmicNoise(p*2.03+7.1)+.125*cosmicNoise(p*4.07+19.3);
+      }
+    ` + shader.fragmentShader;
     shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
@@ -221,7 +237,21 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
       totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth)*(uInterior ? .45 : 1.);
       if(uInterior){
         float glow=exp(-length(vThoughtPosition-uReflectionPosition)*2.2);
-        totalEmissiveRadiance+=vec3(.035,.065,.085)*glow;
+        // Cosmic pigment follows the real curved wall; the words remain a separate layer.
+        vec2 sky=vThoughtUv*vec2(190.,170.);
+        vec2 cell=floor(sky);
+        float seed=cosmicHash(cell);
+        vec2 starPosition=.15+.7*vec2(cosmicHash(cell+17.2),cosmicHash(cell+51.7));
+        float radius=length(fract(sky)-starPosition);
+        float star=exp(-radius*radius/(.005+fwidth(sky.x)*.016))*step(.85,seed);
+        star*=.75+.25*sin(uTime*.32+seed*63.);
+        vec2 cloudUv=vThoughtUv*10.+vec2(uTime*.003,0.);
+        float cloud=cosmicCloud(cloudUv);
+        float dust=cosmicCloud(cloudUv*3.2+cloud*2.);
+        float nebula=pow(max(0.,cloud-.18),1.4)*(.3+dust);
+        totalEmissiveRadiance+=vec3(.007,.012,.024)*glow;
+        totalEmissiveRadiance+=mix(vec3(.035,.06,.115),vec3(.075,.045,.1),dust)*nebula;
+        totalEmissiveRadiance+=vec3(.3,.36,.43)*star;
       }
     `);
   };
@@ -311,6 +341,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     filmPointer.value.set(lookX,lookY);
     time.value = elapsed;
     progressUniform.value = p;
+    galaxy.mesh.visible = p > .77;
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
     hero.style.setProperty("--inner-progress", p.toFixed(4));
     hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
@@ -327,7 +358,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     draw(); frame = requestAnimationFrame(animate);
   };
   const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else draw(); };
-  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); measure(); draw(); };
+  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
   const preference = () => { measure(); if (reduced.matches) { progress = 0; lookX = 0; lookY = 0; } sync(); };
