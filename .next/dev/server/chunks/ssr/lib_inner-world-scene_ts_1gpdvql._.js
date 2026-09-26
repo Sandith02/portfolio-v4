@@ -251,13 +251,22 @@ async function createInnerWorldScene(host, hero, signal) {
         };
         shader.uniforms.uTime = time;
         shader.uniforms.uProgress = progressUniform;
+        shader.uniforms.uPortalCamera = portalCamera;
         shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
         shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-        shader.fragmentShader = `uniform sampler2D uThoughts; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+        shader.fragmentShader = `uniform sampler2D uThoughts; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
         shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
       if(faceEllipse<.91) discard;
+      // Outer ear and jaw surfaces must not project through the hollow interior.
+      // Retain the back-facing scan surfaces: these form the natural inner walls.
+      if(gl_FrontFacing && vThoughtPosition.z<1.085){
+        if(uPortalCamera.z<=1.075) discard;
+        float t=(uPortalCamera.z-1.075)/(uPortalCamera.z-vThoughtPosition.z);
+        vec3 hit=mix(uPortalCamera,vThoughtPosition,t);
+        if(pow(hit.x/.844,2.)+pow((hit.y-.94)/1.26,2.)<1.) discard;
+      }
     `);
         shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", `
       #include <emissivemap_fragment>
