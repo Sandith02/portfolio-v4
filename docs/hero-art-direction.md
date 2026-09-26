@@ -1,10 +1,12 @@
 # A world within
 
-A large, centered human bust with a hollow cosmic face. The surface carries 10,240 single-word instances drawn from 32 words, plus 80 larger accents. These are visual vocabulary, not a diagnosis or invented personal history.
+A large centered, faceless human bust carrying 10,240 single-word instances plus 80 larger accents. The vocabulary is visual expression, not a diagnosis or invented personal history.
 
-The real-time Three.js scene uses a modified Lee Perry-Smith scan. Attribution and modification details are available in public/models/inner-world-credits.txt. No generated image is used for the live scene; fallback posters are captures of this renderer.
+The scanned inner cranium forms a closed, curved back wall. Its glossy lining and a separate transparent film across the face have restrained moving reflections. The figure has tiny idle motion and responds subtly to the pointer. There is no globe or galaxy object.
 
-Scrolling approaches the face, passes through its aperture, and continues into a three-dimensional star field. Reverse scrolling retraces the camera path. Pointer motion subtly turns the figure. Pause, reduced-motion support, visibility suspension, resource cleanup, and a static fallback are included.
+Scrolling enters the head and approaches its interior. The walls, lettering, and reflections darken progressively with proximity; the opening film fades as the camera passes through it. Reverse scrolling restores the lighting. Pause, reduced-motion support, visibility suspension, cleanup, and static fallback posters are included.
+
+Geometry: modified Lee Perry-Smith scan, with symmetric repair and isolated inner-ear cleanup. Attribution: public/models/inner-world-credits.txt.
 
 Scene: lib/inner-world-scene.ts
 Layout: components/cinematic-hero.tsx

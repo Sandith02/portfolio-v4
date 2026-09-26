@@ -248,19 +248,20 @@ async function createInnerWorldScene(host, hero, signal) {
     const portalCamera = {
         value: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Vector3"](0, .25, 8)
     };
-    const portalMask = `
-    if(uPortalCamera.z>1.075){
-      float t=(uPortalCamera.z-1.075)/(uPortalCamera.z-vPortalPosition.z);
-      vec3 hit=mix(uPortalCamera,vPortalPosition,t);
-      if(pow(hit.x/.843,2.)+pow((hit.y-.94)/1.259,2.)>1.)discard;
-    }`;
+    const reflectionPosition = {
+        value: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Vector3"](0, 1, .1)
+    };
+    const filmPointer = {
+        value: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Vector2"]()
+    };
     const makeBodyMaterial = (interior)=>{
         const bodyMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MeshPhysicalMaterial"]({
-            color: 0x141819,
-            metalness: .72,
-            roughness: .42,
-            clearcoat: .2,
-            envMapIntensity: .4,
+            color: interior ? 0x090e11 : 0x141819,
+            metalness: interior ? .16 : .72,
+            roughness: interior ? .76 : .48,
+            clearcoat: interior ? .025 : .14,
+            clearcoatRoughness: interior ? .5 : .22,
+            envMapIntensity: interior ? .008 : .3,
             side: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DoubleSide"]
         });
         bodyMaterial.onBeforeCompile = (shader)=>{
@@ -273,13 +274,14 @@ async function createInnerWorldScene(host, hero, signal) {
             shader.uniforms.uInterior = {
                 value: interior
             };
+            shader.uniforms.uReflectionPosition = reflectionPosition;
             shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
             shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-            shader.fragmentShader = `uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+            shader.fragmentShader = `uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
             shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
-      if(faceEllipse<.91) discard;
+      if(faceEllipse<.91 && (!uInterior || vThoughtPosition.z>-.25)) discard;
       bool inside=false;
       if(vThoughtPosition.z<1.085){
         if(uPortalCamera.z<=1.075) inside=true;
@@ -294,6 +296,13 @@ async function createInnerWorldScene(host, hero, signal) {
 
       }else if(inside) discard;
     `);
+            shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `
+      #include <opaque_fragment>
+      if(uInterior){
+        float depthDarkness=smoothstep(.08,1.,uProgress);
+        gl_FragColor.rgb*=mix(1.,.025,depthDarkness);
+      }
+    `);
             shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", `
       #include <emissivemap_fragment>
       vec2 thoughtUv=vThoughtUv;
@@ -302,7 +311,11 @@ async function createInnerWorldScene(host, hero, signal) {
       thoughtUv.y+=uTime*.001+uProgress*.085;
       float ink=texture2D(uThoughts,thoughtUv).r;
       float warmth=smoothstep(.2,.65,uProgress)*.2;
-      totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth);
+      totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth)*(uInterior ? .45 : 1.);
+      if(uInterior){
+        float glow=exp(-length(vThoughtPosition-uReflectionPosition)*2.2);
+        totalEmissiveRadiance+=vec3(.035,.065,.085)*glow;
+      }
     `);
         };
         bodyMaterial.customProgramCacheKey = ()=>interior ? "inner-head" : "outer-head";
@@ -317,35 +330,6 @@ async function createInnerWorldScene(host, hero, signal) {
     scene.environment = environment.texture;
     room.dispose();
     pmrem.dispose();
-    const voidMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShaderMaterial"]({
-        uniforms: {
-            uTime: time,
-            uProgress: progressUniform,
-            uPortalCamera: portalCamera
-        },
-        transparent: false,
-        vertexShader: `varying vec2 vUv;varying vec3 vPortalPosition;void main(){vUv=uv;vPortalPosition=vec3(position.xy+vec2(0.,.94),-30.);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-        fragmentShader: `
-      varying vec2 vUv;varying vec3 vPortalPosition;uniform vec3 uPortalCamera; uniform float uTime;uniform float uProgress;
-      float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-      float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
-      void main(){
-        ${portalMask}
-        vec2 p=vPortalPosition.xy/8.;
-        float bend=.46+sin(p.x*2.1+uTime*.08)*.2+noise(p*8.)*.07;
-        float ribbon=pow(max(0.,1.-abs(p.y-bend)*17.),2.);
-        float echo=pow(max(0.,1.-abs(p.y-bend+.14)*26.),2.)*.45;
-        float cloud=noise(p*31.+uTime*.018)*noise(p*63.);
-        vec3 color=vec3(.001,.002,.003)+vec3(.5,.56,.59)*(ribbon+echo)*(.2+cloud*.8);
-        color+=vec3(.013,.009,.01)*cloud*uProgress;
-        gl_FragColor=vec4(color,1.);
-        #include <tonemapping_fragment>
-        #include <colorspace_fragment>
-      }`
-    });
-    const innerVoid = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Mesh"](new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlaneGeometry"](60, 60), voidMaterial);
-    innerVoid.position.set(0, .94, -30);
-    figure.add(innerVoid);
     const edge = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Mesh"](new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TorusGeometry"](1, .011, 10, 128), new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MeshStandardMaterial"]({
         color: 0x4d5956,
         metalness: .85,
@@ -355,58 +339,41 @@ async function createInnerWorldScene(host, hero, signal) {
     edge.scale.set(.844, 1.26, 1);
     edge.position.set(0, .94, 1.08);
     figure.add(edge);
-    let seed = 921;
-    const random = ()=>{
-        seed = seed * 16807 % 2147483647;
-        return (seed - 1) / 2147483646;
-    };
-    const starCount = window.innerWidth < 768 ? 9000 : 18000;
-    const starPositions = new Float32Array(starCount * 3);
-    const sizes = new Float32Array(starCount);
-    for(let i = 0; i < starCount; i++){
-        const radius = Math.sqrt(random()) * .96;
-        const angle = random() * Math.PI * 2;
-        const depth = random();
-        const spread = 1.5 + depth * 9;
-        starPositions.set([
-            Math.cos(angle) * radius * spread,
-            Math.sin(angle) * radius * spread + .94,
-            .95 - depth * 29
-        ], i * 3);
-        sizes[i] = .65 + Math.pow(random(), 3) * 2.2;
-    }
-    const starsGeometry = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["BufferGeometry"]();
-    starsGeometry.setAttribute("position", new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["BufferAttribute"](starPositions, 3));
-    starsGeometry.setAttribute("aSize", new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["BufferAttribute"](sizes, 1));
-    const starsMaterial = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShaderMaterial"]({
+    // A transparent, flexible film across the aperture, with soft moving reflections.
+    const film = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Mesh"](new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlaneGeometry"](1.688, 2.52, 64, 64), new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShaderMaterial"]({
         uniforms: {
             uTime: time,
             uProgress: progressUniform,
-            uPixelRatio: {
-                value: renderer.getPixelRatio()
-            },
-            uPortalCamera: portalCamera
+            uPointer: filmPointer
         },
         transparent: true,
         depthWrite: false,
-        blending: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AdditiveBlending"],
-        vertexShader: `uniform float uTime;uniform float uProgress;uniform float uPixelRatio;attribute float aSize;varying float vOpacity;varying vec3 vPortalPosition;
-      void main(){
-        float a=uTime*.009;vec3 p=position;
-        p.xy=mat2(cos(a),-sin(a),sin(a),cos(a))*(p.xy-vec2(0.,.94))+vec2(0.,.94);
-        vPortalPosition=p;vec4 viewPosition=modelViewMatrix*vec4(p,1.);
-        gl_Position=projectionMatrix*viewPosition;
-        gl_PointSize=clamp(aSize*uPixelRatio*12./max(.3,-viewPosition.z),.7,12.);
-        vOpacity=.5+.25*sin(position.x*31.+uTime*.2);
-      }`,
-        fragmentShader: `uniform vec3 uPortalCamera;varying vec3 vPortalPosition;varying float vOpacity;void main(){
-      ${portalMask}
-      float d=length(gl_PointCoord-.5);float alpha=smoothstep(.5,.08,d)*vOpacity;
-      gl_FragColor=vec4(.7,.79,.83,alpha);
-    }`
-    });
-    const stars = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Points"](starsGeometry, starsMaterial);
-    figure.add(stars);
+        side: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DoubleSide"],
+        vertexShader: `uniform float uTime;uniform vec2 uPointer;varying vec2 vUv;
+      void main(){vUv=uv;vec3 p=position;float envelope=max(0.,1.-length((uv-.5)*2.));
+      p.z+=sin(uv.x*7.+uv.y*5.+uTime*.6)*.012*envelope;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+        fragmentShader: `uniform float uTime;uniform float uProgress;uniform vec2 uPointer;varying vec2 vUv;
+      void main(){vec2 p=(vUv-.5)*2.;float r=length(p);if(r>1.)discard;
+        float drift=sin(uTime*.23)*.35+uPointer.x*.3;
+        float curve=p.x*.72+p.y*.42+sin(p.y*2.6+uTime*.35)*.12;
+        float broad=exp(-pow((curve-drift-.22)*5.,2.));
+        float streak=exp(-pow((curve-drift-.25)*31.,2.));
+        float secondary=exp(-pow((p.x*.8-p.y*.5+drift+.58)*14.,2.));
+        float edge=pow(smoothstep(.83,1.,r),2.);
+        float fade=1.-smoothstep(.72,.94,uProgress);
+        float alpha=(.008+broad*.025+streak*.045+secondary*.015+edge*.025)*fade;
+        vec3 tint=mix(vec3(.38,.47,.5),vec3(.82,.89,.9),streak);
+        gl_FragColor=vec4(tint,alpha);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`
+    }));
+    film.position.set(0, .94, 1.095);
+    film.renderOrder = 3;
+    figure.add(film);
+    const liningLight = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PointLight"](0x9bb5c4, .6, 3.5, 2);
+    figure.add(liningLight);
     const haze = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Mesh"](new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["PlaneGeometry"](160, 100), new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShaderMaterial"]({
         depthWrite: false,
         uniforms: {
@@ -436,12 +403,11 @@ async function createInnerWorldScene(host, hero, signal) {
     };
     const draw = ()=>{
         const p = reduced.matches ? 0 : progress;
-        const approach = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(p, 0, .57);
-        const journey = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(p, .48, 1);
-        figure.position.set(0, mobile ? .05 : -.2, 0);
-        figure.rotation.set(-.015 + lookY * .05, lookX * .1 + Math.sin(elapsed * .12) * .012 * (1 - approach), 0);
+        const approach = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(p, 0, 1);
+        figure.position.set(Math.sin(elapsed * .31) * .012, (mobile ? .05 : -.2) + Math.sin(elapsed * .43) * .008, 0);
+        figure.rotation.set(-.015 + lookY * .05 + Math.sin(elapsed * .29) * .004, lookX * .1 + Math.sin(elapsed * .12) * .012, Math.sin(elapsed * .23) * .002);
         const cameraY = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(.25, .94 + figure.position.y, approach);
-        const cameraZ = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(mobile ? 9.9 : 8, 1.6, approach) - journey * 19;
+        const cameraZ = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].lerp(mobile ? 9.9 : 8, 1.04, approach);
         body.visible = interiorBody.visible = cameraZ > -1.8;
         edge.visible = cameraZ > 1.12;
         camera.position.set(0, cameraY, cameraZ);
@@ -449,6 +415,10 @@ async function createInnerWorldScene(host, hero, signal) {
         figure.updateMatrixWorld(true);
         portalCamera.value.copy(camera.position);
         figure.worldToLocal(portalCamera.value);
+        reflectionPosition.value.set(Math.sin(elapsed * .35) * .4, .94 + Math.cos(elapsed * .27) * .5, .1);
+        liningLight.position.copy(reflectionPosition.value);
+        liningLight.intensity = .15 * (1. - __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(p, .08, 1.) * .7);
+        filmPointer.value.set(lookX, lookY);
         time.value = elapsed;
         progressUniform.value = p;
         red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { createFusionOrb } from "./fusion-orb";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -172,22 +171,20 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const time = { value: 0 };
   const progressUniform = { value: 0 };
   const portalCamera = { value: new THREE.Vector3(0, .25, 8) };
-  const fusion = createFusionOrb(figure, portalCamera);
-  fusion.setGlobeVisible(false);
+  const reflectionPosition = { value: new THREE.Vector3(0, 1, .1) };
+  const filmPointer = { value: new THREE.Vector2() };
   const makeBodyMaterial = (interior: boolean) => {
-  const bodyMaterial = new THREE.MeshPhysicalMaterial({ color: interior ? 0x090e11 : 0x141819, metalness: .72, roughness: interior ? .6 : .42, clearcoat: interior ? .05 : .2, envMapIntensity: interior ? .12 : .4, side: THREE.DoubleSide });
+  const bodyMaterial = new THREE.MeshPhysicalMaterial({ color: interior ? 0x090e11 : 0x141819, metalness: interior ? .16 : .72, roughness: interior ? .76 : .48, clearcoat: interior ? .025 : .14, clearcoatRoughness: interior ? .5 : .22, envMapIntensity: interior ? .008 : .3, side: THREE.DoubleSide });
   bodyMaterial.onBeforeCompile = shader => {
     shader.uniforms.uThoughts = { value: words };
     shader.uniforms.uTime = time;
     shader.uniforms.uProgress = progressUniform;
     shader.uniforms.uPortalCamera = portalCamera;
     shader.uniforms.uInterior = { value: interior };
-    shader.uniforms.uOrbPosition = { value: fusion.position };
-    shader.uniforms.uImpact = fusion.impact;
-    shader.uniforms.uImpactPosition = fusion.impactPosition;
+    shader.uniforms.uReflectionPosition = reflectionPosition;
     shader.vertexShader = "varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n" + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\n vThoughtPosition = position; vThoughtUv = uv;");
-    shader.fragmentShader = `uniform vec3 uOrbPosition; uniform vec3 uImpactPosition; uniform float uImpact; uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
+    shader.fragmentShader = `uniform vec3 uReflectionPosition; uniform sampler2D uThoughts; uniform bool uInterior; uniform vec3 uPortalCamera; uniform float uTime; uniform float uProgress; varying vec3 vThoughtPosition; varying vec2 vThoughtUv;\n` + shader.fragmentShader;
     shader.fragmentShader = shader.fragmentShader.replace("#include <clipping_planes_fragment>", `
       #include <clipping_planes_fragment>
       float faceEllipse=pow(vThoughtPosition.x/.88,2.)+pow((vThoughtPosition.y-.94)/1.32,2.);
@@ -206,6 +203,13 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
 
       }else if(inside) discard;
     `);
+    shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `
+      #include <opaque_fragment>
+      if(uInterior){
+        float depthDarkness=smoothstep(.08,1.,uProgress);
+        gl_FragColor.rgb*=mix(1.,.025,depthDarkness);
+      }
+    `);
     shader.fragmentShader = shader.fragmentShader.replace("#include <emissivemap_fragment>", `
       #include <emissivemap_fragment>
       vec2 thoughtUv=vThoughtUv;
@@ -216,11 +220,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
       float warmth=smoothstep(.2,.65,uProgress)*.2;
       totalEmissiveRadiance+=ink*mix(vec3(.18,.21,.22),vec3(.26,.16,.15),warmth)*(uInterior ? .45 : 1.);
       if(uInterior){
-        float glow=exp(-length(vThoughtPosition-uOrbPosition)*2.2);
-        float hitDistance=length(vThoughtPosition-uImpactPosition);
-        float hit=exp(-hitDistance*4.)*uImpact;
-        float ripple=exp(-pow((hitDistance-(1.-uImpact)*1.5)*9.,2.))*uImpact;
-        totalEmissiveRadiance+=vec3(.12,.28,.38)*glow+vec3(.28,.2,.5)*(hit+ripple*.4);
+        float glow=exp(-length(vThoughtPosition-uReflectionPosition)*2.2);
+        totalEmissiveRadiance+=vec3(.035,.065,.085)*glow;
       }
     `);
   };
@@ -243,6 +244,36 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   edge.position.set(0, .94, 1.08);
   figure.add(edge);
 
+  // A transparent, flexible film across the aperture, with soft moving reflections.
+  const film = new THREE.Mesh(new THREE.PlaneGeometry(1.688, 2.52, 64, 64), new THREE.ShaderMaterial({
+    uniforms: { uTime: time, uProgress: progressUniform, uPointer: filmPointer },
+    transparent: true, depthWrite: false, side: THREE.DoubleSide,
+    vertexShader: `uniform float uTime;uniform vec2 uPointer;varying vec2 vUv;
+      void main(){vUv=uv;vec3 p=position;float envelope=max(0.,1.-length((uv-.5)*2.));
+      p.z+=sin(uv.x*7.+uv.y*5.+uTime*.6)*.012*envelope;
+      gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+    fragmentShader: `uniform float uTime;uniform float uProgress;uniform vec2 uPointer;varying vec2 vUv;
+      void main(){vec2 p=(vUv-.5)*2.;float r=length(p);if(r>1.)discard;
+        float drift=sin(uTime*.23)*.35+uPointer.x*.3;
+        float curve=p.x*.72+p.y*.42+sin(p.y*2.6+uTime*.35)*.12;
+        float broad=exp(-pow((curve-drift-.22)*5.,2.));
+        float streak=exp(-pow((curve-drift-.25)*31.,2.));
+        float secondary=exp(-pow((p.x*.8-p.y*.5+drift+.58)*14.,2.));
+        float edge=pow(smoothstep(.83,1.,r),2.);
+        float fade=1.-smoothstep(.72,.94,uProgress);
+        float alpha=(.008+broad*.025+streak*.045+secondary*.015+edge*.025)*fade;
+        vec3 tint=mix(vec3(.38,.47,.5),vec3(.82,.89,.9),streak);
+        gl_FragColor=vec4(tint,alpha);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`,
+  }));
+  film.position.set(0,.94,1.095);
+  film.renderOrder=3;
+  figure.add(film);
+  const liningLight = new THREE.PointLight(0x9bb5c4, .6, 3.5, 2);
+  figure.add(liningLight);
+
   const haze = new THREE.Mesh(new THREE.PlaneGeometry(160, 100), new THREE.ShaderMaterial({
     depthWrite: false, uniforms: {uProgress: progressUniform},
     vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
@@ -263,8 +294,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const draw = () => {
     const p = reduced.matches ? 0 : progress;
     const approach = THREE.MathUtils.smoothstep(p, 0, 1);
-    figure.position.set(0, mobile ? .05 : -.2, 0);
-    figure.rotation.set(-.015 + lookY * .05, lookX * .1 + Math.sin(elapsed * .12) * .012 * (1 - approach), 0);
+    figure.position.set(Math.sin(elapsed*.31)*.012, (mobile ? .05 : -.2)+Math.sin(elapsed*.43)*.008, 0);
+    figure.rotation.set(-.015 + lookY*.05 + Math.sin(elapsed*.29)*.004, lookX*.1 + Math.sin(elapsed*.12)*.012, Math.sin(elapsed*.23)*.002);
     const cameraY = THREE.MathUtils.lerp(.25, .94 + figure.position.y, approach);
     const cameraZ = THREE.MathUtils.lerp(mobile ? 9.9 : 8, 1.04, approach);
     body.visible = interiorBody.visible = cameraZ > -1.8;
@@ -274,6 +305,10 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     figure.updateMatrixWorld(true);
     portalCamera.value.copy(camera.position);
     figure.worldToLocal(portalCamera.value);
+    reflectionPosition.value.set(Math.sin(elapsed*.35)*.4, .94+Math.cos(elapsed*.27)*.5, .1);
+    liningLight.position.copy(reflectionPosition.value);
+    liningLight.intensity=.15*(1.-THREE.MathUtils.smoothstep(p,.08,1.)*.7);
+    filmPointer.value.set(lookX,lookY);
     time.value = elapsed;
     progressUniform.value = p;
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
@@ -289,7 +324,6 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     const ease = 1 - Math.exp(-delta * 4.5);
     progress += (targetProgress - progress) * ease;
     lookX += (pointerX - lookX) * ease; lookY += (pointerY - lookY) * ease;
-    fusion.update(delta, elapsed, lookX, lookY);
     draw(); frame = requestAnimationFrame(animate);
   };
   const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else draw(); };
