@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/archivo";
 import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/cormorant-garamond/400.css";
-import "@fontsource/cormorant-garamond/400-italic.css";
+import "@fontsource/megrim/latin-400.css";
+import "@fontsource-variable/manrope";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
@@ -10,11 +10,11 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://sandithdev.com"),
-  title: "Sandith - Full-Stack & Freelance Web Developer in Sri Lanka",
-  description: "Sandith is a full-stack and freelance web developer in Sri Lanka specialising in Next.js, React, creative web experiences and AI website redesign.",
+  title: "Sandith Sithmaka — Creative Developer",
+  description: "Creative developer based in Sri Lanka. Exploring design, code and expressive web experiences. Open to creative development roles.",
   openGraph: {
     title: "Sandith Dev",
-    description: "AI made it fast. I make it good.",
+    description: "Quiet outside. Worlds within. The creative development portfolio of Sandith Sithmaka.",
     type: "website",
     url: "https://sandithdev.com"
   }

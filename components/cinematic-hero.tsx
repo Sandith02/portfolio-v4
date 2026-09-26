@@ -37,19 +37,28 @@ export function CinematicHero() {
         <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
         <div className="inner-vignette" aria-hidden="true" />
         <div className="inner-grain" aria-hidden="true" />
-        <div className="inner-topline"><span>Sandith Sithmaka / A world within</span><span>Move a little closer.</span></div>
-        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka. Quiet outside. Never quiet inside.</h1>
+        <div className="inner-topline"><span>Sandith Sithmaka<span className="inner-topline-role">Creative developer</span></span></div>
+        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka — Creative developer. Quiet outside. Worlds within.</h1>
         <div className="inner-story" aria-hidden="true">
-          <div className="inner-chapter inner-chapter-first"><p>The things I never say.</p><span>Quiet<br /><em>outside.</em></span></div>
-          <div className="inner-chapter inner-chapter-second"><p>There was never nothing.</p><span>Never quiet<br /><em>inside.</em></span></div>
-          <div className="inner-chapter inner-chapter-last"><p>Beyond the silence.</p><span>Still<br /><em>here.</em></span></div>
+          <div className="inner-chapter inner-chapter-first">
+            <div className="inner-chapter-left"><span className="inner-headline">Quiet<br />outside.</span></div>
+            <div className="inner-chapter-right"><span className="inner-headline">Worlds<br />within.</span></div>
+          </div>
+          <div className="inner-chapter inner-chapter-second">
+            <div className="inner-chapter-left"><span className="inner-headline">Always<br />looking.</span></div>
+            <div className="inner-chapter-right"><span className="inner-headline">Never<br />ordinary.</span></div>
+          </div>
+          <div className="inner-chapter inner-chapter-last">
+            <div className="inner-chapter-left"><span className="inner-headline">Strange<br />ideas.</span></div>
+            <div className="inner-chapter-right"><span className="inner-headline">Real<br />things.</span></div>
+          </div>
         </div>
-        <p className="inner-description">Independent developer.<br />A different kind of presence.</p>
+        <div className="inner-opportunity"><a href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role">Open to creative roles <ArrowUpRight size={16} /></a></div>
         <div className="inner-bottom">
-          <a className="inner-scroll" href="#introduction"><ArrowDown size={14} /><span>Scroll inward</span></a>
-          <Link className="inner-enter" href="/work">Discover the work <ArrowUpRight size={14} /></Link>
+          <a className="inner-scroll" href="#introduction" aria-label="Scroll inward" title="Scroll inward"><ArrowDown size={18} /></a>
+          <Link className="inner-enter" href="/work">Explore my work <ArrowUpRight size={16} /></Link>
           <button className="inner-motion" type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} aria-label={paused ? "Resume atmosphere" : "Pause atmosphere"}>
-            {paused ? <Play size={10} weight="fill" /> : <Pause size={10} weight="fill" />}<span>{paused ? "Resume" : "Stillness"}</span>
+            {paused ? <Play size={10} weight="fill" /> : <Pause size={10} weight="fill" />}
           </button>
         </div>
         <div className="inner-progress" aria-hidden="true"><span /></div>

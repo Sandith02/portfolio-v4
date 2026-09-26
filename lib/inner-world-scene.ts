@@ -157,7 +157,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" }); }
   catch (error) { geometry.dispose(); outerGeometry.dispose(); throw error; }
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.25 : 1.5));
-  renderer.setClearColor(0x080a0b);
+  renderer.setClearColor(0x141417);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = .9;
@@ -304,12 +304,37 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const liningLight = new THREE.PointLight(0x9bb5c4, .6, 3.5, 2);
   figure.add(liningLight);
 
-  const haze = new THREE.Mesh(new THREE.PlaneGeometry(160, 100), new THREE.ShaderMaterial({
-    depthWrite: false, uniforms: {uProgress: progressUniform},
-    vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-    fragmentShader: `varying vec2 vUv;uniform float uProgress;void main(){vec2 p=vUv-.5;float glow=exp(-dot(p*vec2(1.2,.8),p*vec2(1.2,.8))*12.);vec3 c=mix(vec3(.009,.012,.014),vec3(.023,.029,.031),glow);c*=1.-smoothstep(.2,.48,uProgress);gl_FragColor=vec4(c,1.);\n#include <tonemapping_fragment>\n#include <colorspace_fragment>}`
+  const hazeAspect = { value: 1 };
+  const haze = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+    depthWrite: false, depthTest: false,
+    uniforms: { uProgress: progressUniform, uTime: time, uAspect: hazeAspect },
+    vertexShader: `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`,
+    fragmentShader: `
+      varying vec2 vUv;uniform float uProgress,uTime,uAspect;
+      void main(){
+        vec2 p=(vUv-.5)*vec2(uAspect,1.);
+        float inward=smoothstep(0.,.72,uProgress);
+        float radius=mix(.72,.18,inward);
+        // Two desaturated light fields converge behind the head as the visitor approaches.
+        vec2 drift=vec2(sin(uTime*.12)*.015,cos(uTime*.09)*.012);
+        vec2 left=p-vec2(-.48*(1.-inward),.07+inward*.1)-drift;
+        vec2 right=p-vec2(.5*(1.-inward),-.12+inward*.22)+drift;
+        float glow=exp(-dot(left,left)/(radius*radius))*.65
+          +exp(-dot(right,right)/(radius*radius*.72))*.5;
+        float distance=length(p*vec2(.8,1.));
+        float wave=sin(distance*17.+inward*8.+p.y*4.+uTime*.06)*.5+.5;
+        float current=pow(wave,3.)*glow*sin(inward*3.14159);
+        vec3 color=vec3(.006,.006,.007);
+        color+=vec3(.014,.013,.016)*glow;
+        color+=vec3(.015,.013,.018)*current;
+        color*=1.-smoothstep(.32,.85,uProgress)*.94;
+        gl_FragColor=vec4(color,1.);
+        #include <tonemapping_fragment>
+        #include <colorspace_fragment>
+      }`
   }));
-  haze.position.set(1, .5, -40);
+  haze.frustumCulled = false;
+  haze.renderOrder = -10;
   scene.add(haze);
   scene.add(new THREE.AmbientLight(0xa5b9bd, .17));
   const key = new THREE.DirectionalLight(0xc4d5d8, 1.6); key.position.set(-4, 5, 3); scene.add(key);
@@ -358,7 +383,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     draw(); frame = requestAnimationFrame(animate);
   };
   const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else draw(); };
-  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); measure(); draw(); };
+  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
   const preference = () => { measure(); if (reduced.matches) { progress = 0; lookX = 0; lookY = 0; } sync(); };

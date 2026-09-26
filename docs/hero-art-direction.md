@@ -12,3 +12,11 @@ Scene: lib/inner-world-scene.ts
 Final galaxy: lib/cosmic-galaxy.ts
 Layout: components/cinematic-hero.tsx
 Styles: app/globals.css
+
+## Creative role typography
+
+The hero introduces Sandith as a creative developer seeking a creative team. Megrim is the display face; Manrope supports the name, role, navigation and links. The existing centered figure and camera are untouched. Two offset headline fields frame the head: “Quiet outside.” / “Worlds within.” Small captions and descriptive paragraphs have been removed. The only supporting hero copy is the name and role, a creative-role email link, and the work link. Mobile places the two headline fields below the face. Scroll chapters continue into “Always looking.” / “Never ordinary.” and “Strange ideas.” / “Real things.”
+
+The background is a neutral charcoal #141417, with a brighter desaturated haze and only a faint cool undertone, reduced grain and no green-grey cast. Two soft desaturated light fields converge behind the head with scroll progress, creating soft inward-moving bands before darkening into the galaxy reveal. The shared scene clock keeps idle drift, pause and reduced motion consistent. Reverse scrolling restores the atmosphere. The figure materials are unchanged. Display text uses Megrim at 400; body and utility text use Manrope at 400–500.
+
+Navigation follows the compact central capsule of Fourmula.ai: a solid #020108 pill, two-line Menu icon, home shortcut and live page scroll percentage. It has no logo. A narrow disclosure opens underneath, with Work, About, Contact and a direct role-enquiry email. Escape and outside clicks close the menu; links remain keyboard accessible. The same navigation works at all screen sizes.

@@ -108,23 +108,24 @@ function CinematicHero() {
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "inner-topline",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            children: "Sandith Sithmaka / A world within"
-                        }, void 0, false, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 40,
-                            columnNumber: 40
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            children: "Move a little closer."
-                        }, void 0, false, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 40,
-                            columnNumber: 86
-                        }, this)
-                    ]
-                }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        children: [
+                            "Sandith Sithmaka",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "inner-topline-role",
+                                children: "Creative developer"
+                            }, void 0, false, {
+                                fileName: "[project]/components/cinematic-hero.tsx",
+                                lineNumber: 40,
+                                columnNumber: 62
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/cinematic-hero.tsx",
+                        lineNumber: 40,
+                        columnNumber: 40
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/components/cinematic-hero.tsx",
                     lineNumber: 40,
                     columnNumber: 9
@@ -132,7 +133,7 @@ function CinematicHero() {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                     className: "inner-accessible-title",
                     id: "hero-title",
-                    children: "Sandith Sithmaka. Quiet outside. Never quiet inside."
+                    children: "Sandith Sithmaka — Creative developer. Quiet outside. Worlds within."
                 }, void 0, false, {
                     fileName: "[project]/components/cinematic-hero.tsx",
                     lineNumber: 41,
@@ -145,33 +146,51 @@ function CinematicHero() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "inner-chapter inner-chapter-first",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    children: "The things I never say."
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-left",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Quiet",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 44,
+                                                columnNumber: 87
+                                            }, this),
+                                            "outside."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 44,
+                                        columnNumber: 49
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 43,
-                                    columnNumber: 62
+                                    lineNumber: 44,
+                                    columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: [
-                                        "Quiet",
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 43,
-                                            columnNumber: 103
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
-                                            children: "outside."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 43,
-                                            columnNumber: 109
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-right",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Worlds",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 45,
+                                                columnNumber: 89
+                                            }, this),
+                                            "within."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 45,
+                                        columnNumber: 50
+                                    }, this)
+                                }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 43,
-                                    columnNumber: 92
+                                    lineNumber: 45,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
@@ -182,172 +201,106 @@ function CinematicHero() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "inner-chapter inner-chapter-second",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    children: "There was never nothing."
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-left",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Always",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 48,
+                                                columnNumber: 88
+                                            }, this),
+                                            "looking."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 48,
+                                        columnNumber: 49
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 44,
-                                    columnNumber: 63
+                                    lineNumber: 48,
+                                    columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: [
-                                        "Never quiet",
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 44,
-                                            columnNumber: 111
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
-                                            children: "inside."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 44,
-                                            columnNumber: 117
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-right",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Never",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 49,
+                                                columnNumber: 88
+                                            }, this),
+                                            "ordinary."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 49,
+                                        columnNumber: 50
+                                    }, this)
+                                }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 44,
-                                    columnNumber: 94
+                                    lineNumber: 49,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 44,
+                            lineNumber: 47,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "inner-chapter inner-chapter-last",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    children: "Beyond the silence."
-                                }, void 0, false, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 45,
-                                    columnNumber: 61
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: [
-                                        "Still",
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 45,
-                                            columnNumber: 98
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("em", {
-                                            children: "here."
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/cinematic-hero.tsx",
-                                            lineNumber: 45,
-                                            columnNumber: 104
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 45,
-                                    columnNumber: 87
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 45,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/cinematic-hero.tsx",
-                    lineNumber: 42,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                    className: "inner-description",
-                    children: [
-                        "Independent developer.",
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 47,
-                            columnNumber: 64
-                        }, this),
-                        "A different kind of presence."
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/cinematic-hero.tsx",
-                    lineNumber: 47,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "inner-bottom",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
-                            className: "inner-scroll",
-                            href: "#introduction",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$ArrowDown$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ArrowDown"], {
-                                    size: 14
-                                }, void 0, false, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 49,
-                                    columnNumber: 60
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: "Scroll inward"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 49,
-                                    columnNumber: 83
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 49,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            className: "inner-enter",
-                            href: "/work",
-                            children: [
-                                "Discover the work ",
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$ArrowUpRight$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ArrowUpRight"], {
-                                    size: 14
-                                }, void 0, false, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 50,
-                                    columnNumber: 72
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/cinematic-hero.tsx",
-                            lineNumber: 50,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: "inner-motion",
-                            type: "button",
-                            onClick: ()=>setPaused((value)=>!value),
-                            "aria-pressed": paused,
-                            "aria-label": paused ? "Resume atmosphere" : "Pause atmosphere",
-                            children: [
-                                paused ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$Play$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Play"], {
-                                    size: 10,
-                                    weight: "fill"
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-left",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Strange",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 52,
+                                                columnNumber: 89
+                                            }, this),
+                                            "ideas."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 52,
+                                        columnNumber: 49
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
                                     lineNumber: 52,
-                                    columnNumber: 23
-                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$Pause$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Pause"], {
-                                    size: 10,
-                                    weight: "fill"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 52,
-                                    columnNumber: 58
+                                    columnNumber: 13
                                 }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    children: paused ? "Resume" : "Stillness"
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "inner-chapter-right",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "inner-headline",
+                                        children: [
+                                            "Real",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
+                                                fileName: "[project]/components/cinematic-hero.tsx",
+                                                lineNumber: 53,
+                                                columnNumber: 87
+                                            }, this),
+                                            "things."
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/cinematic-hero.tsx",
+                                        lineNumber: 53,
+                                        columnNumber: 50
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/cinematic-hero.tsx",
-                                    lineNumber: 52,
-                                    columnNumber: 92
+                                    lineNumber: 53,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
@@ -358,7 +311,101 @@ function CinematicHero() {
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/cinematic-hero.tsx",
-                    lineNumber: 48,
+                    lineNumber: 42,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "inner-opportunity",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                        href: "mailto:hello@sandithdev.com?subject=Creative%20developer%20role",
+                        children: [
+                            "Open to creative roles ",
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$ArrowUpRight$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ArrowUpRight"], {
+                                size: 16
+                            }, void 0, false, {
+                                fileName: "[project]/components/cinematic-hero.tsx",
+                                lineNumber: 56,
+                                columnNumber: 141
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/cinematic-hero.tsx",
+                        lineNumber: 56,
+                        columnNumber: 44
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/cinematic-hero.tsx",
+                    lineNumber: 56,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "inner-bottom",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
+                            className: "inner-scroll",
+                            href: "#introduction",
+                            "aria-label": "Scroll inward",
+                            title: "Scroll inward",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$ArrowDown$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ArrowDown"], {
+                                size: 18
+                            }, void 0, false, {
+                                fileName: "[project]/components/cinematic-hero.tsx",
+                                lineNumber: 58,
+                                columnNumber: 109
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/cinematic-hero.tsx",
+                            lineNumber: 58,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                            className: "inner-enter",
+                            href: "/work",
+                            children: [
+                                "Explore my work ",
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$ArrowUpRight$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ArrowUpRight"], {
+                                    size: 16
+                                }, void 0, false, {
+                                    fileName: "[project]/components/cinematic-hero.tsx",
+                                    lineNumber: 59,
+                                    columnNumber: 70
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/cinematic-hero.tsx",
+                            lineNumber: 59,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: "inner-motion",
+                            type: "button",
+                            onClick: ()=>setPaused((value)=>!value),
+                            "aria-pressed": paused,
+                            "aria-label": paused ? "Resume atmosphere" : "Pause atmosphere",
+                            children: paused ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$Play$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Play"], {
+                                size: 10,
+                                weight: "fill"
+                            }, void 0, false, {
+                                fileName: "[project]/components/cinematic-hero.tsx",
+                                lineNumber: 61,
+                                columnNumber: 23
+                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$phosphor$2d$icons$2f$react$2f$dist$2f$csr$2f$Pause$2e$es$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Pause"], {
+                                size: 10,
+                                weight: "fill"
+                            }, void 0, false, {
+                                fileName: "[project]/components/cinematic-hero.tsx",
+                                lineNumber: 61,
+                                columnNumber: 58
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/cinematic-hero.tsx",
+                            lineNumber: 60,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/cinematic-hero.tsx",
+                    lineNumber: 57,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -366,12 +413,12 @@ function CinematicHero() {
                     "aria-hidden": "true",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {}, void 0, false, {
                         fileName: "[project]/components/cinematic-hero.tsx",
-                        lineNumber: 55,
+                        lineNumber: 64,
                         columnNumber: 60
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/cinematic-hero.tsx",
-                    lineNumber: 55,
+                    lineNumber: 64,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -382,7 +429,7 @@ function CinematicHero() {
                     children: "Figure: Lee Perry-Smith / CC BY 3.0"
                 }, void 0, false, {
                     fileName: "[project]/components/cinematic-hero.tsx",
-                    lineNumber: 56,
+                    lineNumber: 65,
                     columnNumber: 9
                 }, this)
             ]

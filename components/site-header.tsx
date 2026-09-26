@@ -3,59 +3,61 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useState } from "react";
-import { ArrowUpRight, List, X } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, HouseSimple, X } from "@phosphor-icons/react";
 
-const links = [
-  ["Work", "/work"],
-  ["Services", "/services"],
-  ["AI Rescue", "/ai-website-redesign"],
-  ["About", "/about"],
-  ["Contact", "/contact"]
-];
+const links = [["Work", "/work"], ["About", "/about"], ["Contact", "/contact"]];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const reduce = useReducedMotion();
+  const root = useRef<HTMLElement>(null);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const progress = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const range = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = range > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / range)) * 100) : 0;
+      if (progress.current) progress.current.textContent = `${percent}%`;
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const observer = new ResizeObserver(schedule);
+    observer.observe(document.body);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    update();
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", schedule); };
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const outside = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false); };
+    const escape = (event: KeyboardEvent) => { if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); } };
+    document.addEventListener("pointerdown", outside);
+    document.addEventListener("keydown", escape);
+    return () => { document.removeEventListener("pointerdown", outside); document.removeEventListener("keydown", escape); };
   }, [open]);
 
   return (
-    <header className={`site-header${pathname === "/" ? " site-header-home" : ""}`}>
-      <Link className="wordmark" href="/" aria-label="Sandith Dev home">
-        SANDITH<span>/DEV</span>
-      </Link>
-      <nav className="desktop-nav" aria-label="Primary navigation">
-        {links.map(([label, href]) => (
-          <Link className={pathname === href ? "active" : ""} key={href} href={href}>{label}</Link>
-        ))}
-      </nav>
-      <Link className="header-cta" href="/contact">Start something <ArrowUpRight size={16} weight="bold" /></Link>
-      <button className="menu-button" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Close menu" : "Open menu"}>
-        {open ? <X size={24} /> : <List size={24} />}
-      </button>
+    <header className="site-header" ref={root}>
+      <div className="nav-capsule">
+        <button ref={toggle} className="nav-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="site-menu" aria-label={open ? "Close menu" : "Open menu"}>
+          {open ? <X size={20} weight="light" /> : <span className="nav-menu-icon" aria-hidden="true"><i /><i /></span>}<span>{open ? "Close" : "Menu"}</span>
+        </button>
+        <Link className="nav-home" href="/" aria-label="Home" title="Home" onClick={() => setOpen(false)}><HouseSimple size={16} weight="light" /></Link>
+        <span className="nav-progress" ref={progress} title="Page scroll progress" aria-hidden="true">0%</span>
+      </div>
       <AnimatePresence>
         {open && (
-          <motion.div
-            id="mobile-menu"
-            className="mobile-menu"
-            initial={reduce ? false : { clipPath: "inset(0 0 100% 0)" }}
-            animate={{ clipPath: "inset(0 0 0% 0)" }}
-            exit={{ clipPath: "inset(0 0 100% 0)" }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <nav aria-label="Mobile navigation">
-              {links.map(([label, href], index) => (
-                <motion.div key={href} initial={reduce ? false : { opacity: 0, transform: "translateY(18px)" }} animate={{ opacity: 1, transform: "translateY(0)" }} transition={{ delay: 0.12 + index * 0.05 }}>
-                  <Link href={href} onClick={() => setOpen(false)}>{label}</Link>
-                </motion.div>
-              ))}
+          <motion.div id="site-menu" className="nav-panel" initial={reduce ? false : { opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .18 }}>
+            <nav aria-label="Primary navigation">
+              {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
             </nav>
-            <a className="mobile-email" href="mailto:hello@sandithdev.com">hello@sandithdev.com</a>
+            <a className="nav-contact" href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role" onClick={() => setOpen(false)}>Let’s talk roles <ArrowUpRight size={14} /></a>
           </motion.div>
         )}
       </AnimatePresence>

@@ -23,11 +23,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$smooth$2d$scro
 ;
 const metadata = {
     metadataBase: new URL("https://sandithdev.com"),
-    title: "Sandith - Full-Stack & Freelance Web Developer in Sri Lanka",
-    description: "Sandith is a full-stack and freelance web developer in Sri Lanka specialising in Next.js, React, creative web experiences and AI website redesign.",
+    title: "Sandith Sithmaka — Creative Developer",
+    description: "Creative developer based in Sri Lanka. Exploring design, code and expressive web experiences. Open to creative development roles.",
     openGraph: {
         title: "Sandith Dev",
-        description: "AI made it fast. I make it good.",
+        description: "Quiet outside. Worlds within. The creative development portfolio of Sandith Sithmaka.",
         type: "website",
         url: "https://sandithdev.com"
     }
