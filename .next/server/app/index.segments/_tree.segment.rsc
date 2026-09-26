@@ -1,4 +1,4 @@
 :HL["/_next/static/chunks/2ajroq0ra70uu.css","style"]
 :HC["/",""]
 :HL["/images/events.jpg","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"rY3F8y1CVh-zo4anfcAgl"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"H4wvc7TeFRwKaU40Zvi03"}

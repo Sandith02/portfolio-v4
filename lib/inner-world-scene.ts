@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
@@ -61,6 +62,52 @@ function disposeObject(object: THREE.Object3D) {
   textures.forEach(texture => texture.dispose());
 }
 
+// Reconstruct the damaged side from the intact scanned half. Clipping crossing
+// triangles at the center keeps a closed seam and preserves the original contours.
+function repairHeadSymmetry(source: THREE.BufferGeometry) {
+  const position = source.getAttribute("position"), normal = source.getAttribute("normal"), uv = source.getAttribute("uv");
+  const indices = source.getIndex();
+  const vertices: number[] = [], normals: number[] = [], uvs: number[] = [];
+  type Vertex = { p: THREE.Vector3; n: THREE.Vector3; uv: THREE.Vector2 };
+  const read = (index: number): Vertex => ({
+    p: new THREE.Vector3().fromBufferAttribute(position, index),
+    n: new THREE.Vector3().fromBufferAttribute(normal, index),
+    uv: new THREE.Vector2(uv.getX(index), uv.getY(index)),
+  });
+  const emit = (triangle: Vertex[], mirror: boolean) => {
+    for (const v of mirror ? [...triangle].reverse() : triangle) {
+      vertices.push(v.p.x * (mirror ? -1 : 1), v.p.y, v.p.z);
+      normals.push(v.n.x * (mirror ? -1 : 1), v.n.y, v.n.z);
+      uvs.push(v.uv.x, v.uv.y);
+    }
+  };
+  for (let i = 0; i < (indices?.count ?? position.count); i += 3) {
+    const triangle = [0, 1, 2].map(offset => read(indices ? indices.getX(i + offset) : i + offset));
+    const clipped: Vertex[] = [];
+    for (let corner = 0; corner < 3; corner++) {
+      const a = triangle[corner], b = triangle[(corner + 1) % 3];
+      if (a.p.x <= 0) clipped.push(a);
+      if ((a.p.x <= 0) !== (b.p.x <= 0)) {
+        const t = -a.p.x / (b.p.x - a.p.x);
+        const intersection = { p: a.p.clone().lerp(b.p, t), n: a.n.clone().lerp(b.n, t).normalize(), uv: a.uv.clone().lerp(b.uv, t) };
+        intersection.p.x = 0;
+        clipped.push(intersection);
+      }
+    }
+    for (let fan = 1; fan + 1 < clipped.length; fan++) {
+      const triangle = [clipped[0], clipped[fan], clipped[fan + 1]];
+      emit(triangle, false); emit(triangle, true);
+    }
+  }
+  const raw = new THREE.BufferGeometry();
+  raw.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+  raw.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  raw.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+  const repaired = mergeVertices(raw);
+  raw.dispose();
+  return repaired;
+}
+
 export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElement, signal: AbortSignal): Promise<InnerWorldScene> {
   const response = await fetch("/models/inner-world-head.glb", { signal });
   if (!response.ok) throw new Error("Figure could not be loaded");
@@ -70,7 +117,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   let source: THREE.Mesh | undefined;
   gltf.scene.traverse(child => { if (child instanceof THREE.Mesh) source = child; });
   if (!source) { disposeObject(gltf.scene); throw new Error("Figure geometry missing"); }
-  const geometry = source.geometry.clone();
+  const geometry = repairHeadSymmetry(source.geometry);
   geometry.scale(.62, .62, .62);
   const position = geometry.getAttribute("position");
   // Hollow the scanned face while preserving the cranium, ears, neck and shoulders.

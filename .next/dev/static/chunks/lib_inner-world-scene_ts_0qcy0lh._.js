@@ -13,7 +13,9 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/three/build/three.core.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$module$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/three/build/three.module.js [app-client] (ecmascript) <locals>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$examples$2f$jsm$2f$loaders$2f$GLTFLoader$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/three/examples/jsm/loaders/GLTFLoader.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$examples$2f$jsm$2f$utils$2f$BufferGeometryUtils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/three/examples/jsm/utils/BufferGeometryUtils.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$examples$2f$jsm$2f$environments$2f$RoomEnvironment$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/three/examples/jsm/environments/RoomEnvironment.js [app-client] (ecmascript)");
+;
 ;
 ;
 ;
@@ -101,6 +103,65 @@ function disposeObject(object) {
     });
     textures.forEach((texture)=>texture.dispose());
 }
+// Reconstruct the damaged side from the intact scanned half. Clipping crossing
+// triangles at the center keeps a closed seam and preserves the original contours.
+function repairHeadSymmetry(source) {
+    const position = source.getAttribute("position"), normal = source.getAttribute("normal"), uv = source.getAttribute("uv");
+    const indices = source.getIndex();
+    const vertices = [], normals = [], uvs = [];
+    const read = (index)=>({
+            p: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"]().fromBufferAttribute(position, index),
+            n: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector3"]().fromBufferAttribute(normal, index),
+            uv: new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Vector2"](uv.getX(index), uv.getY(index))
+        });
+    const emit = (triangle, mirror)=>{
+        for (const v of mirror ? [
+            ...triangle
+        ].reverse() : triangle){
+            vertices.push(v.p.x * (mirror ? -1 : 1), v.p.y, v.p.z);
+            normals.push(v.n.x * (mirror ? -1 : 1), v.n.y, v.n.z);
+            uvs.push(v.uv.x, v.uv.y);
+        }
+    };
+    for(let i = 0; i < (indices?.count ?? position.count); i += 3){
+        const triangle = [
+            0,
+            1,
+            2
+        ].map((offset)=>read(indices ? indices.getX(i + offset) : i + offset));
+        const clipped = [];
+        for(let corner = 0; corner < 3; corner++){
+            const a = triangle[corner], b = triangle[(corner + 1) % 3];
+            if (a.p.x <= 0) clipped.push(a);
+            if (a.p.x <= 0 !== b.p.x <= 0) {
+                const t = -a.p.x / (b.p.x - a.p.x);
+                const intersection = {
+                    p: a.p.clone().lerp(b.p, t),
+                    n: a.n.clone().lerp(b.n, t).normalize(),
+                    uv: a.uv.clone().lerp(b.uv, t)
+                };
+                intersection.p.x = 0;
+                clipped.push(intersection);
+            }
+        }
+        for(let fan = 1; fan + 1 < clipped.length; fan++){
+            const triangle = [
+                clipped[0],
+                clipped[fan],
+                clipped[fan + 1]
+            ];
+            emit(triangle, false);
+            emit(triangle, true);
+        }
+    }
+    const raw = new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["BufferGeometry"]();
+    raw.setAttribute("position", new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Float32BufferAttribute"](vertices, 3));
+    raw.setAttribute("normal", new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Float32BufferAttribute"](normals, 3));
+    raw.setAttribute("uv", new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Float32BufferAttribute"](uvs, 2));
+    const repaired = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$examples$2f$jsm$2f$utils$2f$BufferGeometryUtils$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["mergeVertices"])(raw);
+    raw.dispose();
+    return repaired;
+}
 async function createInnerWorldScene(host, hero, signal) {
     const response = await fetch("/models/inner-world-head.glb", {
         signal
@@ -120,7 +181,7 @@ async function createInnerWorldScene(host, hero, signal) {
         disposeObject(gltf.scene);
         throw new Error("Figure geometry missing");
     }
-    const geometry = source.geometry.clone();
+    const geometry = repairHeadSymmetry(source.geometry);
     geometry.scale(.62, .62, .62);
     const position = geometry.getAttribute("position");
     // Hollow the scanned face while preserving the cranium, ears, neck and shoulders.
