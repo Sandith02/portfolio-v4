@@ -6,7 +6,7 @@ __turbopack_context__.v((parentImport) => {
   "static/chunks/node_modules_three_build_three_core_18d0oq6.js",
   "static/chunks/node_modules_three_build_three_module_03rsyo6.js",
   "static/chunks/node_modules_three_examples_jsm_1lsp58r._.js",
-  "static/chunks/lib_inner-world-scene_ts_0qcy0lh._.js"
+  "static/chunks/lib_0xox06b._.js"
 ].map((chunk) => __turbopack_context__.l(chunk))).then(() => {
         return parentImport("[project]/lib/inner-world-scene.ts [app-client] (ecmascript)");
     });
