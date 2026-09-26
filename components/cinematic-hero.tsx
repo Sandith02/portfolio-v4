@@ -1,64 +1,59 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useReducedMotion } from "motion/react";
-import { LinkArrow } from "@/components/link-arrow";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowDown, ArrowUpRight, Pause, Play } from "@phosphor-icons/react";
+import type { InnerWorldScene } from "@/lib/inner-world-scene";
 
 export function CinematicHero() {
   const root = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
+  const viewport = useRef<HTMLDivElement>(null);
+  const controller = useRef<InnerWorldScene | null>(null);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
-    if (reduce || !root.current || window.matchMedia("(max-width: 767px)").matches) return;
-    const context = gsap.context(() => {
-      const timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: root.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1
-        }
+    const host = viewport.current;
+    const hero = root.current;
+    if (!host || !hero) return;
+    const abort = new AbortController();
+    import("@/lib/inner-world-scene")
+      .then(({ createInnerWorldScene }) => createInnerWorldScene(host, hero, abort.signal))
+      .then(scene => {
+        if (abort.signal.aborted) { scene.dispose(); return; }
+        controller.current = scene;
+        scene.setPaused(hero.dataset.paused === "true");
+      })
+      .catch(error => {
+        if (error.name !== "AbortError") { host.dataset.ready = "false"; hero.dataset.fallback = "true"; }
       });
-      timeline
-        .to(".hero-line-first", { transform: "translate3d(-10vw, -5vh, 0)", opacity: .12, ease: "none" }, 0)
-        .to(".hero-line-second", { transform: "translate3d(11vw, 4vh, 0)", opacity: .12, ease: "none" }, 0)
-        .to(".cinematic-image", { transform: "scale(1.18)", clipPath: "inset(0 0 0 0)", ease: "none" }, 0)
-        .to(".hero-support", { opacity: 0, transform: "translateY(-30px)", ease: "none" }, 0)
-        .to(".hero-endline", { opacity: 1, transform: "translate(-50%, -50%)", ease: "none" }, .5);
-    }, root);
-    return () => context.revert();
-  }, [reduce]);
+    return () => { abort.abort(); controller.current?.dispose(); controller.current = null; };
+  }, []);
+
+  useEffect(() => { controller.current?.setPaused(paused); }, [paused]);
 
   return (
-    <section className="cinematic-hero" ref={root}>
+    <section className="cinematic-hero inner-hero" ref={root} data-paused={paused} aria-labelledby="hero-title">
       <div className="cinematic-stage">
-        <div className="hero-labels">
-          <span>Sandith Sithmaka</span>
-          <span>Developer + creative</span>
+        <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
+        <div className="inner-vignette" aria-hidden="true" />
+        <div className="inner-grain" aria-hidden="true" />
+        <div className="inner-topline"><span>Sandith Sithmaka / A world within</span><span>Move a little closer.</span></div>
+        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka. Quiet outside. Never quiet inside.</h1>
+        <div className="inner-story" aria-hidden="true">
+          <div className="inner-chapter inner-chapter-first"><p>The things I never say.</p><span>Quiet<br /><em>outside.</em></span></div>
+          <div className="inner-chapter inner-chapter-second"><p>There was never nothing.</p><span>Never quiet<br /><em>inside.</em></span></div>
+          <div className="inner-chapter inner-chapter-last"><p>Beyond the silence.</p><span>Still<br /><em>here.</em></span></div>
         </div>
-        <div className="cinematic-image">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/corporate.jpg" alt="Angular contemporary architecture in afternoon light" />
+        <p className="inner-description">Independent developer.<br />A different kind of presence.</p>
+        <div className="inner-bottom">
+          <a className="inner-scroll" href="#introduction"><ArrowDown size={14} /><span>Scroll inward</span></a>
+          <Link className="inner-enter" href="/work">Discover the work <ArrowUpRight size={14} /></Link>
+          <button className="inner-motion" type="button" onClick={() => setPaused(value => !value)} aria-pressed={paused} aria-label={paused ? "Resume atmosphere" : "Pause atmosphere"}>
+            {paused ? <Play size={10} weight="fill" /> : <Pause size={10} weight="fill" />}<span>{paused ? "Resume" : "Stillness"}</span>
+          </button>
         </div>
-        <h1 className="cinematic-title">
-          <span className="hero-line-first">Anyone can build one.</span>
-          <span className="hero-line-second">Few are worth remembering.</span>
-        </h1>
-        <div className="hero-support">
-          <p>Custom websites, digital products and rescued AI builds with a real point of view.</p>
-          <div>
-            <LinkArrow href="/work" inverse>View the work</LinkArrow>
-            <LinkArrow href="/contact" inverse>Start something</LinkArrow>
-          </div>
-        </div>
-        <div className="hero-endline" aria-hidden="true">
-          <span>AI made it fast.</span>
-          <strong>I make it good.</strong>
-        </div>
+        <div className="inner-progress" aria-hidden="true"><span /></div>
+        <a className="inner-credits" href="/models/inner-world-credits.txt" target="_blank" rel="noreferrer">Figure: Lee Perry-Smith / CC BY 3.0</a>
       </div>
     </section>
   );

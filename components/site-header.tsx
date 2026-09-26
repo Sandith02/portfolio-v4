@@ -25,7 +25,7 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="site-header">
+    <header className={`site-header${pathname === "/" ? " site-header-home" : ""}`}>
       <Link className="wordmark" href="/" aria-label="Sandith Dev home">
         SANDITH<span>/DEV</span>
       </Link>

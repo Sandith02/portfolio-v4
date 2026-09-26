@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/archivo";
 import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/cormorant-garamond/400.css";
+import "@fontsource/cormorant-garamond/400-italic.css";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";

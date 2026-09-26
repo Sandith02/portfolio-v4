@@ -1,0 +1,10 @@
+Figure attribution
+
+Infinite, 3D Head Scan by Lee Perry-Smith
+Source: https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/LeePerrySmith
+Original work: https://www.triplegangers.com/
+License: Creative Commons Attribution 3.0 Unported
+https://creativecommons.org/licenses/by/3.0/
+
+Adaptations for this portfolio: hollowed face, modified geometry, new word-covered materials, lighting, procedural galaxy, and interactive camera movement.
+Original license notice: /models/inner-world-head-license.txt

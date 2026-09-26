@@ -11,7 +11,7 @@ export default function Home() {
     <main id="main-content">
       <CinematicHero />
 
-      <section className="positioning">
+      <section className="positioning" id="introduction">
         <div className="positioning-top">
           <p>Full-stack engineering<br />Creative direction<br />Sri Lanka to worldwide</p>
           <h2>Fast is common.<br /><span>Distinct is rare.</span></h2>
