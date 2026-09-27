@@ -37,18 +37,18 @@ export function CinematicHero() {
         <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
         <div className="inner-vignette" aria-hidden="true" />
         <div className="inner-grain" aria-hidden="true" />
-        <div className="inner-topline"><span>Sandith Sithmaka<span className="inner-topline-role">Creative developer</span></span></div>
+        <div className="inner-topline"><span>I’m Sandith Sithmaka<span className="inner-topline-role">Creative developer</span></span></div>
         <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka — Creative developer. Quiet outside. Worlds within.</h1>
-        <div className="inner-story" aria-hidden="true">
+        <div className="inner-story">
           <div className="inner-chapter inner-chapter-first">
-            <div className="inner-chapter-left"><span className="inner-headline">Quiet<br />outside.</span></div>
-            <div className="inner-chapter-right"><span className="inner-headline">Worlds<br />within.</span></div>
+            <div className="inner-chapter-left"><span className="inner-headline" aria-hidden="true">Quiet<br />outside.</span><p className="inner-title-note">I leave a lot unsaid.<br />A curious mind might find the rest.</p></div>
+            <div className="inner-chapter-right"><span className="inner-headline" aria-hidden="true">Worlds<br />within.</span></div>
           </div>
-          <div className="inner-chapter inner-chapter-second">
+          <div className="inner-chapter inner-chapter-second" aria-hidden="true">
             <div className="inner-chapter-left"><span className="inner-headline">Always<br />looking.</span></div>
             <div className="inner-chapter-right"><span className="inner-headline">Never<br />ordinary.</span></div>
           </div>
-          <div className="inner-chapter inner-chapter-last">
+          <div className="inner-chapter inner-chapter-last" aria-hidden="true">
             <div className="inner-chapter-left"><span className="inner-headline">Strange<br />ideas.</span></div>
             <div className="inner-chapter-right"><span className="inner-headline">Real<br />things.</span></div>
           </div>

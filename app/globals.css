@@ -76,8 +76,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-viewport[data-ready="true"] .inner-poster { opacity: 0; }
 .inner-vignette { position: absolute; z-index: -2; inset: 0; pointer-events: none; background: linear-gradient(0deg,#141417 0%,#14141755 12%,transparent 32%,transparent 85%,#14141799),linear-gradient(90deg,#14141740,transparent 40%); }
 .inner-grain { position: absolute; z-index: 5; inset: 0; pointer-events: none; opacity: .012; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.inner-topline { position: absolute; inset: calc(var(--header) + 32px) var(--pad) auto; display: flex; justify-content: space-between; gap: 1rem; color: #d8dedc; font: 500 .72rem/1.6 var(--hero-body); letter-spacing: .02em; }
-.inner-topline-role { display: block; margin-top: .3rem; color: #d8dedc; font-size: .9rem; letter-spacing: .015em; }
+.inner-topline { position: absolute; inset: calc(var(--header) + 32px) var(--pad) auto; display: flex; justify-content: space-between; gap: 1rem; color: #d8dedc; font: 400 .85rem/1.4 var(--hero-body); letter-spacing: .02em; }
+.inner-topline-role { display: block; margin-top: .1rem; color: #d8dedc; font-size: 1.3rem; font-weight: 400; letter-spacing: .015em; }
 .inner-accessible-title { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .inner-story { position: absolute; inset: 0; pointer-events: none; }
 .inner-chapter { position: absolute; inset: 0; }
@@ -85,6 +85,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-chapter-left { left: var(--pad); top: 37%; }
 .inner-chapter-right { right: var(--pad); top: 47%; text-align: right; }
 .inner-headline { display: block; color: #e4e9e6; font: 400 clamp(2.8rem, min(5.4vw, 8svh), 7rem)/1.08 var(--hero-display); letter-spacing: -.045em; text-transform: uppercase; text-shadow: 0 2px 22px #14141766; }
+.inner-title-note { position: absolute; top: 100%; left: 0; width: 100%; margin: 1.4rem 0 0; color: #afb5b6; font: 400 clamp(.75rem, .95vw, 1rem)/1.7 var(--hero-body); letter-spacing: .005em; }
 .inner-chapter-first { opacity: var(--inner-first); }
 .inner-chapter-second { opacity: var(--inner-second); }
 .inner-chapter-last { opacity: var(--inner-last); }
@@ -283,12 +284,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .inner-hero { height: 360svh; }
   .inner-poster { background-image: url("/images/inner-world-poster-mobile.webp"); }
   .cinematic-stage { min-height: 700px; }
-  .inner-topline { top: calc(var(--header) + 20px); font-size: .68rem; }
-  .inner-topline-role { margin-top: .15rem; font-size: .75rem; }
+  .inner-topline { top: calc(var(--header) + 20px); font-size: .78rem; }
+  .inner-topline-role { margin-top: .1rem; font-size: 1.15rem; }
   .inner-chapter-left, .inner-chapter-right { top: auto; bottom: 24%; width: 44%; }
   .inner-chapter-left { left: var(--pad); }
   .inner-chapter-right { right: var(--pad); }
   .inner-headline { font-size: clamp(1.65rem, 8.8vw, 3.6rem); line-height: 1.12; letter-spacing: -.035em; }
+  .inner-title-note { width: calc(100vw - var(--pad) * 2); margin-top: .75rem; font-size: .7rem; line-height: 1.6; }
   .inner-opportunity { left: var(--pad); right: var(--pad); bottom: 13.5%; display: flex; justify-content: flex-end; align-items: center; text-align: right; font-size: .72rem; }
   .inner-opportunity a { gap: .5rem; }
   .inner-bottom { height: 70px; grid-template-columns: 1fr auto; gap: .5rem; font-size: .52rem; }

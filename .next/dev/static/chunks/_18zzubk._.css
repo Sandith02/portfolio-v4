@@ -466,7 +466,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-topline {
   inset: calc(var(--header) + 32px) var(--pad) auto;
   color: #d8dedc;
-  font: 500 .72rem/1.6 var(--hero-body);
+  font: 400 .85rem/1.4 var(--hero-body);
   letter-spacing: .02em;
   justify-content: space-between;
   gap: 1rem;
@@ -477,8 +477,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-topline-role {
   color: #d8dedc;
   letter-spacing: .015em;
-  margin-top: .3rem;
-  font-size: .9rem;
+  margin-top: .1rem;
+  font-size: 1.3rem;
+  font-weight: 400;
   display: block;
 }
 
@@ -527,6 +528,17 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   text-transform: uppercase;
   text-shadow: 0 2px 22px #14141766;
   display: block;
+}
+
+.inner-title-note {
+  color: #afb5b6;
+  width: 100%;
+  font: 400 clamp(.75rem, .95vw, 1rem)/1.7 var(--hero-body);
+  letter-spacing: .005em;
+  margin: 1.4rem 0 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
 }
 
 .inner-chapter-first {
@@ -1710,12 +1722,12 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
   .inner-topline {
     top: calc(var(--header) + 20px);
-    font-size: .68rem;
+    font-size: .78rem;
   }
 
   .inner-topline-role {
-    margin-top: .15rem;
-    font-size: .75rem;
+    margin-top: .1rem;
+    font-size: 1.15rem;
   }
 
   .inner-chapter-left, .inner-chapter-right {
@@ -1736,6 +1748,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
     letter-spacing: -.035em;
     font-size: clamp(1.65rem, 8.8vw, 3.6rem);
     line-height: 1.12;
+  }
+
+  .inner-title-note {
+    width: calc(100vw - var(--pad) * 2);
+    margin-top: .75rem;
+    font-size: .7rem;
+    line-height: 1.6;
   }
 
   .inner-opportunity {
