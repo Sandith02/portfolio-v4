@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, HouseSimple, X } from "@phosphor-icons/react";
 
-const links = [["Work", "/work"], ["About", "/about"], ["Contact", "/contact"]];
+const links = [["Work", "/work"], ["About", "/about"], ["Contact", "/contact"], ["Why", "/why"], ["Threads", "/blogs"]];
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -20,9 +20,14 @@ export function SiteHeader() {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const range = document.documentElement.scrollHeight - window.innerHeight;
+      const hero = pathname === "/" ? document.querySelector<HTMLElement>(".inner-hero") : null;
+      const range = hero ? hero.offsetHeight - (hero.querySelector<HTMLElement>(".cinematic-stage")?.clientHeight ?? window.innerHeight) : document.documentElement.scrollHeight - window.innerHeight;
       const percent = range > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / range)) * 100) : 0;
-      if (progress.current) progress.current.textContent = `${percent}%`;
+      if (progress.current) {
+        progress.current.textContent = `${percent}%`;
+        progress.current.dataset.infinite = "false";
+        progress.current.title = hero ? "Journey through my inner world" : "Page scroll progress";
+      }
     };
     const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
     const observer = new ResizeObserver(schedule);
@@ -31,7 +36,7 @@ export function SiteHeader() {
     window.addEventListener("resize", schedule);
     update();
     return () => { observer.disconnect(); cancelAnimationFrame(frame); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", schedule); };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -48,7 +53,7 @@ export function SiteHeader() {
         <button ref={toggle} className="nav-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="site-menu" aria-label={open ? "Close menu" : "Open menu"}>
           {open ? <X size={20} weight="light" /> : <span className="nav-menu-icon" aria-hidden="true"><i /><i /></span>}<span>{open ? "Close" : "Menu"}</span>
         </button>
-        <Link className="nav-home" href="/" aria-label="Home" title="Home" onClick={() => setOpen(false)}><HouseSimple size={16} weight="light" /></Link>
+        <Link className="nav-home" href="/" aria-label="Home" title="Home" onClick={() => { setOpen(false); if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" }); }}><HouseSimple size={16} weight="light" /></Link>
         <span className="nav-progress" ref={progress} title="Page scroll progress" aria-hidden="true">0%</span>
       </div>
       <AnimatePresence>

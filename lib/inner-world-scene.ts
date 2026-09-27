@@ -3,6 +3,9 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { createCosmicGalaxy } from "./cosmic-galaxy";
+import { createPlanetarySystem } from "./planetary-system";
+import { createMindGateway } from "./mind-gateway";
+import { GALAXY_FIELD_GLSL } from "./galaxy-field";
 
 export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
 
@@ -54,7 +57,7 @@ const atmosphericEvents = `
       }
 `;
 
-function wordTexture(size: number) {
+function wordTexture(size: number, uniformSize = false) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = size;
   const context = canvas.getContext("2d")!;
@@ -63,6 +66,22 @@ function wordTexture(size: number) {
   context.textBaseline = "middle";
   const cellWidth = size / 80;
   const cellHeight = size / 128;
+  if (uniformSize) {
+    const fontSize = cellHeight * .66;
+    context.font = `400 ${fontSize}px "IBM Plex Mono", monospace`;
+    context.fillStyle = "#bfc4c4";
+    let index = 0;
+    for (let row = 0; row < 128; row++) {
+      let x = 0;
+      while (x < size) {
+        const word = thoughtWords[index++ % thoughtWords.length];
+        // Flow phrases at their natural width: no accent layer or shrinking
+        // longer entries into fixed cells, so every glyph has the same size.
+        context.fillText(word, x, (row + .5) * cellHeight);
+        x += context.measureText(word).width + fontSize * 1.4;
+      }
+    }
+  } else {
   // Keep the dense 10,240-word layer; phrases get wider spaces in the accent layer.
   for (let row = 0; row < 128; row++) {
     for (let column = 0; column < 80; column++) {
@@ -87,6 +106,7 @@ function wordTexture(size: number) {
     context.fillRect(x - size * .002, y - size * .007, width + size * .004, size * .014);
     context.fillStyle = "#eeeeee";
     context.fillText(word, x, y, width);
+  }
   }
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
@@ -217,6 +237,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const atmosphereMotion = { value: 1 };
   const progressUniform = { value: 0 };
   const galaxy = createCosmicGalaxy(time, progressUniform);
+  const globeWords = wordTexture(words.image.width, true);
+  const planets = createPlanetarySystem(renderer, hero, globeWords);
   scene.add(galaxy.mesh);
   const portalCamera = { value: new THREE.Vector3(0, .25, 8) };
   const reflectionPosition = { value: new THREE.Vector3(0, 1, .1) };
@@ -311,6 +333,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const room = new RoomEnvironment();
   const environment = pmrem.fromScene(room, .06);
   scene.environment = environment.texture;
+  planets.setEnvironment(environment.texture);
   room.dispose();
   pmrem.dispose();
 
@@ -366,6 +389,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     fragmentShader: `
       varying vec2 vUv;uniform float uProgress,uTime,uAspect,uMotion;
       ${atmosphericEvents}
+      ${GALAXY_FIELD_GLSL}
       vec3 starField(vec2 p){
         vec3 light=vec3(0.);
         // A loose diagonal concentration gives depth without adding grain or cloudy texture.
@@ -462,9 +486,11 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
         float distance=length(p*vec2(.8,1.));
         float wave=sin(distance*8.+inward*5.+p.y*2.+uTime*.06)*.5+.5;
         float current=wave*glow*sin(inward*3.14159)*.65;
-        vec3 color=vec3(.006,.006,.007);
-        color+=vec3(.014,.013,.016)*glow;
-        color+=vec3(.015,.013,.018)*current;
+        vec3 color=vec3(.00425,.0045,.0055);
+        color+=vec3(.011,.01025,.013)*glow;
+        color+=vec3(.012,.0105,.0145)*current;
+        // A faint preview of the inner galaxy, behind the head and hero copy.
+        color+=galaxyField(p,0.,0.,0.)*.22;
         color+=starField(p);
         color+=scorpius(p);
         float events=meteor(p,0.)+meteor(p,1.)+meteor(p,2.);
@@ -484,12 +510,17 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const red = new THREE.PointLight(0x983a33, 7, 9, 2); red.position.set(-3, -.5, 1); scene.add(red);
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const gateway = createMindGateway(hero);
   let paused = false, visible = true, destroyed = false, progress = 0, targetProgress = 0, elapsed = 0, frame = 0, lastFrame = 0;
   let pointerX = 0, pointerY = 0, lookX = 0, lookY = 0;
   let mobile = host.clientWidth < 768;
-  const measure = () => { targetProgress = reduced.matches ? 0 : THREE.MathUtils.clamp(-hero.getBoundingClientRect().top / Math.max(1, hero.offsetHeight - host.clientHeight), 0, 1); };
+  const measure = () => {
+    const screen = Math.max(1, host.clientHeight);
+    const distance = Math.max(0, -hero.getBoundingClientRect().top);
+    targetProgress = reduced.matches ? 0 : distance / screen;
+  };
   const draw = () => {
-    const p = reduced.matches ? 0 : progress;
+    const p = reduced.matches ? 0 : Math.min(1, progress / 3);
     atmosphereMotion.value = reduced.matches ? 0 : 1;
     const approach = THREE.MathUtils.smoothstep(p, 0, 1);
     figure.position.set(Math.sin(elapsed*.31)*.012, (mobile ? .05 : -.2)+Math.sin(elapsed*.43)*.008, 0);
@@ -509,26 +540,29 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     filmPointer.value.set(lookX,lookY);
     time.value = elapsed;
     progressUniform.value = p;
+    galaxy.journey.value = Math.max(0, progress - 3);
     galaxy.mesh.visible = p > .77;
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
     hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
     hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));
-    hero.style.setProperty("--inner-last", THREE.MathUtils.smoothstep(p, .72, .95).toFixed(3));
+    hero.style.setProperty("--inner-last", (THREE.MathUtils.smoothstep(p, .72, .85) * (1 - THREE.MathUtils.smoothstep(p, .83, .94))).toFixed(3));
     renderer.render(scene, camera);
+    planets.draw(reduced.matches ? 0 : progress, elapsed);
   };
   const animate = (now: number) => {
     if (destroyed) return;
     const delta = Math.min((now - (lastFrame || now)) / 1000, .05); lastFrame = now; elapsed += delta;
     const ease = 1 - Math.exp(-delta * 4.5);
+    gateway.update(progress);
     progress += (targetProgress - progress) * ease;
     lookX += (pointerX - lookX) * ease; lookY += (pointerY - lookY) * ease;
     draw(); frame = requestAnimationFrame(animate);
   };
   const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else draw(); };
-  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); measure(); draw(); };
+  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
-  const preference = () => { measure(); if (reduced.matches) { progress = 0; lookX = 0; lookY = 0; } sync(); };
+  const preference = () => { measure(); if (reduced.matches) { hero.style.height = ""; progress = 0; lookX = 0; lookY = 0; } sync(); };
   const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }); observer.observe(hero);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(host);
   window.addEventListener("scroll", measure, { passive: true }); hero.addEventListener("pointermove", pointer); hero.addEventListener("pointerleave", leave);
@@ -542,7 +576,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
       destroyed = true; cancelAnimationFrame(frame); observer.disconnect(); resizeObserver.disconnect();
       window.removeEventListener("scroll", measure); hero.removeEventListener("pointermove", pointer); hero.removeEventListener("pointerleave", leave);
       document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", preference); renderer.domElement.removeEventListener("webglcontextlost", lost);
-      disposeObject(scene); words.dispose(); environment.dispose(); renderer.dispose(); renderer.domElement.remove(); host.dataset.ready = "false";
+      gateway.dispose(); planets.dispose(); globeWords.dispose(); disposeObject(scene); words.dispose(); environment.dispose(); renderer.dispose(); renderer.domElement.remove(); host.dataset.ready = "false";
     }
   };
 }

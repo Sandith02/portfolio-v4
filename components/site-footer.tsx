@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname === "/") return null;
   return (
     <footer className="site-footer">
       <div className="footer-lead">
@@ -19,6 +24,7 @@ export function SiteFooter() {
           <Link href="/services">Services</Link>
           <Link href="/ai-website-redesign">AI Rescue</Link>
           <Link href="/about">About</Link>
+          <Link href="/blogs">Threads</Link>
           <Link href="/contact">Contact</Link>
         </nav>
         <div className="footer-place">

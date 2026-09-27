@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "@phosphor-icons/react";
 import type { InnerWorldScene } from "@/lib/inner-world-scene";
 
-function ConstructedTitle({ lines, offset = 0 }: { lines: [string, string]; offset?: number }) {
+function ConstructedTitle({ lines, offset = 0 }: { lines: string[]; offset?: number }) {
   const title = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -22,7 +23,9 @@ function ConstructedTitle({ lines, offset = 0 }: { lines: [string, string]; offs
     <span className="inner-headline constructed-title" ref={title} aria-hidden="true">
       {lines.map((line, row) => (
         <span className="constructed-line" key={line}>
-          {Array.from(line).map((letter, index) => (
+          {Array.from(line).map((letter, index) => letter === " " ? (
+            <span className="constructed-space" key={index}>{"\u00a0"}</span>
+          ) : (
             <span className="constructed-letter" key={index} style={{
               "--build-delay": `${offset + row * 160 + ((index * 3) % 5) * 65}ms`,
             } as CSSProperties}>
@@ -42,6 +45,7 @@ function ConstructedTitle({ lines, offset = 0 }: { lines: [string, string]; offs
 
 export function CinematicHero() {
   const root = useRef<HTMLElement>(null);
+  const router = useRouter();
   const viewport = useRef<HTMLDivElement>(null);
   const controller = useRef<InnerWorldScene | null>(null);
 
@@ -50,6 +54,8 @@ export function CinematicHero() {
     const hero = root.current;
     if (!host || !hero) return;
     const abort = new AbortController();
+    const entered = (event: Event) => { router.push((event as CustomEvent<string>).detail); };
+    hero.addEventListener("planet-entered", entered);
     import("@/lib/inner-world-scene")
       .then(({ createInnerWorldScene }) => createInnerWorldScene(host, hero, abort.signal))
       .then(scene => {
@@ -59,8 +65,8 @@ export function CinematicHero() {
       .catch(error => {
         if (error.name !== "AbortError") { host.dataset.ready = "false"; hero.dataset.fallback = "true"; }
       });
-    return () => { abort.abort(); controller.current?.dispose(); controller.current = null; };
-  }, []);
+    return () => { hero.removeEventListener("planet-entered", entered); abort.abort(); controller.current?.dispose(); controller.current = null; };
+  }, [router]);
 
   return (
     <section className="cinematic-hero inner-hero" ref={root} aria-labelledby="hero-title">
@@ -78,11 +84,50 @@ export function CinematicHero() {
             <div className="inner-chapter-left"><ConstructedTitle lines={["Always", "looking."]} /></div>
             <div className="inner-chapter-right"><ConstructedTitle lines={["Never", "ordinary."]} offset={180} /></div>
           </div>
-          <div className="inner-chapter inner-chapter-last" aria-hidden="true">
-            <div className="inner-chapter-left"><ConstructedTitle lines={["Strange", "ideas."]} /></div>
-            <div className="inner-chapter-right"><ConstructedTitle lines={["Real", "things."]} offset={180} /></div>
-          </div>
         </div>
+        <section className="mind-invitation" aria-labelledby="mind-invitation-title" aria-hidden="true" inert>
+          <h2 id="mind-invitation-title" aria-label="Somewhere only I know."><ConstructedTitle lines={["Somewhere", "only I know."]} /></h2>
+          <p>Beyond this point is my own galaxy. Each world holds a different part of me. Wander between them. Turn them. Step inside. You might catch an idea igniting or feel a little turbulence. Things are still taking shape in here.</p>
+        </section>
+        <nav className="planet-navigation" aria-label="Explore my worlds" aria-hidden="true" inert>
+          <div className="planet-introduction"><h2 aria-label="Inside my mind."><ConstructedTitle lines={["Inside my mind."]} /></h2><p>Each world, a different part of me.</p></div>
+          {[
+            ["Work", "/work", "Things I made"],
+            ["About", "/about", "The person behind it"],
+            ["Contact", "/contact", "A place to connect"],
+            ["Why", "/why", "What moves me"],
+            ["Threads", "/blogs", "Thoughts taking shape"],
+          ].map(([label, href, description]) => (
+            <a className="planet-link" href={href} draggable={false} aria-describedby="planet-controls" data-planet={label} key={label} aria-label={`Enter ${label}: ${description}`}>
+              <span className="planet-label"><span>{label}<ArrowUpRight size={16} /></span><small>{description}</small></span>
+            </a>
+          ))}
+          <p className="planet-controls" id="planet-controls">Scroll to wander <span>·</span> Drag to turn <span>·</span> Click to enter<span className="inner-accessible-title">. When a planet is focused, use the arrow keys to turn it or Enter to go inside.</span></p>
+        </nav>
+        <div className="mind-boundary" aria-hidden="true">
+          <p>You’ve seen a part of me.</p>
+          <h2 aria-label="The rest stays within."><ConstructedTitle lines={["The rest", "stays within."]} /></h2>
+        </div>
+        <footer className="galaxy-footer" aria-label="Journey footer" aria-hidden="true" inert>
+          <div className="galaxy-footer-main">
+            <div className="galaxy-footer-copy">
+              <h2><span>Still</span> <span>becoming.</span></h2>
+              <p>Have a place for a mind like mine?</p>
+            </div>
+            <a className="galaxy-footer-hello" href="mailto:hello@sandithdev.com">
+              <span>Let’s talk</span><span className="galaxy-footer-arrow"><ArrowUpRight size={18} aria-hidden="true" /></span>
+            </a>
+          </div>
+          <div className="galaxy-footer-bottom">
+            <span className="galaxy-footer-signature">© {new Date().getFullYear()} Sandith Sithmaka</span>
+            <nav aria-label="Final scene links">
+              <a href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Sandith on LinkedIn (opens in a new tab)">LinkedIn <ArrowUpRight size={13} aria-hidden="true" /></a>
+              <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>Back to the surface <ArrowUpRight size={13} aria-hidden="true" /></button>
+            </nav>
+          </div>
+        </footer>
+        <div className="planet-entry-veil" aria-hidden="true" />
+        <span className="planet-status inner-accessible-title" role="status" />
         <div className="inner-opportunity"><Link href="/work">Explore my work <ArrowUpRight size={16} /></Link></div>
         <div className="inner-bottom">
           <a className="inner-linkedin" href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Sandith on LinkedIn (opens in a new tab)">
@@ -90,7 +135,10 @@ export function CinematicHero() {
             <span><span className="inner-linkedin-prefix">Connect on </span>LinkedIn</span>
             <span className="inner-linkedin-arrow"><ArrowUpRight size={14} aria-hidden="true" /></span>
           </a>
-          <a className="inner-scroll" href="#introduction" aria-label="Scroll inward" title="Scroll inward"><ArrowDown size={18} /></a>
+          <button className="inner-scroll" type="button" aria-label="Scroll inward" title="Scroll inward" onClick={() => {
+            const hero = root.current;
+            if (hero) window.scrollTo({ top: hero.offsetTop + (viewport.current?.clientHeight ?? window.innerHeight) * 3.4, behavior: "smooth" });
+          }}><ArrowDown size={18} /></button>
         </div>
         <a className="inner-credits" href="/models/inner-world-credits.txt" target="_blank" rel="noreferrer">Figure: Lee Perry-Smith / CC BY 3.0</a>
       </div>

@@ -12,7 +12,10 @@ export function SmoothScroll() {
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
     });
     let frame = 0;
+    let splashActive = false;
     const raf = (time: number) => {
+      const active = document.documentElement.dataset.splash === "active";
+      if (active !== splashActive) { splashActive = active; if (active) lenis.stop(); else lenis.start(); }
       lenis.raf(time);
       frame = requestAnimationFrame(raf);
     };

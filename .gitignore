@@ -1,1 +1,17 @@
-node_modules
+/node_modules/
+
+# Generated Next.js build output
+/.next/
+/out/
+/build/
+*.tsbuildinfo
+
+# Local configuration and credentials
+/.vercel/
+.env*
+!.env.example
+!.env.*.example
+
+# Local logs and operating-system files
+*.log
+.DS_Store
