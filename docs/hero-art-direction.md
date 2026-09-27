@@ -13,6 +13,8 @@ Final galaxy: lib/cosmic-galaxy.ts
 Layout: components/cinematic-hero.tsx
 Styles: app/globals.css
 
+The final galaxy uses a predominantly charcoal and silver palette, with only a faint purple accent in the outer haze. Cloud-layer intensity is roughly halved, the broad haze is narrower, and the distant core is softened so more dark space and stars show through.
+
 ## Creative role typography
 
 The hero introduces Sandith as a creative developer seeking a creative team. Megrim is the display face; Manrope supports the name, role, navigation and links. The existing centered figure and camera are untouched. Two offset headline fields frame the head: “Quiet outside.” / “Worlds within.” Small captions and descriptive paragraphs have been removed. The only supporting hero copy is the name and role, a creative-role email link, and the work link. Mobile places the two headline fields below the face. Scroll chapters continue into “Always looking.” / “Never ordinary.” and “Strange ideas.” / “Real things.”

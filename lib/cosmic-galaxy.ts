@@ -35,7 +35,7 @@ export function createCosmicGalaxy(time: { value: number }, progress: { value: n
         float point=1.-smoothstep(.018,.035+aa*.65,r);
         float halo=exp(-r*22.)*.18;
         float twinkle=.8+.2*sin(uTime*.4+h*83.);
-        return mix(vec3(.52,.69,1.),vec3(1.,.82,.6),h)
+        return mix(vec3(.7,.78,.86),vec3(.95,.89,.78),h)
           *(point+halo)*step(.78,h)*twinkle*(.3+h*h);
       }
       void main(){
@@ -49,22 +49,22 @@ export function createCosmicGalaxy(time: { value: number }, progress: { value: n
         float wisps=cloud(q*5.+vec2(uTime*.002,0.));
         float detail=cloud(q*21.+wisps*2.);
         float band=exp(-pow((q.y+(wisps-.5)*.23)*5.3,2.));
-        float broad=exp(-pow(q.y*2.5,2.));
+        float broad=exp(-pow(q.y*3.2,2.));
         float dust=cloud(q*vec2(9.,19.)+vec2(4.7,1.3));
         float r=length((q-vec2(.12,.015))*vec2(1.1,2.8));
         float core=exp(-r*6.5);
-        vec3 color=vec3(.0015,.003,.009);
-        color+=mix(vec3(.025,.055,.13),vec3(.13,.055,.12),wisps)
-          *broad*pow(wisps,1.7)*1.8;
-        color+=mix(vec3(.09,.15,.25),vec3(.3,.25,.2),detail)
-          *band*pow(detail,2.)*1.8;
-        color+=vec3(.68,.55,.4)*core*(.3+detail);
+        vec3 color=vec3(.003,.004,.005);
+        color+=mix(vec3(.04,.05,.065),vec3(.102,.095,.115),wisps)
+          *broad*pow(wisps,1.7)*.85;
+        color+=mix(vec3(.12,.145,.17),vec3(.26,.26,.245),detail)
+          *band*pow(detail,2.)*.9;
+        color+=vec3(.6,.57,.51)*core*(.3+detail)*.6;
         color*=1.-smoothstep(.48,.78,dust)*band*.87;
         color+=stars(p,155.,3.)*.55;
         color+=stars(p*1.025,71.,31.)*.7;
         color+=stars(p*1.06,29.,71.)*.65;
         // More distant, unresolved stars collect along the galactic plane.
-        color+=vec3(.2,.25,.35)*pow(noise(p*1100.),18.)*band;
+        color+=vec3(.24,.255,.27)*pow(noise(p*1100.),18.)*band;
         gl_FragColor=vec4(color,reveal);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
