@@ -77,7 +77,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-poster { position: absolute; inset: 0; background: #141417 url("/images/inner-world-poster.webp") center / cover no-repeat; transition: opacity 800ms ease; }
 .inner-viewport[data-ready="true"] .inner-poster { opacity: 0; }
 .inner-vignette { position: absolute; z-index: -2; inset: 0; pointer-events: none; background: linear-gradient(0deg,#141417 0%,#14141755 12%,transparent 32%,transparent 85%,#14141799),linear-gradient(90deg,#14141740,transparent 40%); }
-.inner-hero[data-gateway="before"] .inner-vignette { background: linear-gradient(0deg,#0e0f11 0%,#0e0f1155 12%,transparent 32%,transparent 85%,#0e0f1199),linear-gradient(90deg,#0e0f1140,transparent 40%); }
+.inner-hero[data-gateway="before"] .inner-vignette, .mind-splash-shade { background: linear-gradient(0deg,#0e0f11 0%,#0e0f1155 12%,transparent 32%,transparent 85%,#0e0f1199),linear-gradient(90deg,#0e0f1140,transparent 40%); }
 .inner-topline { position: absolute; inset: calc(var(--header) + 32px) var(--pad) auto; display: flex; justify-content: space-between; gap: 1rem; color: #d8dedc; font: 400 .85rem/1.4 var(--hero-body); letter-spacing: .02em; }
 .inner-topline-role { display: block; margin-top: .1rem; color: #d8dedc; font-size: 1.3rem; font-weight: 400; letter-spacing: .015em; }
 .inner-accessible-title { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
@@ -512,25 +512,22 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .blogs-empty { border-top: 1px solid #c7a77c33; padding-top: 1.5rem; }
 .blogs-empty .body-xl { margin: 1rem 0 .6rem; }
 
-/* A brief first-visit opening: thoughts suspended above a quiet presence. */
-.mind-splash { position: fixed; inset: 0; z-index: 10000; overflow: hidden; background: #07090b; color: #dce2df; opacity: 1; transition: opacity 850ms ease, visibility 850ms; }
+/* A quiet presence behind glass; replayed on refresh during testing. */
+.mind-splash { position: fixed; inset: 0; z-index: 10000; overflow: hidden; outline: none; background: #141417; color: #dce2df; opacity: 1; transition: opacity 850ms ease, visibility 850ms; }
 .mind-splash[hidden] { display: none; }
 .mind-splash[data-leaving="true"] { opacity: 0; visibility: hidden; pointer-events: none; }
-.mind-splash-canvas { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 58%,#18303966,transparent 50%); }
+.mind-splash-canvas { position: absolute; inset: 0; background: #141417; }
 .mind-splash-canvas canvas { display: block; width: 100%; height: 100%; animation: splash-materialize 1.4s ease both; }
-.mind-splash-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(0deg,#07090b 0%,#07090b33 30%,transparent 65%,#07090b66),linear-gradient(90deg,#07090b88,transparent 28%,transparent 72%,#07090b88); }
-.mind-splash-top { position: absolute; inset: 30px 40px auto; display: flex; align-items: center; justify-content: space-between; font: 400 .72rem/1.4 var(--hero-body); letter-spacing: .035em; }
-.mind-splash-top > span { color: #aab3b7; }
-.mind-splash-top button { display: flex; align-items: center; gap: 18px; min-height: 44px; border: 0; background: none; color: #aab3b7; cursor: pointer; font: inherit; }
-.mind-splash-top button:hover { color: #fff; }
-.mind-splash-top button:focus-visible { outline: 1px solid #c0d4db; outline-offset: 5px; }
-.mind-splash-caption { position: absolute; left: 5.5%; bottom: 10%; }
-.mind-splash-caption p { margin: 0 0 18px; font: 400 clamp(2.8rem,5.4vw,6rem)/1.04 var(--hero-display); text-transform: uppercase; letter-spacing: -.045em; }
-.mind-splash-caption em { font-style: normal; color: #96adb4; }
-.mind-splash-caption > span { color: #919c9f; font: 400 .76rem/1.5 var(--hero-body); }
-.mind-splash-status { position: absolute; right: 40px; bottom: 38px; display: flex; align-items: center; gap: 12px; font: 400 .65rem/1.5 var(--hero-body); letter-spacing: .06em; color: #87989e; }
-.mind-splash-status i { width: 4px; height: 4px; border-radius: 50%; background: #9fbac4; box-shadow: 0 0 12px #9fbac4; animation: splash-thought 2s ease-in-out infinite; }
+.mind-splash-art { position: absolute; inset: 0; display: block; opacity: .76; mask-image: radial-gradient(ellipse at 50% 44%,#000 32%,#000b 65%,#0003 100%); animation: splash-glass-reveal 1.8s ease both; }
+.mind-splash-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.64) saturate(.35); animation: splash-glass-drift 10s ease-out both; }
+.mind-splash-shade { position: absolute; inset: 0; pointer-events: none; }
+.mind-splash-caption { position: absolute; top: 47%; left: 50%; width: min(90%, 760px); transform: translate(-50%,-50%); text-align: center; text-shadow: 0 2px 24px #07090bb3; animation: splash-copy-reveal 1.6s .45s ease both; }
+.mind-splash-caption p { margin: 0 0 16px; font: 400 clamp(2rem,3.8vw,3.8rem)/1.15 var(--hero-display); text-transform: uppercase; letter-spacing: .04em; }
+.mind-splash-caption .inner-headline { color: inherit; font: inherit; letter-spacing: inherit; text-shadow: inherit; }
+.mind-splash-caption > span { color: #b0b8b9; font: 400 clamp(.72rem,1vw,.85rem)/1.5 var(--hero-body); text-transform: none; letter-spacing: .04em; }
 @keyframes splash-materialize { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
-@keyframes splash-thought { 50% { opacity: .25; } }
-@media (max-width: 600px) { .mind-splash-top { inset: 18px 22px auto; } .mind-splash-caption { left: 24px; bottom: 10%; } .mind-splash-caption p { font-size: 2.75rem; } .mind-splash-status { left: 24px; right: auto; bottom: 25px; font-size: .6rem; } }
+@keyframes splash-glass-reveal { from { opacity: 0; filter: blur(8px); } to { opacity: .76; filter: blur(0); } }
+@keyframes splash-glass-drift { from { transform: scale(1.035); } to { transform: scale(1); } }
+@keyframes splash-copy-reveal { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
+@media (max-width: 600px) { .mind-splash-art img { object-fit: contain; } .mind-splash-caption { top: 47%; width: calc(100% - 36px); } .mind-splash-caption p { font-size: clamp(1.7rem,7vw,2.5rem); letter-spacing: .015em; margin-bottom: 12px; } }
 @media (prefers-reduced-motion: reduce) { .mind-splash { display: none; } }
