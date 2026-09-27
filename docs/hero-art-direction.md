@@ -1,6 +1,6 @@
 # A world within
 
-A large centered, faceless human bust carrying 10,240 single-word instances plus 80 larger accents. The vocabulary is visual expression, not a diagnosis or invented personal history.
+A large centered, faceless human bust carrying 10,240 single-word instances plus 80 larger accents. Sandith's 28 chosen words and phrases are defined verbatim in `thoughtWords`. The 16 single words form the dense texture; the larger accents include all 28 entries, with wider spaces for complete phrases.
 
 The scanned inner cranium forms a closed, curved back wall. Its black cosmic lining carries faint stars and slow nebula texture beneath the visible words. A separate transparent film across the face retains restrained moving reflections. The figure has tiny idle motion and responds subtly to the pointer. There is no floating globe.
 

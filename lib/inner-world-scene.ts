@@ -6,15 +6,18 @@ import { createCosmicGalaxy } from "./cosmic-galaxy";
 
 export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
 
-// Visual vocabulary, not a diagnosis or a claim about the visitor.
+// Sandith's chosen words and phrases, preserved verbatim.
 export const thoughtWords = [
-  "UNSAID", "UNSEEN", "ECHO", "ABSENCE", "AGAIN", "ALMOST", "ELSEWHERE", "STATIC",
-  "STILL", "WITHIN", "DISTANT", "SILENT", "DRIFT", "AFTERIMAGE", "UNFINISHED", "HOLLOW",
-  "BETWEEN", "TRACE", "UNHEARD", "RETURN", "THRESHOLD", "REMNANT", "OTHER", "NEARLY",
-  "FRACTURE", "WAIT", "PAUSE", "OUTSIDE", "INSIDE", "FAR", "LOOP", "ERASURE"
+  "SANDITH", "SITHMAKA", "UNSAID", "UNREAD", "QUIET", "STILL", "WITHIN", "RESTLESS",
+  "WATCHFUL", "UNFINISHED", "BECOMING", "WONDER", "IMAGINE", "FREEDOM", "EXPRESSION", "POSSIBILITY",
+  "WHAT IF", "LOOK CLOSER", "MORE THAN I SHOW", "THINKING IN PIXELS", "ROOM TO CREATE",
+  "LET ME MAKE IT MY WAY", "THINGS I NEVER SAID", "WHAT I COULDN’T SAY, I MADE",
+  "SOMEWHERE BETWEEN ART AND CODE", "STILL FINDING MY OWN FORM",
+  "THIS IS WHERE THE QUIET GOES", "SANDITH WAS HERE"
 ];
 
 export const THOUGHT_WORD_COUNT = 128 * 80;
+const singleWords = thoughtWords.filter(word => !word.includes(" "));
 
 function wordTexture(size: number) {
   const canvas = document.createElement("canvas");
@@ -25,24 +28,30 @@ function wordTexture(size: number) {
   context.textBaseline = "middle";
   const cellWidth = size / 80;
   const cellHeight = size / 128;
-  // 10,240 separate word instances, with no sentences or generated personal claims.
+  // Keep the dense 10,240-word layer; phrases get wider spaces in the accent layer.
   for (let row = 0; row < 128; row++) {
     for (let column = 0; column < 80; column++) {
-      const word = thoughtWords[(row * 7 + column * 3 + (row % 4 === 0 ? 0 : column)) % thoughtWords.length];
+      const word = singleWords[(row * 7 + column * 3 + (row % 4 === 0 ? 0 : column)) % singleWords.length];
       context.font = `400 ${cellHeight * (.58 + ((row + column) % 4) * .06)}px "IBM Plex Mono", monospace`;
       context.fillStyle = `rgb(${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130})`;
       context.fillText(word, column * cellWidth + cellWidth * .06, (row + .5) * cellHeight + Math.sin(column * 4 + row) * cellHeight * .08, cellWidth * .89);
     }
   }
-  // Occasional larger fragments surface above the dense, quieter layer.
+  // All 28 entries appear here. Separate cells keep long phrases intact and prevent overlaps.
   for (let index = 0; index < 80; index++) {
-    const x = ((index * 337) % 1900) / 2048 * size;
-    const y = ((index * 193 + 53) % 2000) / 2048 * size;
+    const word = thoughtWords[index % thoughtWords.length];
+    const fontSize = size * (word.includes(" ") ? .01 : .012);
+    context.font = `400 ${fontSize}px "IBM Plex Mono", monospace`;
+    const width = Math.min(context.measureText(word).width, size * .184);
+    const column = index % 5;
+    const row = Math.floor(index / 5);
+    const spareWidth = size * .184 - width;
+    const x = size * (column * .2 + .008) + spareWidth * ((index * 7 % 11) / 10);
+    const y = size * ((row + .3 + (index * 3 % 7) * .06) / 16);
     context.fillStyle = "#080909";
-    context.fillRect(x - 2, y - size * .007, size * .068, size * .014);
-    context.font = `400 ${size * .012}px "IBM Plex Mono", monospace`;
+    context.fillRect(x - size * .002, y - size * .007, width + size * .004, size * .014);
     context.fillStyle = "#eeeeee";
-    context.fillText(thoughtWords[index % thoughtWords.length], x, y, size * .064);
+    context.fillText(word, x, y, width);
   }
   const texture = new THREE.CanvasTexture(canvas);
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
