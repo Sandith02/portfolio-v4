@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "@phosphor-icons/react";
 import type { InnerWorldScene } from "@/lib/inner-world-scene";
+import { createReturnToSurface } from "@/lib/return-to-surface";
 
 
 export function CinematicHero() {
@@ -20,6 +21,7 @@ export function CinematicHero() {
     const hero = root.current;
     if (!host || !hero) return;
     const abort = new AbortController();
+    const returnToSurface = createReturnToSurface(hero);
     const entered = (event: Event) => { router.push((event as CustomEvent<string>).detail); };
     hero.addEventListener("planet-entered", entered);
     import("@/lib/inner-world-scene")
@@ -31,7 +33,7 @@ export function CinematicHero() {
       .catch(error => {
         if (error.name !== "AbortError") { host.dataset.ready = "false"; hero.dataset.fallback = "true"; }
       });
-    return () => { hero.removeEventListener("planet-entered", entered); abort.abort(); controller.current?.dispose(); controller.current = null; };
+    return () => { returnToSurface.dispose(); hero.removeEventListener("planet-entered", entered); abort.abort(); controller.current?.dispose(); controller.current = null; };
   }, [router]);
 
   return (
@@ -88,7 +90,7 @@ export function CinematicHero() {
             <span className="galaxy-footer-signature">© {new Date().getFullYear()} Sandith Sithmaka</span>
             <nav aria-label="Final scene links">
               <a href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Sandith on LinkedIn (opens in a new tab)">LinkedIn <ArrowUpRight size={13} aria-hidden="true" /></a>
-              <button type="button" onClick={() => window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}>Back to the surface <ArrowUpRight size={13} aria-hidden="true" /></button>
+              <button type="button" onClick={() => root.current?.dispatchEvent(new Event("return-to-surface"))}>Back to the surface <ArrowUpRight size={13} aria-hidden="true" /></button>
             </nav>
           </div>
         </footer>

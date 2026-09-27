@@ -4,6 +4,7 @@ import { createMindWorldGeometry } from "./mind-world-geometry";
 import { createPersonalWorld } from "./personal-worlds";
 import { createInnerGalaxyLife } from "./inner-galaxy-life";
 import { createGalaxyFinale, GALAXY_ARRIVAL_END } from "./galaxy-finale";
+import { PLANET_DEPTHS, PLANET_JOURNEY_START, PLANET_TRAVEL_PER_SCREEN, PLANET_CAMERA_Z } from "./journey-stops";
 
 // A second camera lives beyond the head. The five worlds occupy actual depth;
 // scrolling translates the camera, rather than scaling a flat arrangement.
@@ -28,7 +29,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
   const destination = new THREE.Vector3();
   const projected = new THREE.Vector3();
 
-  const depths = [3, -32, -76, -126, -166];
+  const depths = PLANET_DEPTHS;
   let finaleStartedAt = -1;
   const airColors = [0xa7bec9, 0xc4c3c1, 0x628ca8, 0xc39770, 0xd7a46a];
   const planets = depths.map((depth, index) => {
@@ -176,9 +177,13 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
     setEnvironment(texture: THREE.Texture) { planets.forEach(planet=>{planet.personal?.setEnvironment(texture);planet.digital?.setEnvironment(texture);}); },
     draw(progress: number, time: number) {
       const reveal = selected >= 0 ? 1 : THREE.MathUtils.smoothstep(progress, 2.65, 3.25);
-      if (progress < 27.1 || selected >= 0) finaleStartedAt = -1;
+      const rewind = hero.dataset.rewindProgress;
+      // The finale only plays on the outward journey. Returning uses the
+      // regular galaxy sky, with no cloud rotation, beam or figure replay.
+      if (rewind !== undefined || progress < 27.1 || selected >= 0) finaleStartedAt = -1;
       else if (finaleStartedAt < 0) finaleStartedAt = performance.now() / 1000;
       const finaleAge = finaleStartedAt < 0 ? -1 : performance.now() / 1000 - finaleStartedAt;
+      hero.dataset.finaleAge = finaleAge.toFixed(3);
       const departing = THREE.MathUtils.smoothstep(progress, 25.8, 27.1);
       hero.style.setProperty("--galaxy-departure", departing.toFixed(3));
       hero.dataset.finale = finaleAge < 0 ? "false" : finaleAge < GALAXY_ARRIVAL_END ? "flight" : "arrived";
@@ -196,7 +201,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         footer.setAttribute("aria-hidden", footerReveal < .02 ? "true" : "false");
       }
       finale.update(time, finaleAge, Math.max(0, progress - 3));
-      const travel = Math.max(0, progress - 3.1) * 8;
+      const travel = Math.max(0, progress - PLANET_JOURNEY_START) * PLANET_TRAVEL_PER_SCREEN;
       const delta = Math.min(.05, Math.max(0, time - lastTime)); lastTime = time;
       hero.style.setProperty("--planet-reveal", reveal.toFixed(3));
       nav.inert = reveal < .9 || departing > .95;
@@ -208,7 +213,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         hero.style.setProperty("--idea-shake-scale", "1");
         return;
       }
-      camera.position.set(Math.sin(travel * .012) * .12, Math.sin(travel * .02) * .08, 24);
+      camera.position.set(Math.sin(travel * .012) * .12, Math.sin(travel * .02) * .08, PLANET_CAMERA_Z);
       camera.rotation.z = Math.sin(travel * .01) * .004;
       if (selected < 0) {
         planets.forEach(planet => {
@@ -231,7 +236,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
       hero.style.setProperty("--idea-shake-y", `${((Math.cos(time * 83) + Math.sin(time * 127) * .3) * impact * 9).toFixed(2)}px`);
       hero.style.setProperty("--idea-shake-roll", `${(Math.sin(time * 59) * impact * .3).toFixed(3)}deg`);
       hero.style.setProperty("--idea-shake-scale", (1 + impact * .025).toFixed(4));
-      if (finaleAge >= 0) { camera.position.set(0,0,24);camera.rotation.set(0,0,0); }
+      if (finaleAge >= 0) { camera.position.set(0,0,PLANET_CAMERA_Z);camera.rotation.set(0,0,0); }
       camera.updateMatrixWorld();
       const candidates: { index: number; depth: number }[] = [];
       planets.forEach((planet, i) => {

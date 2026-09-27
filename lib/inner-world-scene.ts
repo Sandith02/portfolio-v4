@@ -425,8 +425,9 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     if (destroyed) return;
     const delta = Math.min((now - (lastFrame || now)) / 1000, .05); lastFrame = now; elapsed += delta;
     const ease = 1 - Math.exp(-delta * 4.5);
+    if (hero.dataset.rewindProgress !== undefined) { measure(); progress = targetProgress; }
+    else progress += (targetProgress - progress) * ease;
     gateway.update(progress);
-    progress += (targetProgress - progress) * ease;
     lookX += (pointerX - lookX) * ease; lookY += (pointerY - lookY) * ease;
     draw(); frame = requestAnimationFrame(animate);
   };
