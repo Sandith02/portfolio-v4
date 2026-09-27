@@ -392,6 +392,118 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   display: block;
 }
 
+.constructed-line {
+  white-space: nowrap;
+  display: block;
+}
+
+.constructed-letter {
+  display: inline-block;
+  position: relative;
+}
+
+.constructed-piece {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.constructed-piece-0 {
+  clip-path: polygon(-15% -15%, 58% -15%, 46% 49%, -15% 57%);
+  --build-x: -.045em;
+  --build-y: -.035em;
+  --piece-delay: 0s;
+}
+
+.constructed-piece-1 {
+  clip-path: polygon(58% -15%, 115% -15%, 115% 49%, 46% 49%);
+  --build-x: .035em;
+  --build-y: -.025em;
+  --piece-delay: .14s;
+}
+
+.constructed-piece-2 {
+  clip-path: polygon(-15% 57%, 46% 49%, 55% 115%, -15% 115%);
+  --build-x: -.025em;
+  --build-y: .045em;
+  --piece-delay: .21s;
+}
+
+.constructed-piece-3 {
+  clip-path: polygon(46% 49%, 115% 49%, 115% 115%, 55% 115%);
+  --build-x: .045em;
+  --build-y: .035em;
+  --piece-delay: 70ms;
+}
+
+.constructed-piece > span {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .constructed-title[data-construct="true"] .constructed-letter-final {
+    animation: 6s linear infinite both letter-finish;
+    animation-delay: var(--build-delay);
+  }
+
+  .constructed-title[data-construct="true"] .constructed-piece {
+    animation: 6s linear infinite both letter-pieces;
+    animation-delay: var(--build-delay);
+  }
+
+  .constructed-title[data-construct="true"] .constructed-piece > span {
+    animation: 6s cubic-bezier(.22, 1, .36, 1) infinite both letter-build;
+    animation-delay: calc(var(--build-delay) + var(--piece-delay));
+  }
+
+  .inner-hero[data-paused="true"] .constructed-title span {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes letter-build {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translate(var(--build-x), var(--build-y));
+  }
+
+  4.6% {
+    opacity: .85;
+  }
+
+  19%, 100% {
+    opacity: 1;
+    clip-path: inset(0 -15%);
+    transform: translate(0);
+  }
+}
+
+@keyframes letter-pieces {
+  0%, 25.99% {
+    visibility: visible;
+  }
+
+  26%, 100% {
+    visibility: hidden;
+  }
+}
+
+@keyframes letter-finish {
+  0%, 25.99% {
+    opacity: 0;
+  }
+
+  26%, 91% {
+    opacity: 1;
+  }
+
+  99%, 100% {
+    opacity: 0;
+  }
+}
+
 .inner-title-note {
   color: #afb5b6;
   width: 100%;

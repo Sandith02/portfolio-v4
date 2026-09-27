@@ -85,6 +85,28 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-chapter-left { left: var(--pad); top: 37%; }
 .inner-chapter-right { right: var(--pad); top: 47%; text-align: right; }
 .inner-headline { display: block; color: #e4e9e6; font: 400 clamp(2.8rem, min(5.4vw, 8svh), 7rem)/1.08 var(--hero-display); letter-spacing: -.045em; text-transform: uppercase; text-shadow: 0 2px 22px #14141766; }
+.constructed-line { display: block; white-space: nowrap; }
+.constructed-letter { position: relative; display: inline-block; }
+.constructed-piece { position: absolute; inset: 0; visibility: hidden; pointer-events: none; }
+/* Complementary cuts retain the actual Megrim glyphs, including their open strokes. */
+.constructed-piece-0 { clip-path: polygon(-15% -15%, 58% -15%, 46% 49%, -15% 57%); --build-x: -.045em; --build-y: -.035em; --piece-delay: 0ms; }
+.constructed-piece-1 { clip-path: polygon(58% -15%, 115% -15%, 115% 49%, 46% 49%); --build-x: .035em; --build-y: -.025em; --piece-delay: 140ms; }
+.constructed-piece-2 { clip-path: polygon(-15% 57%, 46% 49%, 55% 115%, -15% 115%); --build-x: -.025em; --build-y: .045em; --piece-delay: 210ms; }
+.constructed-piece-3 { clip-path: polygon(46% 49%, 115% 49%, 115% 115%, 55% 115%); --build-x: .045em; --build-y: .035em; --piece-delay: 70ms; }
+.constructed-piece > span { display: block; }
+@media (prefers-reduced-motion: no-preference) {
+  .constructed-title[data-construct="true"] .constructed-letter-final { animation: letter-finish 6s linear infinite both; animation-delay: var(--build-delay); }
+  .constructed-title[data-construct="true"] .constructed-piece { animation: letter-pieces 6s linear infinite both; animation-delay: var(--build-delay); }
+  .constructed-title[data-construct="true"] .constructed-piece > span { animation: letter-build 6s cubic-bezier(.22, 1, .36, 1) infinite both; animation-delay: calc(var(--build-delay) + var(--piece-delay)); }
+  .inner-hero[data-paused="true"] .constructed-title span { animation-play-state: paused; }
+}
+@keyframes letter-build {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate(var(--build-x), var(--build-y)); }
+  4.6% { opacity: .85; }
+  19%, 100% { opacity: 1; clip-path: inset(0 -15% 0 -15%); transform: translate(0, 0); }
+}
+@keyframes letter-pieces { 0%, 25.99% { visibility: visible; } 26%, 100% { visibility: hidden; } }
+@keyframes letter-finish { 0%, 25.99% { opacity: 0; } 26%, 91% { opacity: 1; } 99%, 100% { opacity: 0; } }
 .inner-title-note { position: absolute; top: 100%; left: 0; width: 100%; margin: 1.4rem 0 0; color: #afb5b6; font: 400 clamp(.75rem, .95vw, 1rem)/1.7 var(--hero-body); letter-spacing: .005em; }
 .inner-chapter-first { opacity: var(--inner-first); }
 .inner-chapter-second { opacity: var(--inner-second); }
