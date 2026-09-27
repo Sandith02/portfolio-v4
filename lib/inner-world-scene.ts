@@ -367,6 +367,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const gateway = createMindGateway(hero);
   let paused = false, visible = true, destroyed = false, progress = 0, targetProgress = 0, elapsed = 0, frame = 0, lastFrame = 0;
   let pointerX = 0, pointerY = 0, lookX = 0, lookY = 0;
+  let arrivalStarted: number | null = null;
+  let arrival = 0;
   let mobile = host.clientWidth < 768;
   const measure = () => {
     const screen = Math.max(1, host.clientHeight);
@@ -377,9 +379,25 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     const p = reduced.matches ? 0 : Math.min(1, progress / 3);
     atmosphereMotion.value = reduced.matches ? 0 : 1;
     const approach = THREE.MathUtils.smoothstep(p, 0, 1);
-    figure.position.set(Math.sin(elapsed*.31)*.012, (mobile ? .05 : -.2)+Math.sin(elapsed*.43)*.008, 0);
+    // Hold the figure below the frame until the splash starts dissolving.
+    // Arrival only runs once; the camera and scroll journey keep their own positions.
+    if (reduced.matches || progress > .08) arrival = 1;
+    if (arrival < 1) {
+      const splash = document.querySelector<HTMLElement>('.mind-splash:not([hidden])');
+      if (arrivalStarted === null && (!splash || splash.dataset.leaving === "true")) {
+        arrivalStarted = elapsed + (splash ? .35 : 0);
+      }
+      if (arrivalStarted !== null) {
+        const t = THREE.MathUtils.clamp((elapsed - arrivalStarted) / 2.15, 0, 1);
+        arrival = 1 - Math.pow(1 - t, 3);
+      }
+    }
+    const arrivalState = arrival >= 1 ? "complete" : arrivalStarted === null ? "waiting" : "entering";
+    if (host.dataset.arrival !== arrivalState) host.dataset.arrival = arrivalState;
+    const baseY = (mobile ? .05 : -.2) + Math.sin(elapsed*.43)*.008;
+    figure.position.set(Math.sin(elapsed*.31)*.012, baseY - (1 - arrival) * (mobile ? 6 : 5.2), 0);
     figure.rotation.set(-.015 + lookY*.05 + Math.sin(elapsed*.29)*.004, lookX*.1 + Math.sin(elapsed*.12)*.012, Math.sin(elapsed*.23)*.002);
-    const cameraY = THREE.MathUtils.lerp(.25, .94 + figure.position.y, approach);
+    const cameraY = THREE.MathUtils.lerp(.25, .94 + baseY, approach);
     const cameraZ = THREE.MathUtils.lerp(mobile ? 9.9 : 8, 1.04, approach);
     body.visible = interiorBody.visible = cameraZ > -1.8;
     edge.visible = cameraZ > 1.12;
