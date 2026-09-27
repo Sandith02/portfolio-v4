@@ -92,7 +92,6 @@ export function CinematicHero() {
           </a>
           <a className="inner-scroll" href="#introduction" aria-label="Scroll inward" title="Scroll inward"><ArrowDown size={18} /></a>
         </div>
-        <div className="inner-progress" aria-hidden="true"><span /></div>
         <a className="inner-credits" href="/models/inner-world-credits.txt" target="_blank" rel="noreferrer">Figure: Lee Perry-Smith / CC BY 3.0</a>
       </div>
     </section>

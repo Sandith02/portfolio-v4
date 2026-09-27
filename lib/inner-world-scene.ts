@@ -511,7 +511,6 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     progressUniform.value = p;
     galaxy.mesh.visible = p > .77;
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
-    hero.style.setProperty("--inner-progress", p.toFixed(4));
     hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
     hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));
     hero.style.setProperty("--inner-last", THREE.MathUtils.smoothstep(p, .72, .95).toFixed(3));

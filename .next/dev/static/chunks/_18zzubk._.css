@@ -407,7 +407,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .inner-hero {
-  --inner-progress: 0;
   --inner-first: 1;
   --inner-second: 0;
   --inner-last: 0;
@@ -772,22 +771,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .inner-linkedin:hover .inner-linkedin-arrow {
   background: #414149;
-}
-
-.inner-progress {
-  inset: auto var(--pad) 23px;
-  background: #91aaa01c;
-  height: 1px;
-  position: absolute;
-}
-
-.inner-progress > span {
-  width: 100%;
-  height: 100%;
-  transform: scaleX(var(--inner-progress));
-  transform-origin: 0;
-  background: #829b92;
-  display: block;
 }
 
 .inner-credits {
@@ -2092,10 +2075,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
   .cinematic-stage {
     position: relative;
-  }
-
-  .inner-progress {
-    display: none;
   }
 
   *, :before, :after {

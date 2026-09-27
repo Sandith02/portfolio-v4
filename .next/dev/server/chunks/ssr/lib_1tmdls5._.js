@@ -719,7 +719,6 @@ async function createInnerWorldScene(host, hero, signal) {
         progressUniform.value = p;
         galaxy.mesh.visible = p > .77;
         red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
-        hero.style.setProperty("--inner-progress", p.toFixed(4));
         hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
         hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));
         hero.style.setProperty("--inner-last", __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$three$2f$build$2f$three$2e$core$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MathUtils"].smoothstep(p, .72, .95).toFixed(3));
