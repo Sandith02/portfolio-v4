@@ -83,14 +83,13 @@ export function CinematicHero() {
             <div className="inner-chapter-right"><ConstructedTitle lines={["Real", "things."]} offset={180} /></div>
           </div>
         </div>
-        <div className="inner-opportunity"><a href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role">Open to creative roles <ArrowUpRight size={16} /></a></div>
+        <div className="inner-opportunity"><Link href="/work">Explore my work <ArrowUpRight size={16} /></Link></div>
         <div className="inner-bottom">
           <a className="inner-linkedin" href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Sandith on LinkedIn (opens in a new tab)">
             <Image className="inner-linkedin-brand" src="/images/linkedin-in-official.png" width={20} height={17} alt="" unoptimized />
             <span><span className="inner-linkedin-prefix">Connect on </span>LinkedIn</span>
             <span className="inner-linkedin-arrow"><ArrowUpRight size={14} aria-hidden="true" /></span>
           </a>
-          <Link className="inner-enter" href="/work">Explore my work <ArrowUpRight size={16} /></Link>
           <a className="inner-scroll" href="#introduction" aria-label="Scroll inward" title="Scroll inward"><ArrowDown size={18} /></a>
         </div>
         <div className="inner-progress" aria-hidden="true"><span /></div>

@@ -115,11 +115,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .inner-opportunity a { display: inline-flex; align-items: center; gap: 1.3rem; min-height: 44px; color: #e4e9e6; border-bottom: 1px solid #8ba49c66; }
 .inner-opportunity a:hover { border-color: #e4e9e6; }
 .inner-bottom { position: absolute; inset: auto var(--pad) 20px; height: 76px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1.5rem; color: #b7c2be; font: 500 .6rem/1.4 var(--hero-body); letter-spacing: .08em; text-transform: uppercase; }
-.inner-scroll { grid-column: 3; grid-row: 1; justify-self: end; display: inline-flex; align-items: center; justify-content: flex-end; gap: .8rem; min-height: 44px; min-width: 44px; width: fit-content; }
+.inner-scroll { grid-column: 3; grid-row: 1; justify-self: end; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #ffffff30; border-radius: 50%; background: transparent; transition: border-color 180ms ease, color 180ms ease; }
 .inner-scroll svg { transition: transform 180ms ease; }
+.inner-scroll:hover { border-color: #ffffff66; color: #f4f4f6; }
 .inner-scroll:hover svg { transform: translateY(3px); }
-.inner-enter { grid-column: 2; grid-row: 1; display: inline-flex; align-items: center; gap: 2.5rem; min-height: 44px; border-bottom: 1px solid #8ba49c55; transition: border-color 180ms ease, color 180ms ease; }
-.inner-enter:hover { border-color: #d8dedc; color: #fff; }
 .inner-linkedin { grid-column: 1; grid-row: 1; display: inline-flex; align-items: center; justify-self: start; gap: .55rem; min-height: 44px; padding: 5px 5px 5px 14px; border-radius: 999px; background: #020108; color: #f4f4f6; box-shadow: 0 0 0 1px #ffffff0c; font: 400 .75rem/1 var(--hero-body); letter-spacing: -.025em; text-transform: none; white-space: nowrap; transition: background-color 180ms ease, box-shadow 180ms ease; }
 .inner-linkedin:hover { background: #0c0b12; box-shadow: 0 0 0 1px #ffffff24; }
 .inner-linkedin svg { flex: none; }
@@ -320,7 +319,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .inner-opportunity { left: var(--pad); right: var(--pad); bottom: 13.5%; display: flex; justify-content: flex-end; align-items: center; text-align: right; font-size: .72rem; }
   .inner-opportunity a { gap: .5rem; }
   .inner-bottom { height: 70px; grid-template-columns: auto minmax(0, 1fr) 44px; gap: .5rem; font-size: .52rem; }
-  .inner-enter { gap: .75rem; }
   .inner-linkedin { gap: .35rem; padding-left: 10px; font-size: .65rem; }
   .inner-linkedin-arrow { width: 26px; height: 26px; margin-left: 0; }
   .inner-linkedin-prefix { display: none; }
