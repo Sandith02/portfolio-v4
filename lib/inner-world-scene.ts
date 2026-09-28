@@ -137,7 +137,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const time = { value: 0 };
   const atmosphereMotion = { value: 1 };
   const progressUniform = { value: 0 };
-  const galaxy = createCosmicGalaxy(time, progressUniform);
+  const galaxyProgress = { value: 0 };
+  const galaxy = createCosmicGalaxy(time, galaxyProgress);
   const globeWords = wordTexture(words.image.width, true, compact);
   const planets = createPlanetarySystem(renderer, hero, globeWords);
   scene.add(galaxy.mesh);
@@ -335,8 +336,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     const cameraY = THREE.MathUtils.lerp(.25, .94 + baseY, approach);
     const cameraZ = THREE.MathUtils.lerp(mobile ? 9.9 : 8, 1.04, approach);
     // Once the galaxy is opaque, the head and its lights are fully covered.
-    figure.visible = !compact || p < .98;
-    haze.visible = !compact || p < .98;
+    figure.visible = !compact || progress < 3.3;
+    haze.visible = !compact || progress < 3.3;
     body.visible = interiorBody.visible = cameraZ > -1.8;
     edge.visible = cameraZ > 1.12;
     camera.position.set(0, cameraY, cameraZ);
@@ -350,8 +351,9 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     filmPointer.value.set(lookX,lookY);
     time.value = elapsed;
     progressUniform.value = p;
+    galaxyProgress.value = progress;
     galaxy.journey.value = Math.max(0, progress - 3);
-    galaxy.mesh.visible = p > .77;
+    galaxy.mesh.visible = progress > 2.3;
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
     hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
     hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));

@@ -10,7 +10,7 @@ export function createMindGateway(hero: HTMLElement) {
   return {
     update(progress: number) {
       const opacity = reduced.matches ? 0
-        : smooth(progress, 2.15, 2.35) * (1 - smooth(progress, 2.7, 2.95));
+        : smooth(progress, 2.15, 2.35) * (1 - smooth(progress, 2.5, 3.1));
       const visible = opacity > .001;
       hero.dataset.gateway = progress < 2.1 ? "before" : visible ? "reading" : "after";
       hero.style.setProperty("--mind-invitation-opacity", opacity.toFixed(3));

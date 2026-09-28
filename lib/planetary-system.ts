@@ -179,7 +179,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
     resize,
     setEnvironment(texture: THREE.Texture) { planets.forEach(planet=>{planet.personal?.setEnvironment(texture);planet.digital?.setEnvironment(texture);}); },
     draw(progress: number, time: number) {
-      const reveal = selected >= 0 ? 1 : THREE.MathUtils.smoothstep(progress, 2.65, 3.25);
+      const reveal = selected >= 0 ? 1 : THREE.MathUtils.smoothstep(progress, 2.55, 3.3);
       const rewind = hero.dataset.rewindProgress;
       // The finale only plays on the outward journey. Returning uses the
       // regular galaxy sky, with no cloud rotation, beam or figure replay.
@@ -205,7 +205,9 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
       }
       if (!compact || progress > 18) finale.prepare();
       finale.update(time, finaleAge, Math.max(0, progress - 3));
-      const travel = Math.max(0, progress - PLANET_JOURNEY_START) * PLANET_TRAVEL_PER_SCREEN;
+      // Ease into forward travel while the tunnel dissolves into the galaxy.
+      const travel = Math.max(0, progress - PLANET_JOURNEY_START) * PLANET_TRAVEL_PER_SCREEN
+        * THREE.MathUtils.smoothstep(progress, PLANET_JOURNEY_START, PLANET_JOURNEY_START + 1);
       const delta = Math.min(.05, Math.max(0, time - lastTime)); lastTime = time;
       hero.style.setProperty("--planet-reveal", reveal.toFixed(3));
       nav.inert = reveal < .9 || departing > .95;
@@ -217,7 +219,10 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         hero.style.setProperty("--idea-shake-scale", "1");
         return;
       }
-      camera.position.set(Math.sin(travel * .012) * .12, Math.sin(travel * .02) * .08, PLANET_CAMERA_Z);
+      // Give the opening worlds breathing room, then rejoin the existing route
+      // before About so later planet stops and return links keep their framing.
+      const openingDistance = 5 * (1 - THREE.MathUtils.smoothstep(progress, 3.3, 7));
+      camera.position.set(Math.sin(travel * .012) * .12, Math.sin(travel * .02) * .08, PLANET_CAMERA_Z + openingDistance);
       camera.rotation.z = Math.sin(travel * .01) * .004;
       if (selected < 0) {
         planets.forEach(planet => {

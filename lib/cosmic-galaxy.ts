@@ -14,10 +14,10 @@ export function createCosmicGalaxy(time: { value: number }, progress: { value: n
       uniform float uTime,uProgress,uAspect,uJourney;
       ${GALAXY_FIELD_GLSL}
       void main(){
-        float reveal=smoothstep(.77,.97,uProgress);
+        float reveal=smoothstep(2.3,3.3,uProgress);
         if(reveal<=0.)discard;
         vec2 p=(vUv-.5)*vec2(uAspect,1.);
-        p*=mix(1.14,1.,smoothstep(.77,1.,uProgress));
+        p*=mix(1.08,1.,reveal);
         gl_FragColor=vec4(galaxyField(p,uJourney,0.,0.),reveal);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
