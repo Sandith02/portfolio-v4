@@ -30,6 +30,39 @@ export default function AboutPage() {
           <p>This portfolio is a personal expression of that curiosity. The words on the body, the journey inside the head, the worlds waiting within. Fragments of how I think, given somewhere to exist.</p>
         </div>
 
+        <div className={styles.background}>
+          <section className={styles.detail} aria-labelledby="about-education">
+            <h2 id="about-education">Education</h2>
+            <h3>BSc (Hons) Computer Science<br />with Industrial Experience</h3>
+            <p>University of Westminster, delivered at Informatics Institute of Technology (IIT), Sri Lanka.</p>
+            <p className={styles.meta}>September 2023 to expected May 2027 · Part-time</p>
+          </section>
+
+          <section className={styles.detail} aria-labelledby="about-recognition">
+            <h2 id="about-recognition">Recognition</h2>
+            <h3>Employee of the Year 2026</h3>
+            <p>Cogent Solutions · Sri Lanka Team</p>
+          </section>
+
+          <section className={styles.detail} aria-labelledby="about-community">
+            <h2 id="about-community">Community</h2>
+            <h3>IEEE Robotics &amp; Automation Society, IIT</h3>
+            <ol className={styles.roles} aria-label="Leadership progression">
+              <li>Design Volunteer</li>
+              <li>Design Vice Chair</li>
+              <li>Public Visibility Vice Chair</li>
+            </ol>
+            <p>Across three flagship events in 2025, I led and contributed to the visual direction, from posters, campaign graphics and logos to merchandise, attendee tags and event branding.</p>
+            <p>I helped build a distinctive identity across the event cycle, carrying it from digital promotion into physical assets and the on-site experience.</p>
+            <h3 className={styles.additionalTitle}>Additional activities</h3>
+            <ul className={styles.activities}>
+              <li>IEEE Xtreme 18.0</li>
+              <li>CodeSprint 8</li>
+              <li>IX25</li>
+            </ul>
+          </section>
+        </div>
+
         <p className={styles.closing}>There’s a lot I leave unsaid.<br /><span>Some of it ends up here.</span></p>
       </article>
     </main>
