@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import styles from "@/app/about/about.module.css";
+import styles from "./mind-world.module.css";
 
-export function AboutSky() {
+export function WorldSky() {
   const host = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let disposed = false;

@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { worldReturn } from "./world-navigation";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -9,77 +10,8 @@ import { atmosphericEvents, HERO_BACKGROUND_FRAGMENT } from "./hero-atmosphere";
 
 export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
 
-// Sandith's chosen words and phrases, preserved verbatim.
-export const thoughtWords = [
-  "SANDITH", "SITHMAKA", "UNSAID", "UNREAD", "QUIET", "STILL", "WITHIN", "RESTLESS",
-  "WATCHFUL", "UNFINISHED", "BECOMING", "WONDER", "IMAGINE", "FREEDOM", "EXPRESSION", "POSSIBILITY",
-  "WHAT IF", "LOOK CLOSER", "MORE THAN I SHOW", "THINKING IN PIXELS", "ROOM TO CREATE",
-  "LET ME MAKE IT MY WAY", "THINGS I NEVER SAID", "WHAT I COULDN’T SAY, I MADE",
-  "SOMEWHERE BETWEEN ART AND CODE", "STILL FINDING MY OWN FORM",
-  "THIS IS WHERE THE QUIET GOES", "SANDITH WAS HERE", "MY MIND"
-];
-
-export const THOUGHT_WORD_COUNT = 128 * 80;
-const singleWords = thoughtWords.filter(word => !word.includes(" "));
-
-// Shared event timing lets the face film catch the same light as the atmosphere.
-
-function wordTexture(size: number, uniformSize = false) {
-  const canvas = document.createElement("canvas");
-  canvas.width = canvas.height = size;
-  const context = canvas.getContext("2d")!;
-  context.fillStyle = "#000";
-  context.fillRect(0, 0, size, size);
-  context.textBaseline = "middle";
-  const cellWidth = size / 80;
-  const cellHeight = size / 128;
-  if (uniformSize) {
-    const fontSize = cellHeight * .66;
-    context.font = `400 ${fontSize}px "IBM Plex Mono", monospace`;
-    context.fillStyle = "#bfc4c4";
-    let index = 0;
-    for (let row = 0; row < 128; row++) {
-      let x = 0;
-      while (x < size) {
-        const word = thoughtWords[index++ % thoughtWords.length];
-        // Flow phrases at their natural width: no accent layer or shrinking
-        // longer entries into fixed cells, so every glyph has the same size.
-        context.fillText(word, x, (row + .5) * cellHeight);
-        x += context.measureText(word).width + fontSize * 1.4;
-      }
-    }
-  } else {
-  // Keep the dense 10,240-word layer; phrases get wider spaces in the accent layer.
-  for (let row = 0; row < 128; row++) {
-    for (let column = 0; column < 80; column++) {
-      const word = singleWords[(row * 7 + column * 3 + (row % 4 === 0 ? 0 : column)) % singleWords.length];
-      context.font = `400 ${cellHeight * (.58 + ((row + column) % 4) * .06)}px "IBM Plex Mono", monospace`;
-      context.fillStyle = `rgb(${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130})`;
-      context.fillText(word, column * cellWidth + cellWidth * .06, (row + .5) * cellHeight + Math.sin(column * 4 + row) * cellHeight * .08, cellWidth * .89);
-    }
-  }
-  // Every entry appears here. Separate cells keep long phrases intact and prevent overlaps.
-  for (let index = 0; index < 80; index++) {
-    const word = thoughtWords[index % thoughtWords.length];
-    const fontSize = size * (word.includes(" ") ? .01 : .012);
-    context.font = `400 ${fontSize}px "IBM Plex Mono", monospace`;
-    const width = Math.min(context.measureText(word).width, size * .184);
-    const column = index % 5;
-    const row = Math.floor(index / 5);
-    const spareWidth = size * .184 - width;
-    const x = size * (column * .2 + .008) + spareWidth * ((index * 7 % 11) / 10);
-    const y = size * ((row + .3 + (index * 3 % 7) * .06) / 16);
-    context.fillStyle = "#080909";
-    context.fillRect(x - size * .002, y - size * .007, width + size * .004, size * .014);
-    context.fillStyle = "#eeeeee";
-    context.fillText(word, x, y, width);
-  }
-  }
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-  texture.anisotropy = 4;
-  return texture;
-}
+import { wordTexture } from "./thought-texture";
+export { thoughtWords, THOUGHT_WORD_COUNT } from "./thought-texture";
 
 function disposeObject(object: THREE.Object3D) {
   const textures = new Set<THREE.Texture>();
@@ -364,7 +296,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const red = new THREE.PointLight(0x983a33, 7, 9, 2); red.position.set(-3, -.5, 1); scene.add(red);
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const returningToAbout = window.location.hash === "#about-world";
+  const returnDestination = worldReturn(window.location.hash);
   const gateway = createMindGateway(hero);
   let paused = false, visible = true, destroyed = false, progress = 0, targetProgress = 0, elapsed = 0, frame = 0, lastFrame = 0;
   let pointerX = 0, pointerY = 0, lookX = 0, lookY = 0;
@@ -374,7 +306,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const measure = () => {
     const screen = Math.max(1, host.clientHeight);
     const distance = Math.max(0, -hero.getBoundingClientRect().top);
-    targetProgress = reduced.matches ? (returningToAbout ? 7.6 : 0) : distance / screen;
+    targetProgress = reduced.matches ? (returnDestination?.progress ?? 0) : distance / screen;
   };
   const draw = () => {
     const p = Math.min(1, progress / 3);
@@ -443,8 +375,8 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   document.addEventListener("visibilitychange", sync); reduced.addEventListener("change", preference);
   const lost = (event: Event) => { event.preventDefault(); paused = true; cancelAnimationFrame(frame); host.dataset.ready = "false"; hero.dataset.fallback = "true"; };
   renderer.domElement.addEventListener("webglcontextlost", lost);
-  if (returningToAbout && !reduced.matches) {
-    const top = hero.offsetTop + host.clientHeight * 7.6;
+  if (returnDestination && !reduced.matches) {
+    const top = hero.offsetTop + host.clientHeight * returnDestination.progress;
     window.dispatchEvent(new Event("mind-native-return"));
     window.scrollTo({ top, behavior: "instant" });
     window.dispatchEvent(new CustomEvent("mind-rewind-scroll", { detail: top }));

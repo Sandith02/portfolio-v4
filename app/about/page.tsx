@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Planet, ArrowUpLeft } from "@phosphor-icons/react/dist/ssr";
 import { ConstructedTitle } from "@/components/constructed-title";
-import { AboutSky } from "@/components/about-sky";
+import { BackToMind } from "@/components/back-to-mind";
+import { WorldSky } from "@/components/world-sky";
+import worldStyles from "@/components/mind-world.module.css";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -12,13 +12,9 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main id="main-content" className={styles.world}>
-      <AboutSky />
-      <Link href="/#about-world" scroll={false} className={`inner-linkedin ${styles.back}`}>
-        <span className="inner-linkedin-arrow"><ArrowUpLeft size={14} aria-hidden="true" /></span>
-        <span>Back to my mind</span>
-        <Planet size={20} weight="light" aria-hidden="true" />
-      </Link>
+    <main id="main-content" className={worldStyles.world}>
+      <WorldSky />
+      <BackToMind world="about" />
       <article className={styles.story} aria-labelledby="about-title">
         <header className={styles.opening}>
           <h1 id="about-title" className={styles.title}>

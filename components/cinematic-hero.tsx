@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ArrowDown, ArrowUpRight } from "@phosphor-icons/react";
 import type { InnerWorldScene } from "@/lib/inner-world-scene";
+import { worldReturn } from "@/lib/world-navigation";
 import { createReturnToSurface } from "@/lib/return-to-surface";
 
 
@@ -20,7 +21,8 @@ export function CinematicHero() {
     const host = viewport.current;
     const hero = root.current;
     if (!host || !hero) return;
-    if (window.location.hash === "#about-world") hero.dataset.returnWorld = "about";
+    const destination = worldReturn(window.location.hash);
+    if (destination) hero.dataset.returnWorld = destination.world;
     const abort = new AbortController();
     const returnToSurface = createReturnToSurface(hero);
     const entered = (event: Event) => { router.push((event as CustomEvent<string>).detail); };

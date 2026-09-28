@@ -1,0 +1,40 @@
+.world {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: #d8dedc;
+  background: #0e0f11;
+  font-family: var(--hero-body);
+}
+.world::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #0e0f110a, #0e0f115c 65%, #0e0f1138), linear-gradient(0deg, #0e0f11b0, transparent 24%, transparent 85%, #0e0f1120);
+}
+.sky {
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 25% 35%, #26282d55, transparent 65%), #0e0f11;
+}
+.sky canvas { display: block; width: 100%; height: 100%; opacity: .92; }
+.back {
+  position: fixed;
+  z-index: 80;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  left: clamp(24px, 6vw, 100px);
+  padding: 5px 14px 5px 5px;
+}
+.back :global(.inner-linkedin-arrow) { margin-left: 0; margin-right: 3px; }
+.back:focus-visible { outline: 2px solid #e4e9e6; outline-offset: 5px; }
+.planetIcon { position: relative; display: block; flex: none; width: 42px; height: 32px; margin-right: -7px; }
+.planetIcon canvas { display: block; width: 42px; height: 32px; }
+.planetIcon:not([data-ready="true"])::before { content: ""; position: absolute; width: 16px; height: 16px; border-radius: 50%; left: 13px; top: 8px; background: radial-gradient(circle at 30% 25%, #839093, #253134 55%, #080a0c); }
+.planetIcon[data-world="about"]:not([data-ready="true"])::after { content: ""; position: absolute; width: 29px; height: 10px; left: 6px; top: 11px; border: 1px solid #b5c3c9; border-radius: 50%; transform: rotate(-32deg); }
+
+@media (max-width: 800px) { .world::before { background: linear-gradient(0deg, #0e0f11a0, #0e0f114d 20%, #0e0f114d 75%, #0e0f1120); } }
+@media (prefers-reduced-motion: reduce) { .back { transition: none; } }

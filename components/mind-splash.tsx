@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { worldReturn } from "@/lib/world-navigation";
 import { ConstructedTitle } from "@/components/constructed-title";
 
 export function MindSplash() {
@@ -12,7 +13,7 @@ export function MindSplash() {
     const element = root.current, host = canvas.current;
     if (!element || !host) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || window.location.hash === "#about-world") {
+    if (reduced || worldReturn(window.location.hash)) {
       element.hidden = true;
       const timer = window.setTimeout(() => setVisible(false), 0);
       return () => window.clearTimeout(timer);
