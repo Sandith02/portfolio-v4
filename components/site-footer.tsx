@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (pathname === "/") return null;
+  if (pathname === "/" || pathname === "/about") return null;
   return (
     <footer className="site-footer">
       <div className="footer-lead">

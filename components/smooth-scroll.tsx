@@ -17,7 +17,7 @@ export function SmoothScroll() {
       const active = document.documentElement.dataset.splash === "active" || document.documentElement.dataset.rewinding === "true";
       if (active !== scrollLocked) { scrollLocked = active; if (active) lenis.stop(); else lenis.start(); }
     };
-    const nativeReturn = () => { lenis.stop(); if (!scrollLocked) lenis.start(); };
+    const nativeReturn = () => { lenis.stop(); lenis.resize(); if (!scrollLocked) lenis.start(); };
     const rewindScroll = (event: Event) => {
       const top = (event as CustomEvent<number>).detail;
       if (typeof top === "number" && Number.isFinite(top)) lenis.scrollTo(top, { immediate: true, force: true });

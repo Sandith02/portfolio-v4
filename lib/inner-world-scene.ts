@@ -364,6 +364,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const red = new THREE.PointLight(0x983a33, 7, 9, 2); red.position.set(-3, -.5, 1); scene.add(red);
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const returningToAbout = window.location.hash === "#about-world";
   const gateway = createMindGateway(hero);
   let paused = false, visible = true, destroyed = false, progress = 0, targetProgress = 0, elapsed = 0, frame = 0, lastFrame = 0;
   let pointerX = 0, pointerY = 0, lookX = 0, lookY = 0;
@@ -373,10 +374,10 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const measure = () => {
     const screen = Math.max(1, host.clientHeight);
     const distance = Math.max(0, -hero.getBoundingClientRect().top);
-    targetProgress = reduced.matches ? 0 : distance / screen;
+    targetProgress = reduced.matches ? (returningToAbout ? 7.6 : 0) : distance / screen;
   };
   const draw = () => {
-    const p = reduced.matches ? 0 : Math.min(1, progress / 3);
+    const p = Math.min(1, progress / 3);
     atmosphereMotion.value = reduced.matches ? 0 : 1;
     const approach = THREE.MathUtils.smoothstep(p, 0, 1);
     // Hold the figure below the frame until the splash starts dissolving.
@@ -419,7 +420,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));
     hero.style.setProperty("--inner-last", (THREE.MathUtils.smoothstep(p, .72, .85) * (1 - THREE.MathUtils.smoothstep(p, .83, .94))).toFixed(3));
     renderer.render(scene, camera);
-    planets.draw(reduced.matches ? 0 : progress, elapsed);
+    planets.draw(progress, elapsed);
   };
   const animate = (now: number) => {
     if (destroyed) return;
@@ -435,14 +436,20 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
-  const preference = () => { measure(); if (reduced.matches) { hero.style.height = ""; progress = 0; lookX = 0; lookY = 0; } sync(); };
+  const preference = () => { measure(); if (reduced.matches) { hero.style.height = ""; progress = targetProgress; lookX = 0; lookY = 0; } sync(); };
   const observer = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }); observer.observe(hero);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(host);
   window.addEventListener("scroll", measure, { passive: true }); hero.addEventListener("pointermove", pointer); hero.addEventListener("pointerleave", leave);
   document.addEventListener("visibilitychange", sync); reduced.addEventListener("change", preference);
   const lost = (event: Event) => { event.preventDefault(); paused = true; cancelAnimationFrame(frame); host.dataset.ready = "false"; hero.dataset.fallback = "true"; };
   renderer.domElement.addEventListener("webglcontextlost", lost);
-  resize(); progress = targetProgress; draw(); host.dataset.ready = "true"; sync();
+  if (returningToAbout && !reduced.matches) {
+    const top = hero.offsetTop + host.clientHeight * 7.6;
+    window.dispatchEvent(new Event("mind-native-return"));
+    window.scrollTo({ top, behavior: "instant" });
+    window.dispatchEvent(new CustomEvent("mind-rewind-scroll", { detail: top }));
+  }
+  resize(); progress = targetProgress; gateway.update(progress); draw(); host.dataset.ready = "true"; sync();
   return {
     setPaused(value) { paused = value; sync(); },
     dispose() {

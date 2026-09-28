@@ -1,71 +1,42 @@
 import type { Metadata } from "next";
-import { Reveal } from "@/components/reveal";
-import { LinkArrow } from "@/components/link-arrow";
+import Link from "next/link";
+import { Planet, ArrowUpLeft } from "@phosphor-icons/react/dist/ssr";
+import { ConstructedTitle } from "@/components/constructed-title";
+import { AboutSky } from "@/components/about-sky";
+import styles from "./about.module.css";
 
 export const metadata: Metadata = {
-  title: "About Sandith | Full-Stack Developer Sri Lanka",
-  description: "Meet Sandith, a full-stack developer from Sri Lanka working across Next.js, React, web applications, creative development and digital products."
+  title: "About Sandith | Design Engineer & Creative Frontend Developer",
+  description: "I have ideas I want to make real. I’m Sandith, a design engineer and creative frontend developer based in Sri Lanka.",
 };
-
-const stack = ["Next.js", "React", "TypeScript", "JavaScript", "Node.js", "Java", "Spring Boot", "MySQL", "REST APIs", "Tailwind CSS", "Git", "Vercel", "Sanity", "Figma"];
 
 export default function AboutPage() {
   return (
-    <main id="main-content">
-      <section className="page-hero">
-        <div className="page-hero-copy">
-          <p className="eyebrow">About</p>
-          <h1 className="display">Hi. I’m Sandith.</h1>
+    <main id="main-content" className={styles.world}>
+      <AboutSky />
+      <Link href="/#about-world" scroll={false} className={`inner-linkedin ${styles.back}`}>
+        <span className="inner-linkedin-arrow"><ArrowUpLeft size={14} aria-hidden="true" /></span>
+        <span>Back to my mind</span>
+        <Planet size={20} weight="light" aria-hidden="true" />
+      </Link>
+      <article className={styles.story} aria-labelledby="about-title">
+        <header className={styles.opening}>
+          <h1 id="about-title" className={styles.title}>
+            <span className="inner-accessible-title">I HAVE IDEAS I WANT TO MAKE REAL.</span>
+            <ConstructedTitle lines={["I have ideas", "I want to", "make real."]} />
+          </h1>
+        </header>
+
+        <div className={styles.prose}>
+          <p className={styles.introduction}>I’m Sandith, a design engineer and creative frontend developer based in Sri Lanka.</p>
+          <p>I’m usually quiet. Making things is how a lot of my thoughts find their way out through an interface, a visual identity, a small interaction or a strange idea that becomes an entire website.</p>
+          <p>I’ve worked on corporate platforms, internal tools, brands and campaigns. Across all of them, I’m drawn to the point where an idea starts becoming something you can see, use and feel.</p>
+          <p>I like exploring how something could look, move and respond. Trying a direction, questioning it and working through the details until it feels right. Sometimes that means building something unexpected. Sometimes it means knowing what to leave out.</p>
+          <p>This portfolio is a personal expression of that curiosity. The words on the body, the journey inside the head, the worlds waiting within. Fragments of how I think, given somewhere to exist.</p>
         </div>
-        <div className="page-hero-foot">
-          <p className="body-xl">A full-stack developer and creative working where software engineering meets visual experimentation.</p>
-          <div className="page-hero-actions"><LinkArrow href="/contact">Tell me about it</LinkArrow></div>
-        </div>
-      </section>
 
-      <section className="section shell about-portrait">
-        <Reveal>
-          <figure>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/images/workspace.jpg" alt="Creative developer workspace with laptop and large monitor" />
-          </figure>
-        </Reveal>
-        <Reveal className="about-portrait-copy" delay={0.08}>
-          <p className="body-xl">My background is in Computer Science, but I’ve always cared about the visual side of technology as much as the technical side.</p>
-          <p className="body-lg muted">That combination became websites, business tools, event experiences and digital products where code and design have to work together.</p>
-          <p className="body-lg muted">Tools change. Taste travels surprisingly well.</p>
-        </Reveal>
-      </section>
-
-      <section className="section shell">
-        <Reveal className="short-version">
-          <span>I develop.</span>
-          <span>I design.</span>
-          <span>I experiment.</span>
-          <span>I break things.</span>
-          <span>I make them better.</span>
-          <span>Repeat.</span>
-        </Reveal>
-      </section>
-
-      <section className="section shell stack-columns">
-        <Reveal>
-          <h2 className="display-sm">Things I use when necessary.</h2>
-          <div className="stack-cloud">{stack.map((item) => <span key={item}>{item}</span>)}</div>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <h2 className="display-sm">Things I use constantly.</h2>
-          <div className="stack-cloud"><span>Curiosity</span><span>Google</span><span>Inspect Element</span><span>Undo</span></div>
-        </Reveal>
-      </section>
-
-      <section className="section shell big-cta">
-        <Reveal><h2 className="display">Enough about me. What are you building?</h2></Reveal>
-        <Reveal className="big-cta-bottom">
-          <p className="body-xl">A website, a product or something that does not fit neatly into either category.</p>
-          <LinkArrow href="/contact">Tell me about it</LinkArrow>
-        </Reveal>
-      </section>
+        <p className={styles.closing}>There’s a lot I leave unsaid.<br /><span>Some of it ends up here.</span></p>
+      </article>
     </main>
   );
 }

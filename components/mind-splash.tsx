@@ -12,7 +12,7 @@ export function MindSplash() {
     const element = root.current, host = canvas.current;
     if (!element || !host) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) {
+    if (reduced || window.location.hash === "#about-world") {
       element.hidden = true;
       const timer = window.setTimeout(() => setVisible(false), 0);
       return () => window.clearTimeout(timer);

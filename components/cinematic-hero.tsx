@@ -20,6 +20,7 @@ export function CinematicHero() {
     const host = viewport.current;
     const hero = root.current;
     if (!host || !hero) return;
+    if (window.location.hash === "#about-world") hero.dataset.returnWorld = "about";
     const abort = new AbortController();
     const returnToSurface = createReturnToSurface(hero);
     const entered = (event: Event) => { router.push((event as CustomEvent<string>).detail); };
