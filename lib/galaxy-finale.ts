@@ -134,7 +134,11 @@ export function createGalaxyFinale(scene: THREE.Scene) {
   const driftRotation = new THREE.Quaternion();
   const driftAxis = new THREE.Vector3();
   // The arm gesture uses real shoulder/elbow joints, including the clothing.
-  new GLTFLoader().load("/models/inner-world-figure.glb?pose=relaxed-drift-6", (gltf) => {
+  let requested = false;
+  const prepare = () => {
+    if (requested || disposed) return;
+    requested = true;
+    new GLTFLoader().load("/models/inner-world-figure.glb?pose=relaxed-drift-6", (gltf) => {
     const sourceMaterials = new Set<THREE.Material>();
     gltf.scene.traverse((object) => {
       if (object instanceof THREE.Bone && /^(upperarm01|lowerarm01)[._]?[LR]$/.test(object.name)) {
@@ -167,7 +171,9 @@ export function createGalaxyFinale(scene: THREE.Scene) {
       }
     }
   });
+  };
   return {
+    prepare,
     resize(width:number,height:number){aspect.value=width/height;},
     update(now:number,age:number,distance:number){
       root.visible=age>=0;

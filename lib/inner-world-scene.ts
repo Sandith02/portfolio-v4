@@ -1,3 +1,4 @@
+import { isMobileRendering, mobilePixelRatio } from "./render-budget";
 import * as THREE from "three";
 import { worldReturn } from "./world-navigation";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -73,6 +74,7 @@ function repairHeadSymmetry(source: THREE.BufferGeometry) {
 }
 
 export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElement, signal: AbortSignal): Promise<InnerWorldScene> {
+  const compact = isMobileRendering();
   const response = await fetch("/models/inner-world-head.glb", { signal });
   if (!response.ok) throw new Error("Figure could not be loaded");
   const gltf = await new GLTFLoader().parseAsync(await response.arrayBuffer(), "/models/");
@@ -117,9 +119,9 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   if (signal.aborted) { geometry.dispose(); outerGeometry.dispose(); throw new DOMException("Aborted", "AbortError"); }
 
   let renderer: THREE.WebGLRenderer;
-  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" }); }
+  try { renderer = new THREE.WebGLRenderer({ antialias: !compact, alpha: false, powerPreference: "high-performance" }); }
   catch (error) { geometry.dispose(); outerGeometry.dispose(); throw error; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.25 : 1.5));
+  renderer.setPixelRatio(compact ? mobilePixelRatio(host.clientWidth, host.clientHeight) : Math.min(window.devicePixelRatio, 1.5));
   renderer.setClearColor(0x141417);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -131,12 +133,12 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   const camera = new THREE.PerspectiveCamera(37, 1, .1, 60);
   const figure = new THREE.Group();
   scene.add(figure);
-  const words = wordTexture(Math.min(renderer.capabilities.maxTextureSize, window.innerWidth < 768 ? 2048 : 4096));
+  const words = wordTexture(Math.min(renderer.capabilities.maxTextureSize, compact ? 1024 : 4096), false, compact);
   const time = { value: 0 };
   const atmosphereMotion = { value: 1 };
   const progressUniform = { value: 0 };
   const galaxy = createCosmicGalaxy(time, progressUniform);
-  const globeWords = wordTexture(words.image.width, true);
+  const globeWords = wordTexture(words.image.width, true, compact);
   const planets = createPlanetarySystem(renderer, hero, globeWords);
   scene.add(galaxy.mesh);
   const portalCamera = { value: new THREE.Vector3(0, .25, 8) };
@@ -242,7 +244,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   figure.add(edge);
 
   // A transparent, flexible film across the aperture, with soft moving reflections.
-  const film = new THREE.Mesh(new THREE.PlaneGeometry(1.688, 2.52, 64, 64), new THREE.ShaderMaterial({
+  const film = new THREE.Mesh(new THREE.PlaneGeometry(1.688, 2.52, compact ? 24 : 64, compact ? 24 : 64), new THREE.ShaderMaterial({
     uniforms: { uTime: time, uProgress: progressUniform, uPointer: filmPointer, uAspect: { value: .8 }, uMotion: atmosphereMotion },
     transparent: true, depthWrite: false, side: THREE.DoubleSide,
     vertexShader: `uniform float uTime;uniform vec2 uPointer;varying vec2 vUv;
@@ -332,6 +334,9 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     figure.rotation.set(-.015 + lookY*.05 + Math.sin(elapsed*.29)*.004, lookX*.1 + Math.sin(elapsed*.12)*.012, Math.sin(elapsed*.23)*.002);
     const cameraY = THREE.MathUtils.lerp(.25, .94 + baseY, approach);
     const cameraZ = THREE.MathUtils.lerp(mobile ? 9.9 : 8, 1.04, approach);
+    // Once the galaxy is opaque, the head and its lights are fully covered.
+    figure.visible = !compact || p < .98;
+    haze.visible = !compact || p < .98;
     body.visible = interiorBody.visible = cameraZ > -1.8;
     edge.visible = cameraZ > 1.12;
     camera.position.set(0, cameraY, cameraZ);
@@ -356,16 +361,20 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   };
   const animate = (now: number) => {
     if (destroyed) return;
+    frame = requestAnimationFrame(animate);
+    if (compact && lastFrame && now - lastFrame < 1000 / 30 - 1) return;
+    // The intro covers the hero. Keep its prepared first frame, not two live skies.
+    if (compact && document.documentElement.dataset.splash === "active" && !document.querySelector('.mind-splash[data-leaving="true"]')) { lastFrame = now; return; }
     const delta = Math.min((now - (lastFrame || now)) / 1000, .05); lastFrame = now; elapsed += delta;
     const ease = 1 - Math.exp(-delta * 4.5);
     if (hero.dataset.rewindProgress !== undefined) { measure(); progress = targetProgress; }
     else progress += (targetProgress - progress) * ease;
     gateway.update(progress);
     lookX += (pointerX - lookX) * ease; lookY += (pointerY - lookY) * ease;
-    draw(); frame = requestAnimationFrame(animate);
+    draw();
   };
-  const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else draw(); };
-  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); measure(); draw(); };
+  const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else if (!destroyed && !document.hidden && visible) draw(); };
+  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); if (compact) renderer.setPixelRatio(mobilePixelRatio(host.clientWidth, host.clientHeight)); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
   const preference = () => { measure(); if (reduced.matches) { hero.style.height = ""; progress = targetProgress; lookX = 0; lookY = 0; } sync(); };
@@ -388,7 +397,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
       destroyed = true; cancelAnimationFrame(frame); observer.disconnect(); resizeObserver.disconnect();
       window.removeEventListener("scroll", measure); hero.removeEventListener("pointermove", pointer); hero.removeEventListener("pointerleave", leave);
       document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", preference); renderer.domElement.removeEventListener("webglcontextlost", lost);
-      gateway.dispose(); planets.dispose(); globeWords.dispose(); disposeObject(scene); words.dispose(); environment.dispose(); renderer.dispose(); renderer.domElement.remove(); host.dataset.ready = "false";
+      gateway.dispose(); planets.dispose(); globeWords.dispose(); disposeObject(scene); words.dispose(); environment.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove(); host.dataset.ready = "false";
     }
   };
 }

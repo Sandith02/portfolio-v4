@@ -1,10 +1,12 @@
+import { isMobileRendering, mobilePixelRatio } from "./render-budget";
 import * as THREE from "three";
 import { HERO_BACKGROUND_FRAGMENT } from "./hero-atmosphere";
 
 // The splash shares the hero's sky beneath its photographic glass layer.
 export function createMindSplashScene(host: HTMLElement) {
+  const compact = isMobileRendering();
   const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(compact ? mobilePixelRatio(host.clientWidth, host.clientHeight) : Math.min(window.devicePixelRatio, 1.5));
   renderer.setClearColor(0x141417, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -26,6 +28,7 @@ export function createMindSplashScene(host: HTMLElement) {
   const resize = () => {
     aspect.value = host.clientWidth / Math.max(host.clientHeight, 1);
     renderer.setSize(host.clientWidth, host.clientHeight);
+    renderer.render(scene, camera);
   };
   const observer = new ResizeObserver(resize);
   observer.observe(host); resize();
@@ -36,9 +39,9 @@ export function createMindSplashScene(host: HTMLElement) {
     renderer.render(scene, camera);
     frame = requestAnimationFrame(draw);
   };
-  draw();
+  if (!compact) draw();
   return { dispose() {
     cancelAnimationFrame(frame); observer.disconnect();
-    geometry.dispose(); material.dispose(); renderer.dispose(); renderer.domElement.remove();
+    geometry.dispose(); material.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
   } };
 }

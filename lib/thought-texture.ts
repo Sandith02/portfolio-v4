@@ -13,21 +13,22 @@ export const thoughtWords = [
 export const THOUGHT_WORD_COUNT = 128 * 80;
 const singleWords = thoughtWords.filter(word => !word.includes(" "));
 
-export function wordTexture(size: number, uniformSize = false) {
+export function wordTexture(size: number, uniformSize = false, compact = false) {
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = size;
   const context = canvas.getContext("2d")!;
   context.fillStyle = "#000";
   context.fillRect(0, 0, size, size);
   context.textBaseline = "middle";
-  const cellWidth = size / 80;
-  const cellHeight = size / 128;
+  const columns = compact ? 40 : 80, rows = compact ? 64 : 128;
+  const cellWidth = size / columns;
+  const cellHeight = size / rows;
   if (uniformSize) {
     const fontSize = cellHeight * .66;
     context.font = `400 ${fontSize}px "IBM Plex Mono", monospace`;
     context.fillStyle = "#bfc4c4";
     let index = 0;
-    for (let row = 0; row < 128; row++) {
+    for (let row = 0; row < rows; row++) {
       let x = 0;
       while (x < size) {
         const word = thoughtWords[index++ % thoughtWords.length];
@@ -39,8 +40,8 @@ export function wordTexture(size: number, uniformSize = false) {
     }
   } else {
   // Keep the dense 10,240-word layer; phrases get wider spaces in the accent layer.
-  for (let row = 0; row < 128; row++) {
-    for (let column = 0; column < 80; column++) {
+  for (let row = 0; row < rows; row++) {
+    for (let column = 0; column < columns; column++) {
       const word = singleWords[(row * 7 + column * 3 + (row % 4 === 0 ? 0 : column)) % singleWords.length];
       context.font = `400 ${cellHeight * (.58 + ((row + column) % 4) * .06)}px "IBM Plex Mono", monospace`;
       context.fillStyle = `rgb(${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130},${120 + (row * 23 + column * 17) % 130})`;

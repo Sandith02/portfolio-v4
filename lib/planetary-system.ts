@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { createDigitalGlobe } from "./digital-globe";
-import { createMindWorldGeometry } from "./mind-world-geometry";
+import { isMobileRendering } from "./render-budget";
 import { createPersonalWorld } from "./personal-worlds";
 import { createInnerGalaxyLife } from "./inner-galaxy-life";
 import { createGalaxyFinale, GALAXY_ARRIVAL_END } from "./galaxy-finale";
@@ -9,6 +9,7 @@ import { PLANET_DEPTHS, PLANET_JOURNEY_START, PLANET_TRAVEL_PER_SCREEN, PLANET_C
 // A second camera lives beyond the head. The five worlds occupy actual depth;
 // scrolling translates the camera, rather than scaling a flat arrangement.
 export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLElement, thoughts: THREE.Texture) {
+  const compact = isMobileRendering();
   const boundary = hero.querySelector<HTMLElement>(".mind-boundary");
   const footer = hero.querySelector<HTMLElement>(".galaxy-footer");
   const scene = new THREE.Scene();
@@ -37,8 +38,8 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
     const personal = index > 0 ? createPersonalWorld(index, thoughts) : undefined;
     const digital = index === 0 ? createDigitalGlobe() : undefined;
     const surface = personal?.material ?? digital!.material;
-    const geometry = index === 0 ? new THREE.SphereGeometry(1, 128, 96) : createMindWorldGeometry(index);
-    geometries.push(geometry);
+    const geometry = index === 0 ? new THREE.SphereGeometry(1, compact ? 48 : 128, compact ? 32 : 96) : null;
+    if (geometry) geometries.push(geometry);
     surface.side = personal ? THREE.DoubleSide : THREE.FrontSide;
     const globe = personal?.root ?? digital!.root;
     group.add(globe);
@@ -54,9 +55,11 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
           gl_FragColor=vec4(tint,edge*day*.16*alpha);}`,
     });
     materials.push(air);
-    const atmosphere = new THREE.Mesh(geometry, air);
-    atmosphere.scale.setScalar(1.016);
-    if (!personal) globe.add(atmosphere);
+    if (geometry) {
+      const atmosphere = new THREE.Mesh(geometry, air);
+      atmosphere.scale.setScalar(1.016);
+      globe.add(atmosphere);
+    }
     scene.add(group);
     return { group, globe, surface, personal, digital, air, depth, radius: 1, turnX: 0, turnY: 0, velocity: 0 };
   });
@@ -200,6 +203,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         footer.inert = footerReveal < .9;
         footer.setAttribute("aria-hidden", footerReveal < .02 ? "true" : "false");
       }
+      if (!compact || progress > 18) finale.prepare();
       finale.update(time, finaleAge, Math.max(0, progress - 3));
       const travel = Math.max(0, progress - PLANET_JOURNEY_START) * PLANET_TRAVEL_PER_SCREEN;
       const delta = Math.min(.05, Math.max(0, time - lastTime)); lastTime = time;
@@ -248,9 +252,12 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         planet.globe.rotation.set(planet.turnX, planet.turnY, 0);
         const depth = camera.position.z - planet.group.position.z;
         const visibility = 1 - THREE.MathUtils.smoothstep(depth, 82, 120);
+        if (compact) planet.group.visible = finaleAge < 0 && depth > -planet.radius * 2 && visibility > .001;
         planet.surface.opacity = reveal * visibility;
-        planet.digital?.update(reveal * visibility, time);
-        planet.personal?.update(time, reveal * visibility);
+        if (planet.group.visible) {
+          planet.digital?.update(reveal * visibility, time);
+          planet.personal?.update(time, reveal * visibility);
+        }
         planet.air.uniforms.alpha.value = i === 3 ? 0 : reveal * visibility * (hovered === i ? 1.3 : 1) * (i === 1 ? .5 : 1);
         projected.copy(planet.group.position).project(camera);
         const radiusPx = planet.radius / (Math.max(.1, depth) * Math.tan(THREE.MathUtils.degToRad(19))) * height / 2;

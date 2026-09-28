@@ -1,10 +1,12 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 
 export function createWhyGlobe() {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const time = { value: 0 }, alpha = { value: 0 };
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const geometry = new THREE.SphereGeometry(1, 96, 64);
+  const geometry = new THREE.SphereGeometry(1, compact ? 48 : 96, compact ? 32 : 64);
   const material = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, metalness: .06, roughness: .72,
     clearcoat: .15, clearcoatRoughness: .5,
@@ -32,7 +34,7 @@ export function createWhyGlobe() {
     `);
   };
   root.add(new THREE.Mesh(geometry,material));
-  const atmosphereGeometry=new THREE.SphereGeometry(1.018,96,64);
+  const atmosphereGeometry=new THREE.SphereGeometry(1.018,compact ? 48 : 96,compact ? 32 : 64);
   const atmosphereMaterial=new THREE.ShaderMaterial({
     uniforms:{uAlpha:alpha,uTime:time},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
     vertexShader:`varying vec3 n,e,p;void main(){vec4 v=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);e=normalize(-v.xyz);p=position;gl_Position=projectionMatrix*v;}`,

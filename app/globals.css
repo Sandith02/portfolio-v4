@@ -534,3 +534,19 @@ body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #th
 @keyframes splash-copy-reveal { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
 @media (max-width: 600px) { .mind-splash-art img { object-fit: contain; } .mind-splash-caption { width: calc(100% - 36px); } .mind-splash-caption p { font-size: clamp(1.7rem,7vw,2.5rem); letter-spacing: .015em; margin-bottom: 12px; } }
 @media (prefers-reduced-motion: reduce) { .mind-splash { display: none; } }
+
+/* Mobile keeps the type reveal, without hundreds of looping clipped layers. */
+@media (max-width: 767px), (pointer: coarse) and (max-width: 1366px) {
+  .constructed-title[data-construct="true"] .constructed-piece { display: none; animation: none; }
+  .constructed-title[data-construct="true"] .constructed-piece > span { animation: none; }
+  .constructed-title[data-construct="true"] .constructed-letter-final { display: inline-block; animation: mobile-letter-arrival 900ms ease both; animation-delay: var(--build-delay); }
+  .mind-splash-art { animation-name: mobile-splash-reveal; }
+  .mind-splash-caption { animation-name: mobile-copy-reveal; }
+  .mind-splash-art img { animation: none; }
+}
+@keyframes mobile-letter-arrival { from { opacity: .25; transform: translateY(.06em); } to { opacity: 1; transform: none; } }
+@keyframes mobile-copy-reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mobile-splash-reveal { from { opacity: 0; } to { opacity: .76; } }
+@media (prefers-reduced-motion: reduce) {
+  .constructed-title[data-construct="true"] .constructed-letter-final { animation: none; }
+}

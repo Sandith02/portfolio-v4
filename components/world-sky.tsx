@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { isMobileRendering, mobilePixelRatio } from "@/lib/render-budget";
 import styles from "./mind-world.module.css";
 
 export function WorldSky() {
@@ -10,10 +11,11 @@ export function WorldSky() {
     let cleanup: (() => void) | undefined;
     const element = host.current;
     if (!element) return;
+    const compact = isMobileRendering();
     Promise.all([import("three"), import("@/lib/galaxy-field")]).then(([THREE, { GALAXY_FIELD_GLSL }]) => {
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+      renderer.setPixelRatio(compact ? mobilePixelRatio(element.clientWidth, element.clientHeight) : Math.min(devicePixelRatio, 1.5));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = 1.05;
@@ -46,10 +48,11 @@ export function WorldSky() {
       };
       const sync = () => {
         cancelAnimationFrame(frame); last = 0;
-        if (!document.hidden && !reduced.matches) frame = requestAnimationFrame(draw);
+        if (!document.hidden && !reduced.matches && !compact) frame = requestAnimationFrame(draw);
         else if (!document.hidden) render();
       };
       const resize = () => {
+        if (compact) renderer.setPixelRatio(mobilePixelRatio(element.clientWidth, element.clientHeight));
         renderer.setSize(element.clientWidth, element.clientHeight);
         material.uniforms.uAspect.value = element.clientWidth / Math.max(1, element.clientHeight);
         render();
@@ -63,7 +66,7 @@ export function WorldSky() {
         cancelAnimationFrame(frame); observer.disconnect();
         document.removeEventListener("visibilitychange", sync);
         reduced.removeEventListener("change", sync);
-        geometry.dispose(); material.dispose(); renderer.dispose(); renderer.domElement.remove();
+        geometry.dispose(); material.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
       };
     }).catch(() => { /* Keep the charcoal atmospheric fallback if WebGL is unavailable. */ });
     return () => { disposed = true; cleanup?.(); };

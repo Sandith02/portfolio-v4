@@ -1,8 +1,10 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 
 // Physical silver pieces on a spherical shell: real volume, shaded sides and
 // perspective foreshortening, including when the visitor turns the world.
 export function createDigitalGlobe() {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const glowUniforms = { uParticleTime: { value: 0 }, uAlpha: { value: 0 }, uHeight: { value: 1000 } };
@@ -14,7 +16,7 @@ export function createDigitalGlobe() {
       return pow(wave,7.)*(.25+seed*.75);
     }
   `;
-  const coreGeometry = new THREE.SphereGeometry(.82, 64, 48);
+  const coreGeometry = new THREE.SphereGeometry(.82, compact ? 32 : 64, compact ? 24 : 48);
   const coreMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x241b1a, metalness: .25, roughness: .5,
     clearcoat: .2, clearcoatRoughness: .4,
@@ -71,13 +73,13 @@ export function createDigitalGlobe() {
       #include <opaque_fragment>
     `);
   };
-  const dotGeometry = new THREE.SphereGeometry(.01, 8, 6);
+  const dotGeometry = new THREE.SphereGeometry(.01, compact ? 4 : 8, compact ? 3 : 6);
   const transforms: THREE.Matrix4[] = [];
   const colors: THREE.Color[] = [];
   const glowPositions: number[] = [];
   const node = new THREE.Object3D();
   const random = (n: number) => THREE.MathUtils.seededRandom(n);
-  const count = 6400;
+  const count = compact ? 1800 : 6400;
   const goldenAngle = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < count; i++) {
     const y = 1 - 2 * (i + .5) / count;

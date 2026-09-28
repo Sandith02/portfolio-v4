@@ -2,9 +2,11 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { isMobileRendering } from "@/lib/render-budget";
 
 export function SmoothScroll() {
   useEffect(() => {
+    if (isMobileRendering()) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({

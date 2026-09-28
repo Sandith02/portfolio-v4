@@ -1,3 +1,4 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 import { createContactGlobe } from "./contact-globe";
 import { createAboutRings } from "./about-rings";
@@ -40,6 +41,7 @@ function surface(color: number, metalness: number, roughness: number, smoke = fa
 }
 
 export function createPersonalWorld(index: number, thoughts: THREE.Texture) {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const sculpture = new THREE.Group();root.add(sculpture);
   const geometries = new Set<THREE.BufferGeometry>();
@@ -98,7 +100,7 @@ export function createPersonalWorld(index: number, thoughts: THREE.Texture) {
       material.customProgramCacheKey=()=>`thought-globe-${inside}`;
       return material;
     };
-    mesh(new THREE.SphereGeometry(.88,112,80),wordMaterial(false));
+    mesh(new THREE.SphereGeometry(.88,compact ? 48 : 112,compact ? 32 : 80),wordMaterial(false));
     sculpture.add(rings!.root);
   } else if (threads) {
     sculpture.add(threads.root);

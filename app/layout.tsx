@@ -8,6 +8,8 @@ import "@fontsource/megrim/latin-400.css";
 import "@fontsource-variable/manrope";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { GoogleAnalytics } from "@/components/google-analytics";
+import { SiteInsights } from "@/components/site-insights";
 import { SiteFooter } from "@/components/site-footer";
 import { SmoothScroll } from "@/components/smooth-scroll";
 
@@ -39,6 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <SiteFooter />
+        {process.env.VERCEL_ENV === "production" && <><SiteInsights /><GoogleAnalytics /></>}
       </body>
     </html>
   );

@@ -1,8 +1,10 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 
 // One continuous liquid body. Position and normals deform together, so its
 // reflections follow the moving folds instead of sliding over a static sphere.
 export function createThreadsGlobe() {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const clock = { value: 0 };
@@ -74,7 +76,7 @@ export function createThreadsGlobe() {
     `);
   };
   material.customProgramCacheKey = () => 'threads-continuous-liquid';
-  const geometry = new THREE.SphereGeometry(.94, 128, 96);
+  const geometry = new THREE.SphereGeometry(.94, compact ? 56 : 128, compact ? 40 : 96);
   // Account for shader displacement during frustum culling.
   geometry.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 1.4);
   root.add(new THREE.Mesh(geometry, material));

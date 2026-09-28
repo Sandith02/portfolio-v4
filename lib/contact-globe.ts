@@ -1,10 +1,12 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 
 export function createContactGlobe() {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const uniforms = { uTime: { value: 0 }, uAlpha: { value: 0 }, uHeight: { value: 1000 } };
-  const glassGeometry = new THREE.SphereGeometry(1, 80, 64);
+  const glassGeometry = new THREE.SphereGeometry(1, compact ? 40 : 80, compact ? 28 : 64);
   const glass = new THREE.MeshPhysicalMaterial({
     color: 0x073b38, metalness: .08, roughness: .2,
     clearcoat: 1, clearcoatRoughness: .18, envMapIntensity: .45,
@@ -31,7 +33,7 @@ export function createContactGlobe() {
   interior.renderOrder = -1;
   root.add(interior);
 
-  const count = 2800;
+  const count = compact ? 1000 : 2800;
   const positions = new Float32Array(count * 3), seeds = new Float32Array(count);
   const random = (n: number) => THREE.MathUtils.seededRandom(n);
   for (let i = 0; i < count; i++) {

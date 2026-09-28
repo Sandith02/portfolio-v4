@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { isMobileRendering } from "@/lib/render-budget";
 import styles from "./mind-world.module.css";
 
 export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" | "why" | "threads" }) {
@@ -9,6 +10,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
   useEffect(() => {
     const element = host.current;
     if (!element) return;
+    const compact = isMobileRendering();
     let disposed = false;
     let cleanup: (() => void) | undefined;
     Promise.all([
@@ -23,7 +25,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
     ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }, { createWhyGlobe }, { createThreadsGlobe }]) => {
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
-      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(devicePixelRatio, compact ? 1 : 2));
       renderer.setSize(42, 32);
       renderer.setClearColor(0x000000, 0);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -68,7 +70,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
       };
       const sync = () => {
         cancelAnimationFrame(frame); last = 0;
-        if (!document.hidden && !reduced.matches) frame = requestAnimationFrame(draw);
+        if (!document.hidden && !reduced.matches && !compact) frame = requestAnimationFrame(draw);
         else if (!document.hidden) render();
       };
       document.addEventListener("visibilitychange", sync);
@@ -78,7 +80,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
         cancelAnimationFrame(frame);
         document.removeEventListener("visibilitychange", sync);
         reduced.removeEventListener("change", sync);
-        planet.dispose(); thoughts?.dispose(); renderer.dispose(); renderer.domElement.remove();
+        planet.dispose(); thoughts?.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
         delete element.dataset.ready;
       };
     }).catch(() => { /* Retain the quiet planet silhouette when WebGL is unavailable. */ });

@@ -1,6 +1,8 @@
+import { isMobileRendering } from "./render-budget";
 import * as THREE from "three";
 
 export function createAboutRings() {
+  const compact = isMobileRendering();
   const root = new THREE.Group();
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const time = { value: 0 }, alpha = { value: 0 };
@@ -16,7 +18,7 @@ export function createAboutRings() {
     const orbit = new THREE.Group();
     orbit.rotation.set(track.pitch, .15, track.tilt, 'ZXY');
     root.add(orbit);
-    const bandGeometry = new THREE.RingGeometry(track.radius-track.width/2,track.radius+track.width/2,256,8);
+    const bandGeometry = new THREE.RingGeometry(track.radius-track.width/2,track.radius+track.width/2,compact ? 96 : 256,compact ? 3 : 8);
     const bandMaterial = new THREE.ShaderMaterial({
       uniforms: { uTime: time, uAlpha: alpha, uSpeed: { value: track.speed }, uPhase: { value: track.phase }, uRadius: { value: track.radius }, uWidth: { value: track.width } },
       side: THREE.DoubleSide, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
@@ -42,7 +44,7 @@ export function createAboutRings() {
     orbit.add(band);
     geometries.push(bandGeometry);materials.push(bandMaterial);
     for (const halo of [false, true]) {
-      const geometry = new THREE.TorusGeometry(track.radius, halo ? .023 : .005, 8, 256);
+      const geometry = new THREE.TorusGeometry(track.radius, halo ? .023 : .005, compact ? 5 : 8, compact ? 96 : 256);
       const material = new THREE.ShaderMaterial({
         uniforms: { uTime: time, uAlpha: alpha, uSpeed: { value: track.speed }, uPhase: { value: track.phase }, uHalo: { value: halo ? 1 : 0 } },
         transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,

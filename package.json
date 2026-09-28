@@ -17,6 +17,8 @@
     "@fontsource/ibm-plex-mono": "latest",
     "@fontsource/megrim": "^5.3.0",
     "@phosphor-icons/react": "latest",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "gsap": "latest",
     "lenis": "latest",
     "motion": "latest",
