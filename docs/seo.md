@@ -13,15 +13,16 @@ Sandith Sithmaka, design engineer and creative frontend developer based in Sri L
 | `/work` | Actual projects, frontend engineering, UI/UX and visual identity | Yes |
 | `/why` | Creative thinking and portfolio concept | Yes |
 | `/contact` | Project and collaboration inquiries | Yes |
-| `/blogs` | Threads placeholder | No, until real posts exist |
+| `/blogs` | Published Threads | Yes |
+| `/blogs/[slug]` | Individual articles | Yes |
 
-Threads remains available with noindex metadata until posts exist. Do not disallow it in robots.txt, because crawlers need to read that metadata. The retired Services and AI Website Redesign pages and their sharing images have been removed and return 404. Vercel preview builds also emit noindex and an empty sitemap.
+Threads and its published articles are indexed. Add new articles to `content/threads.ts`, newest first: their static pages, canonical metadata, BlogPosting data, sharing images and sitemap entries are generated at build time. Keep the publication date accurate and preserve the slug after publishing. The retired Services and AI Website Redesign pages and their sharing images return 404. Vercel preview builds emit noindex and an empty sitemap.
 
 ## Implemented
 
 - Unique titles, descriptions, self-referencing www canonicals, Open Graph and large Twitter/X cards, managed in `lib/seo.ts`.
 - Static, route-specific 1200 × 630 galaxy sharing images at `/og/home`, `/og/about`, etc. These use local fonts and build once, without an image service dependency.
-- `/sitemap.xml` lists the five finished public pages. No invented modification dates.
+- `/sitemap.xml` lists the six public pages and every published thread. No invented modification dates.
 - `/robots.txt` permits public pages and rendering assets, excludes `/api/`, and advertises the production sitemap.
 - Connected Person, WebSite and page JSON-LD, including a ProfilePage for About. Facts come from the portfolio and CV. No fabricated reviews, business address, articles or search feature.
 - Navigation anchors are present in server HTML even when the menu is closed. They remain inert when hidden.

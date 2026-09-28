@@ -2,18 +2,20 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { seoPages, type SeoPage } from "@/lib/seo";
+import { threads, getThread } from "@/content/threads";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return Object.keys(seoPages).map(slug => ({ slug }));
+  return [...Object.keys(seoPages), ...threads.map(thread => thread.slug)].map(slug => ({ slug }));
 }
 
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (!Object.hasOwn(seoPages, slug)) return new Response("Not found", { status: 404 });
-  const page = seoPages[slug as SeoPage];
+  const thread = getThread(slug);
+  const page = thread ? { headline: thread.sharingHeadline, label: "Threads · By Sandith Sithmaka Thenuwara" } : Object.hasOwn(seoPages, slug) ? seoPages[slug as SeoPage] : null;
+  if (!page) return new Response("Not found", { status: 404 });
   const [displayFont, bodyFont] = await Promise.all([
     readFile(join(process.cwd(), "node_modules/@fontsource/megrim/files/megrim-latin-400-normal.woff")),
     readFile(join(process.cwd(), "node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff")),

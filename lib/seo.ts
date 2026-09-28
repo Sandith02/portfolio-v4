@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { type Thread, threadPath } from "@/content/threads";
 
 export const SITE_URL = "https://www.sandithdev.com";
 export const PERSON_ID = `${SITE_URL}/#sandith`;
@@ -33,8 +34,8 @@ export const seoPages = {
   },
   threads: {
     path: "/blogs", title: "Threads | Thoughts on Design & Code by Sandith Sithmaka",
-    description: "Thoughts on design, code and the ideas in between. Notes and experiments by Sandith Sithmaka. The first threads are coming soon.",
-    headline: "Thoughts\ntaking shape.", label: "Threads · Coming soon", index: false,
+    description: "Thoughts on design, code and the ideas in between. Read personal reflections, notes and experiments by Sandith Sithmaka, a design engineer in Sri Lanka.",
+    headline: "Thoughts\ntaking shape.", label: "Threads · By Sandith Sithmaka", index: true,
   },
 } as const;
 
@@ -51,5 +52,19 @@ export function pageMetadata(key: SeoPage): Metadata {
     robots: { index, follow: true, ...(index ? { googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } } : {}) },
     openGraph: { type: "website", locale: "en_US", siteName: "Sandith Sithmaka", url: `${SITE_URL}${page.path}`, title: page.title, description: page.description, images: [image] },
     twitter: { card: "summary_large_image", title: page.title, description: page.description, images: [image] },
+  };
+}
+
+export function threadMetadata(thread: Thread): Metadata {
+  const title = `${thread.title} | Sandith Sithmaka`;
+  const url = `${SITE_URL}${threadPath(thread)}`;
+  const image = { url: `${SITE_URL}/og/${thread.slug}`, width: 1200, height: 630, alt: thread.title };
+  return {
+    title, description: thread.description,
+    authors: [{ name: "Sandith Sithmaka Thenuwara", url: `${SITE_URL}/about` }],
+    alternates: { canonical: url },
+    robots: { index: !isPreview, follow: true, "max-image-preview": "large" },
+    openGraph: { type: "article", title, description: thread.description, url, siteName: "Sandith Sithmaka", locale: "en_US", publishedTime: thread.published, authors: [`${SITE_URL}/about`], images: [image] },
+    twitter: { card: "summary_large_image", title, description: thread.description, images: [image] },
   };
 }

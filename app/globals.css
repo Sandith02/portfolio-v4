@@ -43,7 +43,7 @@ main { min-height: 100dvh; }
   opacity: .03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #threads-title) > .noise { display: none; }
+body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #threads-title, #thread-title) > .noise { display: none; }
 
 .site-header { position: fixed; z-index: 90; top: 20px; left: 50%; width: 196px; transform: translateX(-50%); font-family: var(--hero-body); }
 .nav-capsule { display: grid; grid-template-columns: minmax(0, 1fr) 36px 42px; align-items: center; gap: 4px; height: 44px; padding: 6px; border-radius: 999px; background: #020108; color: #f4f4f6; box-shadow: 0 0 0 1px #ffffff0c; }
