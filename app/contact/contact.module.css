@@ -9,7 +9,7 @@
 .connections a:hover { color: #b9dfd2; }
 .connections a:focus-visible { outline: 2px solid #b9dfd2; outline-offset: 6px; }
 .place { max-width: 280px; margin: 34px 0 0; color: #9ca6ad; font-size: 12px; line-height: 1.8; }
-.conversation { min-width: 0; }
+.conversation { min-width: 0; scroll-margin-top: 110px; }
 .conversation h2 { margin: 0; font-size: clamp(24px, 2.2vw, 32px); font-weight: 400; line-height: 1.35; letter-spacing: -.04em; color: #e4e9e6; text-wrap: balance; }
 .formIntro { margin: 20px 0 40px; color: #b7bbc3; font-size: 15px; line-height: 1.85; }
 @media (max-width: 800px) {

@@ -99,7 +99,7 @@ export function CinematicHero() {
         </footer>
         <div className="planet-entry-veil" aria-hidden="true" />
         <span className="planet-status inner-accessible-title" role="status" />
-        <div className="inner-opportunity"><Link href="/work">Explore my work <ArrowUpRight size={16} /></Link></div>
+        <div className="inner-opportunity"><Link href="/contact#contact-form">Connect with me <ArrowUpRight size={16} aria-hidden="true" /></Link></div>
         <div className="inner-bottom">
           <a className="inner-linkedin" href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Connect with Sandith on LinkedIn (opens in a new tab)">
             <Image className="inner-linkedin-brand" src="/images/linkedin-in-official.png" width={20} height={17} alt="" unoptimized />

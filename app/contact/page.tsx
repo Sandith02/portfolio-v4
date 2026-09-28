@@ -31,7 +31,7 @@ export default function ContactPage() {
           </div>
           <p className={styles.place}>Based in Sri Lanka. Open to conversations everywhere.</p>
         </header>
-        <section className={styles.conversation} aria-labelledby="contact-form-title">
+        <section id="contact-form" className={styles.conversation} aria-labelledby="contact-form-title">
           <h2 id="contact-form-title">It starts with a conversation.</h2>
           <p className={styles.formIntro}>You don’t need to have it all figured out.<br />Tell me what you’re thinking.</p>
           <ContactForm />
