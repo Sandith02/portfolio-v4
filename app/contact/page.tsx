@@ -6,16 +6,12 @@ import { ContactForm } from "@/components/contact-form";
 import { WorldSky } from "@/components/world-sky";
 import { BackToMind } from "@/components/back-to-mind";
 import { CONTACT_EMAIL } from "@/lib/contact";
-import { getThread } from "@/content/threads";
 import worldStyles from "@/components/mind-world.module.css";
 import styles from "./contact.module.css";
 
 export const metadata = pageMetadata("contact");
 
-export default async function ContactPage({ searchParams }: { searchParams: Promise<{ thread?: string }> }) {
-  const { thread: slug } = await searchParams;
-  const thread = typeof slug === "string" ? getThread(slug) : undefined;
-  const initialMessage = thread ? `In response to “${thread.title}”\n\n${thread.paragraphs[thread.paragraphs.length - 1]}\n\nMy answer:\n` : "";
+export default function ContactPage() {
   return (
     <main id="main-content" className={worldStyles.world}>
       <PageStructuredData page="contact" />
@@ -41,7 +37,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
             <style>{`#contact-form form{display:none}`}</style>
             <p>The form needs JavaScript. You can also <a href={`mailto:${CONTACT_EMAIL}`}>email me directly</a>.</p>
           </noscript>
-          <ContactForm key={thread?.slug ?? "contact"} initialMessage={initialMessage} />
+          <ContactForm />
         </section>
       </div>
     </main>

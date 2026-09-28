@@ -54,7 +54,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ slug: s
           </div>
         </article>
       </div>
-      <ThreadDock key={thread.slug} slug={thread.slug} title={thread.title} url={`${SITE_URL}${threadPath(thread)}`} />
+      <ThreadDock key={thread.slug} slug={thread.slug} question={thread.paragraphs[thread.paragraphs.length - 1]} title={thread.title} url={`${SITE_URL}${threadPath(thread)}`} />
     </main>
   );
 }

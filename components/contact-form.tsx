@@ -5,7 +5,7 @@ import { ArrowUpRight } from "@phosphor-icons/react";
 import { CONTACT_EMAIL, CONTACT_LIMITS, CONTACT_TOPICS, validateContact, type ContactErrors, type ContactField } from "@/lib/contact";
 import styles from "./contact-form.module.css";
 
-export function ContactForm({ initialMessage = "" }: { initialMessage?: string }) {
+export function ContactForm() {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errors, setErrors] = useState<ContactErrors>({});
   const [error, setError] = useState("");
@@ -93,7 +93,7 @@ export function ContactForm({ initialMessage = "" }: { initialMessage?: string }
         </div>
         <div className={styles.field}>
           <label htmlFor="contact-message">What’s on your mind?</label>
-          <textarea id="contact-message" name="message" defaultValue={initialMessage} required minLength={10} maxLength={CONTACT_LIMITS.message} rows={5} placeholder="An idea, a little context, a link. Start wherever feels right." {...accessibility("message")} />
+          <textarea id="contact-message" name="message" required minLength={10} maxLength={CONTACT_LIMITS.message} rows={5} placeholder="An idea, a little context, a link. Start wherever feels right." {...accessibility("message")} />
           {fieldError("message")}
         </div>
         <div className={styles.honeypot} aria-hidden="true" inert>
