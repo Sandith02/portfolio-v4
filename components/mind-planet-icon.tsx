@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./mind-world.module.css";
 
-export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" }) {
+export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" | "why" }) {
   const host = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -17,8 +17,9 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
       import("@/lib/thought-texture"),
       import("@/lib/digital-globe"),
       import("@/lib/contact-globe"),
+      import("@/lib/why-globe"),
       document.fonts.ready,
-    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }]) => {
+    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }, { createWhyGlobe }]) => {
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -34,9 +35,11 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
       const digital = world === "work" ? createDigitalGlobe() : null;
       const personal = thoughts ? createPersonalWorld(1, thoughts) : null;
       const contact = world === "contact" ? createContactGlobe() : null;
-      const planet = (digital ?? personal ?? contact)!;
+      const why = world === "why" ? createWhyGlobe() : null;
+      const planet = (digital ?? personal ?? contact ?? why)!;
       if (digital) { digital.root.scale.setScalar(1.15); digital.resize(32, renderer.getPixelRatio()); }
       if (contact) { contact.root.scale.setScalar(1.15); contact.resize(32, renderer.getPixelRatio()); }
+      if (why) why.root.scale.setScalar(1.15);
       scene.add(planet.root);
       scene.add(new THREE.AmbientLight(0xa7bbd0, .6));
       const light = new THREE.DirectionalLight(0xffedda, 3.5);
@@ -49,6 +52,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
         digital?.update(1, elapsed);
         personal?.update(elapsed, 1);
         contact?.update(elapsed, 1);
+        why?.update(elapsed, 1);
         renderer.render(scene, camera);
         element.dataset.ready = "true";
       };

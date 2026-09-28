@@ -1,0 +1,29 @@
+.layout { display: grid; grid-template-columns: 1fr 1.05fr; align-items: start; gap: clamp(48px, 7vw, 110px); max-width: 1500px; margin: 0 auto; padding: clamp(150px, 19svh, 210px) clamp(24px, 6vw, 100px) 160px; }
+.opening { position: sticky; top: clamp(120px, 19svh, 210px); min-width: 0; }
+.title { margin: 0; font-weight: 400; }
+.title :global(.inner-headline) { color: #e4e9e6; font: 400 clamp(43px, 5.2vw, 78px)/1.15 var(--hero-display); letter-spacing: -.045em; text-shadow: 0 2px 24px #0e0f1180; }
+.note { max-width: 330px; margin: 34px 0 0; color: #b7bbc3; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.85; letter-spacing: -.02em; }
+.story { min-width: 0; max-width: 570px; }
+.lead { margin: 0 0 66px; color: #e4e9e6; font-size: clamp(26px, 2.4vw, 36px); line-height: 1.5; letter-spacing: -.035em; }
+.thought { margin-bottom: 54px; }
+.thought h2 { margin: 0 0 20px; color: #d8dedc; font-size: clamp(19px, 1.6vw, 23px); font-weight: 400; letter-spacing: -.025em; line-height: 1.55; }
+.thought p { margin: 0 0 24px; color: #b7bbc3; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.95; letter-spacing: -.014em; text-wrap: pretty; }
+.thought p:last-child { margin-bottom: 0; }
+.closing { margin: 66px 0 44px; color: #b7bbc3; font-size: clamp(25px, 2.4vw, 36px); line-height: 1.6; letter-spacing: -.035em; }
+.closing span { color: #e4e9e6; }
+.next { display: flex; flex-wrap: wrap; gap: 14px 34px; padding-top: 24px; border-top: 1px solid #d8dedc24; }
+.next a { display: inline-flex; align-items: center; gap: 18px; min-height: 44px; color: #c6cdd1; font-size: 13px; }
+.next a:hover { color: #f2f4f3; }
+.next svg { color: #a8a4b4; }
+.next a:focus-visible { outline: 2px solid #d8dedc; outline-offset: 5px; }
+@media (max-width: 800px) {
+  .layout { display: block; padding-top: 140px; padding-bottom: 140px; }
+  .opening { position: static; margin-bottom: 64px; }
+  .title :global(.inner-headline) { font-size: clamp(42px, 10.5vw, 76px); }
+  .note { margin-top: 24px; }
+  .story { max-width: none; }
+  .lead { margin-bottom: 44px; }
+  .thought { margin-bottom: 40px; }
+  .closing { margin-top: 50px; }
+}
+@media (max-width: 360px) { .title :global(.inner-headline) { font-size: 39px; } }
