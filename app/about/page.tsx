@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import { ConstructedTitle } from "@/components/constructed-title";
 import { BackToMind } from "@/components/back-to-mind";
 import { WorldSky } from "@/components/world-sky";
 import worldStyles from "@/components/mind-world.module.css";
 import styles from "./about.module.css";
 
-export const metadata: Metadata = {
-  title: "About Sandith | Design Engineer & Creative Frontend Developer",
-  description: "I have ideas I want to make real. I’m Sandith, a design engineer and creative frontend developer based in Sri Lanka.",
-};
+export const metadata = pageMetadata("about");
 
 export default function AboutPage() {
   return (
     <main id="main-content" className={worldStyles.world}>
+      <PageStructuredData page="about" />
       <WorldSky />
       <BackToMind world="about" />
       <article className={styles.story} aria-labelledby="about-title">

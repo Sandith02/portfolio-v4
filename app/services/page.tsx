@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import { Reveal } from "@/components/reveal";
 import { LinkArrow } from "@/components/link-arrow";
 
-export const metadata: Metadata = {
-  title: "Web Development Services Sri Lanka | Sandith Dev",
-  description: "Custom web development, Next.js, React frontend development, full-stack applications, creative websites and AI website redesign by Sandith Dev."
-};
+export const metadata = pageMetadata("services");
 
 const details = [
   ["Custom website development", "Websites built around the brand. Not the template.", "Custom business websites, portfolios and campaign experiences developed with modern web technologies.", ["Next.js development", "React development", "Responsive interfaces", "CMS integration", "API integrations", "Motion and interaction", "SEO foundations", "Deployment"]],
@@ -18,6 +16,7 @@ const details = [
 export default function ServicesPage() {
   return (
     <main id="main-content">
+      <PageStructuredData page="services" />
       <section className="page-hero">
         <div className="page-hero-copy">
           <p className="eyebrow">Services</p>

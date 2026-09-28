@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { ConstructedTitle } from "@/components/constructed-title";
@@ -7,14 +8,12 @@ import { WorldSky } from "@/components/world-sky";
 import worldStyles from "@/components/mind-world.module.css";
 import styles from "./why.module.css";
 
-export const metadata: Metadata = {
-  title: "Why I create | Sandith Sithmaka",
-  description: "This is where the quiet goes. On curiosity, making ideas real, and finding a form somewhere between art and code.",
-};
+export const metadata = pageMetadata("why");
 
 export default function WhyPage() {
   return (
     <main id="main-content" className={worldStyles.world}>
+      <PageStructuredData page="why" />
       <WorldSky />
       <BackToMind world="why" />
       <article className={styles.layout} aria-labelledby="why-title">

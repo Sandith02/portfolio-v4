@@ -1,16 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import { Reveal } from "@/components/reveal";
 import { LinkArrow } from "@/components/link-arrow";
 import { rescueItems } from "@/lib/data";
 
-export const metadata: Metadata = {
-  title: "AI Website Redesign & Development | Sandith Dev",
-  description: "Improve your AI-generated website with professional design, development, SEO, performance and UX improvements by Sandith Dev."
-};
+export const metadata = pageMetadata("redesign");
 
 export default function AiRescuePage() {
   return (
     <main id="main-content">
+      <PageStructuredData page="redesign" />
       <section className="page-hero">
         <div className="page-hero-copy">
           <p className="eyebrow">AI website redesign</p>

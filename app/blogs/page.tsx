@@ -1,18 +1,17 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import { ConstructedTitle } from "@/components/constructed-title";
 import { BackToMind } from "@/components/back-to-mind";
 import { WorldSky } from "@/components/world-sky";
 import worldStyles from "@/components/mind-world.module.css";
 import styles from "./threads.module.css";
 
-export const metadata: Metadata = {
-  title: "Threads | Sandith Sithmaka",
-  description: "A place for my thoughts on design, code and the ideas in between. The first threads are coming soon.",
-};
+export const metadata = pageMetadata("threads");
 
 export default function ThreadsPage() {
   return (
     <main id="main-content" className={worldStyles.world}>
+      <PageStructuredData page="threads" />
       <WorldSky />
       <BackToMind world="threads" />
       <section className={styles.layout} aria-labelledby="threads-title">

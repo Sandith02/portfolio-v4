@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, HouseSimple, X } from "@phosphor-icons/react";
 import { skipIntroOnNavigation } from "@/lib/intro-navigation";
@@ -61,16 +61,12 @@ export function SiteHeader() {
         }}><HouseSimple size={16} weight="light" /></Link>
         <span className="nav-progress" ref={progress} title="Page scroll progress" aria-hidden="true">0%</span>
       </div>
-      <AnimatePresence>
-        {open && (
-          <motion.div id="site-menu" className="nav-panel" initial={reduce ? false : { opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: .18 }}>
-            <nav aria-label="Primary navigation">
-              {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
-            </nav>
-            <a className="nav-contact" href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role" onClick={() => setOpen(false)}>Let’s talk roles <ArrowUpRight size={14} /></a>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div id="site-menu" className="nav-panel" initial={false} inert={!open} aria-hidden={!open} animate={{ opacity: open ? 1 : 0, y: open ? 0 : -6, visibility: open ? "visible" : "hidden" }} transition={{ duration: reduce ? 0 : .18 }}>
+        <nav aria-label="Primary navigation">
+          {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
+        </nav>
+        <a className="nav-contact" href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role" onClick={() => setOpen(false)}><span data-nosnippet>Let’s talk roles</span> <ArrowUpRight size={14} /></a>
+      </motion.div>
     </header>
   );
 }

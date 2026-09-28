@@ -45,7 +45,7 @@ export function CinematicHero() {
         <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
         <div className="inner-vignette" aria-hidden="true" />
         <div className="inner-topline"><span>I’m Sandith Sithmaka<span className="inner-topline-role">Creative developer</span></span></div>
-        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka — Creative developer. Quiet outside. Worlds within.</h1>
+        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka, design engineer and creative frontend developer. Quiet outside. Worlds within.</h1>
         <div className="inner-story">
           <div className="inner-chapter inner-chapter-first">
             <div className="inner-chapter-left"><ConstructedTitle lines={["Quiet", "outside."]} /><p className="inner-title-note">I leave a lot unsaid.<br />A curious mind might find the rest.</p></div>

@@ -1,4 +1,5 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
+import { PageStructuredData } from "@/components/structured-data";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { ConstructedTitle } from "@/components/constructed-title";
 import { WorldSky } from "@/components/world-sky";
@@ -6,10 +7,7 @@ import { BackToMind } from "@/components/back-to-mind";
 import worldStyles from "@/components/mind-world.module.css";
 import styles from "./work.module.css";
 
-export const metadata: Metadata = {
-  title: "Work | Sandith Sithmaka, Design Engineer",
-  description: "Selected work across corporate platforms, product interfaces, brands and campaigns. Design and frontend engineering by Sandith Sithmaka.",
-};
+export const metadata = pageMetadata("work");
 
 const projects = [
   {
@@ -76,6 +74,7 @@ const projects = [
 export default function WorkPage() {
   return (
     <main id="main-content" className={worldStyles.world}>
+      <PageStructuredData page="work" />
       <WorldSky />
       <BackToMind world="work" />
       <div className={styles.layout}>
