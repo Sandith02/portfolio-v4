@@ -23,7 +23,7 @@ const projects = [
       "Integrated GA4, Google Search Console and Vercel Analytics, then iterated using feedback, technical SEO findings and visual QA.",
     ],
     tools: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
-    href: "https://cogentsolutions.ae",
+    links: [{ label: "Visit website", href: "https://cogentsolutions.ae" }],
   },
   {
     id: "supernizo",
@@ -54,6 +54,10 @@ const projects = [
     ],
     tools: ["Brand identity", "Next.js", "TypeScript", "Three.js"],
     note: "Development in progress",
+    links: [
+      { label: "View Go Tech branding", href: "https://drive.google.com/file/d/1I3Tbob96XzPFYzwd2QR4BBvbB9Xg6K4d/view" },
+      { label: "Preview Go Tech website", href: "https://go-tech-corporate.vercel.app/" },
+    ],
   },
   {
     id: "brand-campaign",
@@ -105,7 +109,9 @@ export default function WorkPage() {
                 <ul>{project.contribution.map(item => <li key={item}>{item}</li>)}</ul>
               </details>
               <ul className={styles.tools} aria-label={`Tools and disciplines for ${project.name}`}>{project.tools.map(tool => <li key={tool}>{tool}</li>)}</ul>
-              {project.href && <a className={styles.visit} href={project.href} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${project.name} website (opens in a new tab)`}>Visit website <ArrowUpRight size={16} aria-hidden="true" /></a>}
+              {project.links && <div className={styles.projectLinks}>
+                {project.links.map(link => <a key={link.href} className={styles.visit} href={link.href} target="_blank" rel="noopener noreferrer" aria-label={`${link.label} (opens in a new tab)`}>{link.label}<ArrowUpRight size={16} aria-hidden="true" /></a>)}
+              </div>}
             </article>
           ))}
           <p className={styles.closing}>Different kinds of work.<br /><span>The same curiosity behind them.</span></p>

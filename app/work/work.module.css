@@ -37,7 +37,8 @@
 .details li { padding-left: 6px; margin-bottom: 16px; color: #b7bbc3; font-size: 14px; line-height: 1.85; }
 .details li::marker { color: #818e97; }
 .tools { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 0; margin: 22px 0 0; list-style: none; color: #9aa5ad; font-size: 11px; line-height: 1.8; }
-.visit { display: inline-flex; align-items: center; gap: 18px; min-height: 44px; margin-top: 24px; font-size: 13px; color: #e4e9e6; }
+.projectLinks { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 24px; }
+.visit { display: inline-flex; align-items: center; gap: 18px; min-height: 44px; font-size: 13px; color: #e4e9e6; }
 .visit:hover { color: #bfcdd8; }
 .closing { margin: 0; font-size: clamp(22px, 2vw, 28px); letter-spacing: -.035em; line-height: 1.7; color: #a5afb6; }
 .closing span { color: #e4e9e6; }
