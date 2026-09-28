@@ -3,17 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 import { worldReturn } from "@/lib/world-navigation";
 import { ConstructedTitle } from "@/components/constructed-title";
+import { hasEnteredThisDocument, skipIntroOnNavigation } from "@/lib/intro-navigation";
 
 export function MindSplash() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(() => !hasEnteredThisDocument());
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLDivElement>(null);
+  const skipIntro = useRef<boolean | null>(null);
 
   useEffect(() => {
     const element = root.current, host = canvas.current;
     if (!element || !host) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced || worldReturn(window.location.hash)) {
+    // Retain the decision across Strict Mode's effect replay.
+    if (skipIntro.current === null) skipIntro.current = reduced || !!worldReturn(window.location.hash) || hasEnteredThisDocument();
+    skipIntroOnNavigation();
+    if (skipIntro.current) {
       element.hidden = true;
       const timer = window.setTimeout(() => setVisible(false), 0);
       return () => window.clearTimeout(timer);

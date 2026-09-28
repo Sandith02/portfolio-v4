@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, HouseSimple, X } from "@phosphor-icons/react";
+import { skipIntroOnNavigation } from "@/lib/intro-navigation";
 
 const links = [["Work", "/work"], ["About", "/about"], ["Contact", "/contact"], ["Why", "/why"], ["Threads", "/blogs"]];
 
@@ -53,7 +54,11 @@ export function SiteHeader() {
         <button ref={toggle} className="nav-toggle" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="site-menu" aria-label={open ? "Close menu" : "Open menu"}>
           {open ? <X size={20} weight="light" /> : <span className="nav-menu-icon" aria-hidden="true"><i /><i /></span>}<span>{open ? "Close" : "Menu"}</span>
         </button>
-        <Link className="nav-home" href="/" aria-label="Home" title="Home" onClick={() => { setOpen(false); if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" }); }}><HouseSimple size={16} weight="light" /></Link>
+        <Link className="nav-home" href="/" aria-label="Home" title="Home" onClick={event => {
+          setOpen(false);
+          if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) skipIntroOnNavigation();
+          if (pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" });
+        }}><HouseSimple size={16} weight="light" /></Link>
         <span className="nav-progress" ref={progress} title="Page scroll progress" aria-hidden="true">0%</span>
       </div>
       <AnimatePresence>
