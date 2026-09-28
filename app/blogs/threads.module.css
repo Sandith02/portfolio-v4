@@ -1,0 +1,13 @@
+.layout { display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: clamp(48px, 7vw, 110px); min-height: 100svh; max-width: 1500px; margin: 0 auto; padding: 150px clamp(24px, 6vw, 100px); }
+.title { margin: 0; min-width: 0; font-weight: 400; }
+.title :global(.inner-headline) { color: #e4e9e6; font: 400 clamp(60px, 7.2vw, 106px)/1.1 var(--hero-display); letter-spacing: -.045em; text-shadow: 0 2px 24px #0e0f1180; }
+.introduction { max-width: 490px; }
+.description { margin: 0; color: #c0c6ca; font-size: clamp(19px, 1.7vw, 24px); line-height: 1.85; letter-spacing: -.025em; text-wrap: pretty; }
+.soon { display: flex; align-items: center; gap: 16px; margin: 32px 0 0; color: #9da9b0; font-size: 13px; line-height: 1.7; }
+.soon::before { content: ""; width: 26px; height: 1px; background: #9da9b066; }
+@media (max-width: 800px) {
+  .layout { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 36px; padding-top: 140px; padding-bottom: 140px; }
+  .title :global(.inner-headline) { font-size: clamp(56px, 14vw, 100px); }
+  .description { font-size: 20px; }
+  .soon { margin-top: 28px; }
+}

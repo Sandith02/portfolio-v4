@@ -22,14 +22,17 @@
   background: radial-gradient(ellipse at 25% 35%, #26282d55, transparent 65%), #0e0f11;
 }
 .sky canvas { display: block; width: 100%; height: 100%; opacity: .92; }
-.back {
+.back:global(.inner-linkedin) {
   position: fixed;
   z-index: 80;
   bottom: max(24px, env(safe-area-inset-bottom));
   left: clamp(24px, 6vw, 100px);
-  padding: 5px 14px 5px 5px;
+  min-height: 44px;
+  padding: 6px;
+  gap: 12px;
 }
-.back :global(.inner-linkedin-arrow) { margin-left: 0; margin-right: 3px; }
+.back :global(.inner-linkedin-arrow) { flex: none; width: 32px; height: 32px; margin: 0; }
+.back .planetIcon { margin-right: 0; }
 .back:focus-visible { outline: 2px solid #e4e9e6; outline-offset: 5px; }
 .planetIcon { position: relative; display: block; flex: none; width: 42px; height: 32px; margin-right: -7px; }
 .planetIcon canvas { display: block; width: 42px; height: 32px; }

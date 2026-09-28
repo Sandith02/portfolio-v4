@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 export function SiteFooter() {
   const pathname = usePathname();
-  if (["/", "/about", "/work", "/contact", "/why"].includes(pathname)) return null;
+  if (["/", "/about", "/work", "/contact", "/why", "/blogs"].includes(pathname)) return null;
   return (
     <footer className="site-footer">
       <div className="footer-lead">

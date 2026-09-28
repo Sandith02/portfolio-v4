@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./mind-world.module.css";
 
-export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" | "why" }) {
+export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" | "why" | "threads" }) {
   const host = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -18,8 +18,9 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
       import("@/lib/digital-globe"),
       import("@/lib/contact-globe"),
       import("@/lib/why-globe"),
+      import("@/lib/threads-globe"),
       document.fonts.ready,
-    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }, { createWhyGlobe }]) => {
+    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }, { createWhyGlobe }, { createThreadsGlobe }]) => {
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -36,10 +37,12 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
       const personal = thoughts ? createPersonalWorld(1, thoughts) : null;
       const contact = world === "contact" ? createContactGlobe() : null;
       const why = world === "why" ? createWhyGlobe() : null;
-      const planet = (digital ?? personal ?? contact ?? why)!;
+      const threads = world === "threads" ? createThreadsGlobe() : null;
+      const planet = (digital ?? personal ?? contact ?? why ?? threads)!;
       if (digital) { digital.root.scale.setScalar(1.15); digital.resize(32, renderer.getPixelRatio()); }
       if (contact) { contact.root.scale.setScalar(1.15); contact.resize(32, renderer.getPixelRatio()); }
       if (why) why.root.scale.setScalar(1.15);
+      if (threads) threads.root.scale.setScalar(1.05);
       scene.add(planet.root);
       scene.add(new THREE.AmbientLight(0xa7bbd0, .6));
       const light = new THREE.DirectionalLight(0xffedda, 3.5);
@@ -53,6 +56,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" 
         personal?.update(elapsed, 1);
         contact?.update(elapsed, 1);
         why?.update(elapsed, 1);
+        threads?.update(elapsed, 1);
         renderer.render(scene, camera);
         element.dataset.ready = "true";
       };

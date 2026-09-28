@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { LinkArrow } from "@/components/link-arrow";
+import { ConstructedTitle } from "@/components/constructed-title";
+import { BackToMind } from "@/components/back-to-mind";
+import { WorldSky } from "@/components/world-sky";
+import worldStyles from "@/components/mind-world.module.css";
+import styles from "./threads.module.css";
 
 export const metadata: Metadata = {
-  title: "Threads | Sandith",
-  description: "Thoughts on design, code and the things in between, by Sandith Sithmaka.",
+  title: "Threads | Sandith Sithmaka",
+  description: "A place for my thoughts on design, code and the ideas in between. The first threads are coming soon.",
 };
 
-export default function BlogsPage() {
+export default function ThreadsPage() {
   return (
-    <main id="main-content" className="blogs-page">
-      <section className="page-hero">
-        <div className="page-hero-copy">
-          <p className="eyebrow">Threads</p>
-          <h1>Thoughts<br />put into words.</h1>
-          <p className="body-lg muted">Notes on design, code and the things in between.</p>
-        </div>
-        <div className="page-hero-foot">
-          <div className="blogs-empty"><span className="eyebrow">The first entry</span><p className="body-xl">Still taking shape.</p><p className="muted">My articles will live here.</p></div>
-          <div className="page-hero-actions"><LinkArrow href="/">Back to my universe</LinkArrow></div>
+    <main id="main-content" className={worldStyles.world}>
+      <WorldSky />
+      <BackToMind world="threads" />
+      <section className={styles.layout} aria-labelledby="threads-title">
+        <h1 id="threads-title" className={styles.title}>
+          <span className="inner-accessible-title">Threads</span>
+          <ConstructedTitle lines={["Threads"]} />
+        </h1>
+        <div className={styles.introduction}>
+          <p className={styles.description}>A place for my thoughts on design, code and the ideas in between. Notes, experiments and things I’m still figuring out.</p>
+          <p className={styles.soon}>Coming soon.</p>
         </div>
       </section>
     </main>
