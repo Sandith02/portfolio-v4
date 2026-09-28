@@ -10,7 +10,7 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="footer-lead">
         <p>Useful enough to work.<br />Different enough to remember.</p>
-        <a href="mailto:hello@sandithdev.com">hello@sandithdev.com</a>
+        <Link href="/contact#contact-form">Let’s connect</Link>
       </div>
       <div className="footer-grid">
         <div>

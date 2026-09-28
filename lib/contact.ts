@@ -1,4 +1,4 @@
-export const CONTACT_EMAIL = "lhthenuwara@gmail.com";
+export const CONTACT_EMAIL = "hello@sandithdev.com";
 export const CONTACT_TOPICS = ["A project", "A collaboration", "A role or opportunity", "Just saying hello"] as const;
 export const CONTACT_LIMITS = { name: 100, email: 254, company: 160, message: 5000 };
 export type ContactField = "name" | "email" | "company" | "topic" | "message";

@@ -65,7 +65,7 @@ export function SiteHeader() {
         <nav aria-label="Primary navigation">
           {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
         </nav>
-        <a className="nav-contact" href="mailto:hello@sandithdev.com?subject=Creative%20developer%20role" onClick={() => setOpen(false)}><span data-nosnippet>Let’s talk roles</span> <ArrowUpRight size={14} /></a>
+        <Link className="nav-contact" href="/contact#contact-form" onClick={() => setOpen(false)}>Let’s connect <ArrowUpRight size={14} /></Link>
       </motion.div>
     </header>
   );

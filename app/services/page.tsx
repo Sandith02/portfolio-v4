@@ -24,7 +24,7 @@ export default function ServicesPage() {
         </div>
         <div className="page-hero-foot">
           <p className="body-xl">The interesting part is what the website needs to do, how it should feel and what it should avoid.</p>
-          <div className="page-hero-actions"><LinkArrow href="/contact">Start something</LinkArrow></div>
+          <div className="page-hero-actions"><LinkArrow href="/contact#contact-form">Start something</LinkArrow></div>
         </div>
       </section>
 
@@ -42,7 +42,7 @@ export default function ServicesPage() {
               <div className="capability-grid">
                 {(items as string[]).map((item) => <span key={item}>{item}</span>)}
               </div>
-              <LinkArrow href="/contact">Discuss the project</LinkArrow>
+              <LinkArrow href="/contact#contact-form">Discuss the project</LinkArrow>
             </Reveal>
           ))}
         </div>

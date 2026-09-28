@@ -11,7 +11,7 @@ Project: `https://pwpffpwtqkfiibwyltsl.supabase.co`
 3. Restart the dev server. Add `SUPABASE_URL` and `SUPABASE_SECRET_KEY` to the Vercel project's environment variables and redeploy when publishing.
 4. Submit a test message, then check **Table Editor → contact_inquiries**, newest `created_at` first. Mark entries `read`, `replied`, or `archived` as you handle them. Delete your test entry after checking it.
 
-This stores inquiries in Supabase. It does not send email notifications. The public email link uses the address in the CV, `lhthenuwara@gmail.com`.
+This stores inquiries in Supabase. It does not send email notifications. The public email link uses `hello@sandithdev.com`, defined in `lib/contact.ts`.
 
 ## Privacy and abuse protection
 

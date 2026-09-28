@@ -17,7 +17,7 @@ export default function AiRescuePage() {
         </div>
         <div className="page-hero-foot">
           <p className="body-xl">Generated quickly. Finished properly. I improve the design, code and experience without rebuilding blindly.</p>
-          <div className="page-hero-actions"><LinkArrow href="/contact">Fix my AI website</LinkArrow></div>
+          <div className="page-hero-actions"><LinkArrow href="/contact#contact-form">Fix my AI website</LinkArrow></div>
         </div>
       </section>
 
@@ -52,7 +52,7 @@ export default function AiRescuePage() {
         <Reveal><h2 className="display">AI did the first 80%. Make the last 20% count.</h2></Reveal>
         <Reveal className="big-cta-bottom">
           <p className="body-xl">Send the existing site, the repo or the original prompt. I’ll tell you what is worth keeping.</p>
-          <LinkArrow href="/contact">Send me your website</LinkArrow>
+          <LinkArrow href="/contact#contact-form">Send me your website</LinkArrow>
         </Reveal>
       </section>
     </main>

@@ -85,9 +85,9 @@ export function CinematicHero() {
               <h2><span>Still</span> <span>becoming.</span></h2>
               <p>Have a place for a mind like mine?</p>
             </div>
-            <a className="galaxy-footer-hello" href="mailto:hello@sandithdev.com">
+            <Link className="galaxy-footer-hello" href="/contact#contact-form">
               <span>Let’s talk</span><span className="galaxy-footer-arrow"><ArrowUpRight size={18} aria-hidden="true" /></span>
-            </a>
+            </Link>
           </div>
           <div className="galaxy-footer-bottom">
             <span className="galaxy-footer-signature">© {new Date().getFullYear()} Sandith Sithmaka</span>

@@ -43,7 +43,7 @@ export default function WhyPage() {
           <p className={styles.closing}>Still curious.<br /><span>Still becoming.</span></p>
           <nav className={styles.next} aria-label="Continue exploring">
             <Link href="/work">Explore my work<ArrowUpRight size={17} aria-hidden="true" /></Link>
-            <Link href="/contact">Start a conversation<ArrowUpRight size={17} aria-hidden="true" /></Link>
+            <Link href="/contact#contact-form">Start a conversation<ArrowUpRight size={17} aria-hidden="true" /></Link>
           </nav>
         </div>
       </article>
