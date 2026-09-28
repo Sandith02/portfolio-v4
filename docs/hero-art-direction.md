@@ -126,6 +126,13 @@ Drag a globe to rotate it; release leaves a short damped momentum. Vertical touc
 scrolling remains available. Arrow keys rotate a focused globe. Click/Enter flies
 into the chosen surface, fades during crossing and opens its page. Modified clicks
 retain normal link behavior. Route completion is independent of animation frames.
+Fallback backgrounds use desktop and mobile captures of the 3D canvas only, at
+`/images/inner-world-background.webp` and `/images/inner-world-background-mobile.webp`.
+Never capture the full page for these assets: headings, navigation and contact
+copy are rendered once by the live HTML. If WebGL fails during the journey, the
+fallback immediately restores this background and the opening hero copy, hiding
+later chapters and planet controls.
+
 Reduced-motion and fallback visitors can use the persistent menu directly. Why uses
 the personal language already supplied for the figure’s words.
 

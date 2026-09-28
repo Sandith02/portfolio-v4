@@ -14,9 +14,8 @@ Sandith Sithmaka, design engineer and creative frontend developer based in Sri L
 | `/why` | Creative thinking and portfolio concept | Yes |
 | `/contact` | Project and collaboration inquiries | Yes |
 | `/blogs` | Threads placeholder | No, until real posts exist |
-| `/services`, `/ai-website-redesign` | Legacy pages outside the current portfolio direction | No, pending content review |
 
-The excluded pages remain available and their links can be followed. Do not disallow them in robots.txt, because crawlers need to read their noindex metadata. Vercel preview builds also emit noindex and an empty sitemap.
+Threads remains available with noindex metadata until posts exist. Do not disallow it in robots.txt, because crawlers need to read that metadata. The retired Services and AI Website Redesign pages and their sharing images have been removed and return 404. Vercel preview builds also emit noindex and an empty sitemap.
 
 ## Implemented
 

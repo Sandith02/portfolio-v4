@@ -7,7 +7,6 @@ const canonical = "https://www.sandithdev.com";
 const pages = [
   ["/", "home", true], ["/about", "about", true], ["/work", "work", true],
   ["/contact", "contact", true], ["/why", "why", true], ["/blogs", "threads", false],
-  ["/services", "services", false], ["/ai-website-redesign", "redesign", false],
 ];
 function attrs(tag) {
   return Object.fromEntries([...tag.matchAll(/([\w:-]+)="([^"]*)"/g)].map(m => [m[1], m[2].replace(/&amp;/g, "&").replace(/&#x27;/g, "'").replace(/&quot;/g, '"')]));
@@ -67,8 +66,12 @@ test("every sharing image is a real 1200 by 630 PNG", async () => {
 });
 
 test("unknown routes return a genuine 404 and cannot be indexed", async () => {
-  const response = await fetch(base + "/seo-test-page-that-does-not-exist");
-  assert.equal(response.status, 404);
-  assert.match(await response.text(), /name="robots" content="noindex"/);
-  assert.equal((await fetch(base + "/og/not-a-page")).status, 404);
+  for (const path of ["/seo-test-page-that-does-not-exist", "/services", "/ai-website-redesign"]) {
+    const response = await fetch(base + path);
+    assert.equal(response.status, 404, path);
+    assert.match(await response.text(), /name="robots" content="noindex"/);
+  }
+  for (const path of ["/og/not-a-page", "/og/services", "/og/redesign"]) {
+    assert.equal((await fetch(base + path)).status, 404, path);
+  }
 });

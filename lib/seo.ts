@@ -36,16 +36,6 @@ export const seoPages = {
     description: "Thoughts on design, code and the ideas in between. Notes and experiments by Sandith Sithmaka. The first threads are coming soon.",
     headline: "Thoughts\ntaking shape.", label: "Threads · Coming soon", index: false,
   },
-  services: {
-    path: "/services", title: "Web Development Services | Sandith Sithmaka",
-    description: "Custom websites, React and Next.js frontend development, and creative web experiences by Sandith Sithmaka in Sri Lanka.",
-    headline: "From idea\nto interface.", label: "Web development", index: false,
-  },
-  redesign: {
-    path: "/ai-website-redesign", title: "Website Redesign | Sandith Sithmaka",
-    description: "Website design and frontend development improvements by Sandith Sithmaka, with attention to visual identity, usability and responsive interfaces.",
-    headline: "A second\npair of eyes.", label: "Website redesign", index: false,
-  },
 } as const;
 
 export type SeoPage = keyof typeof seoPages;
