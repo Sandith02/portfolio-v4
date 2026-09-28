@@ -360,6 +360,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     hero.style.setProperty("--inner-last", (THREE.MathUtils.smoothstep(p, .72, .85) * (1 - THREE.MathUtils.smoothstep(p, .83, .94))).toFixed(3));
     renderer.render(scene, camera);
     planets.draw(progress, elapsed);
+    if (returnDestination && hero.dataset.returnReady !== "true" && Math.abs(progress - returnDestination.progress) < .05) hero.dataset.returnReady = "true";
   };
   const animate = (now: number) => {
     if (destroyed) return;

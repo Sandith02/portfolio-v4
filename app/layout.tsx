@@ -11,6 +11,7 @@ import { SiteHeader } from "@/components/site-header";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { SiteInsights } from "@/components/site-insights";
 import { SmoothScroll } from "@/components/smooth-scroll";
+import { WorldReturnTransition } from "@/components/world-return-transition";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div className="noise" aria-hidden="true" />
         <SiteHeader />
         {children}
+        <WorldReturnTransition />
         {process.env.VERCEL_ENV === "production" && <><SiteInsights /><GoogleAnalytics /></>}
       </body>
     </html>

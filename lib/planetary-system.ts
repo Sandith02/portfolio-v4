@@ -5,6 +5,7 @@ import { createPersonalWorld } from "./personal-worlds";
 import { createInnerGalaxyLife } from "./inner-galaxy-life";
 import { createGalaxyFinale, GALAXY_ARRIVAL_END } from "./galaxy-finale";
 import { PLANET_DEPTHS, PLANET_JOURNEY_START, PLANET_TRAVEL_PER_SCREEN, PLANET_CAMERA_Z } from "./journey-stops";
+import { WORLD_RETURN_DURATION_MS } from "./world-navigation";
 
 // A second camera lives beyond the head. The five worlds occupy actual depth;
 // scrolling translates the camera, rather than scaling a flat arrangement.
@@ -229,6 +230,20 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
           const depth = planet.depth + travel;
           planet.group.position.z = depth;
         });
+      }
+      // On a page return, ease out from near that world into its familiar orbit.
+      // The overlay starts this only once the first destination frame is ready.
+      if (selected < 0 && hero.dataset.returnWorld && document.documentElement.dataset.worldReturning && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const returning = ["work", "about", "contact", "why", "threads"].indexOf(hero.dataset.returnWorld);
+        const planet = planets[returning];
+        if (planet) {
+          const age = hero.dataset.returnArrival ? Math.min(1, (performance.now() - Number(hero.dataset.returnArrival)) / WORLD_RETURN_DURATION_MS) : 0;
+          const remaining = Math.pow(1 - age, 3);
+          const distance = camera.position.z - planet.group.position.z;
+          camera.position.x += (planet.group.position.x * .35 - camera.position.x) * remaining;
+          camera.position.y += (planet.group.position.y * .35 - camera.position.y) * remaining;
+          camera.position.z -= Math.max(0, distance - Math.max(planet.radius * 4.4, distance * .62)) * remaining;
+        }
       }
       const enterProgress = selected < 0 ? 0 : Math.min(1, (performance.now() - enteredAt) / 1900);
       if (selected >= 0) {

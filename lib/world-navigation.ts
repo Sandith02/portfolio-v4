@@ -1,3 +1,6 @@
+export const WORLD_RETURN_EVENT = "mind-return-to-world";
+export const WORLD_RETURN_DURATION_MS = 1800;
+
 export function worldReturn(hash: string) {
   if (hash === "#about-world") return { world: "about", progress: 7.6 };
   if (hash === "#work-world") return { world: "work", progress: 3.3 };

@@ -16,7 +16,7 @@ export function SmoothScroll() {
     let frame = 0;
     let scrollLocked = false;
     const syncLock = () => {
-      const active = document.documentElement.dataset.splash === "active" || document.documentElement.dataset.rewinding === "true";
+      const active = document.documentElement.dataset.splash === "active" || document.documentElement.dataset.rewinding === "true" || !!document.documentElement.dataset.worldReturning;
       if (active !== scrollLocked) { scrollLocked = active; if (active) lenis.stop(); else lenis.start(); }
     };
     const nativeReturn = () => { lenis.stop(); lenis.resize(); if (!scrollLocked) lenis.start(); };
