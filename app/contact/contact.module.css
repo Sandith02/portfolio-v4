@@ -1,0 +1,22 @@
+.layout { display: grid; grid-template-columns: 1fr 1fr; align-items: start; gap: clamp(48px, 7vw, 120px); max-width: 1500px; min-height: 100svh; margin: 0 auto; padding: clamp(150px, 19svh, 210px) clamp(24px, 6vw, 100px) 150px; }
+.intro { position: sticky; top: clamp(120px, 17svh, 180px); min-width: 0; }
+.title { margin: 0; font-weight: 400; }
+.title :global(.inner-headline) { font: 400 clamp(48px, 5.5vw, 80px)/1.15 var(--hero-display); letter-spacing: -.045em; color: #e4e9e6; text-shadow: none; }
+.lead { margin: 32px 0 44px; color: #b7bbc3; font-size: clamp(16px, 1.25vw, 18px); line-height: 1.85; letter-spacing: -.02em; }
+.connections { display: grid; gap: 14px; justify-items: start; }
+.connections a { display: inline-flex; align-items: center; gap: 20px; min-height: 32px; color: #d8dedc; font-size: 14px; }
+.connections svg { color: #91b5ac; }
+.connections a:hover { color: #b9dfd2; }
+.connections a:focus-visible { outline: 2px solid #b9dfd2; outline-offset: 6px; }
+.place { max-width: 280px; margin: 34px 0 0; color: #9ca6ad; font-size: 12px; line-height: 1.8; }
+.conversation { min-width: 0; }
+.conversation h2 { margin: 0; font-size: clamp(24px, 2.2vw, 32px); font-weight: 400; line-height: 1.35; letter-spacing: -.04em; color: #e4e9e6; text-wrap: balance; }
+.formIntro { margin: 20px 0 40px; color: #b7bbc3; font-size: 15px; line-height: 1.85; }
+@media (max-width: 800px) {
+  .layout { display: block; padding-top: 140px; padding-bottom: 140px; }
+  .intro { position: static; margin-bottom: 64px; }
+  .title :global(.inner-headline) { font-size: clamp(44px, 11.5vw, 80px); }
+  .lead { margin: 24px 0 28px; }
+  .desktopBreak { display: none; }
+  .place { margin-top: 24px; }
+}

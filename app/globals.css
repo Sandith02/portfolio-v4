@@ -6,6 +6,8 @@
   --line-dark: rgba(255, 255, 255, .22);
   --line-light: rgba(9, 9, 9, .2);
   --cyan: #5ce8ff;
+  --selection-bg: #343940;
+  --focus-ring: #cbd3d6;
   --display: "Archivo Variable", "Arial Narrow", sans-serif;
   --mono: "IBM Plex Mono", monospace;
   --hero-display: "Megrim", sans-serif;
@@ -25,13 +27,13 @@ body {
   font-family: var(--display);
   text-rendering: optimizeLegibility;
 }
-::selection { background: var(--cyan); color: var(--black); }
+::selection { background: var(--selection-bg); color: #f2f4f3; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 img { display: block; max-width: 100%; }
 main { min-height: 100dvh; }
 
-.skip-link { position: fixed; left: 1rem; top: -100px; z-index: 100; padding: .75rem 1rem; background: var(--cyan); color: var(--black); }
+.skip-link { position: fixed; left: 1rem; top: -100px; z-index: 100; padding: .75rem 1rem; background: #d8dedc; color: var(--black); }
 .skip-link:focus { top: 1rem; }
 .noise {
   position: fixed;
@@ -41,7 +43,7 @@ main { min-height: 100dvh; }
   opacity: .03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-body:has(.inner-hero, #about-title, #work-title) > .noise { display: none; }
+body:has(.inner-hero, #about-title, #work-title, #contact-title) > .noise { display: none; }
 
 .site-header { position: fixed; z-index: 90; top: 20px; left: 50%; width: 196px; transform: translateX(-50%); font-family: var(--hero-body); }
 .nav-capsule { display: grid; grid-template-columns: minmax(0, 1fr) 36px 42px; align-items: center; gap: 4px; height: 44px; padding: 6px; border-radius: 999px; background: #020108; color: #f4f4f6; box-shadow: 0 0 0 1px #ffffff0c; }
@@ -62,7 +64,7 @@ body:has(.inner-hero, #about-title, #work-title) > .noise { display: none; }
 .nav-contact:hover { color: #f4f4f6; }
 .site-header :focus-visible { outline: 2px solid #f4f4f6; outline-offset: 2px; }
 
-a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--cyan); outline-offset: 4px; }
+:where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px; }
 .link-arrow { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; width: max-content; min-height: 46px; padding: .72rem .9rem; color: var(--black); border: 1px solid var(--black); background: transparent; font: 400 .67rem/1 var(--mono); text-transform: uppercase; white-space: nowrap; transition: color 180ms ease, background-color 180ms ease, transform 140ms var(--ease); }
 .link-arrow:hover { color: var(--white); background: var(--black); }
 .link-arrow-inverse { color: var(--white); border-color: rgba(255,255,255,.7); }
@@ -278,7 +280,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .field label { font: 400 .68rem/1 var(--mono); text-transform: uppercase; }
 .field input, .field select, .field textarea { width: 100%; padding: 1rem 0; border: 0; border-bottom: 1px solid var(--line-dark); border-radius: 0; color: var(--white); background: transparent; font-size: clamp(1.15rem, 2vw, 1.65rem); outline: 0; }
 .field input::placeholder, .field textarea::placeholder { color: #8f8f8a; opacity: 1; }
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--cyan); box-shadow: 0 1px 0 var(--cyan); }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--focus-ring); box-shadow: 0 1px 0 var(--focus-ring); }
 .field textarea { min-height: 12rem; resize: vertical; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
 .submit-button { width: max-content; padding: .95rem 1.1rem; border: 0; color: var(--black); background: var(--cyan); font: 400 .68rem/1 var(--mono); text-transform: uppercase; cursor: pointer; }

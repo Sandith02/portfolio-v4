@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./mind-world.module.css";
 
-export function MindPlanetIcon({ world }: { world: "about" | "work" }) {
+export function MindPlanetIcon({ world }: { world: "about" | "work" | "contact" }) {
   const host = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
@@ -16,8 +16,9 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" }) {
       import("@/lib/personal-worlds"),
       import("@/lib/thought-texture"),
       import("@/lib/digital-globe"),
+      import("@/lib/contact-globe"),
       document.fonts.ready,
-    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }]) => {
+    ]).then(([THREE, { createPersonalWorld }, { wordTexture }, { createDigitalGlobe }, { createContactGlobe }]) => {
       if (disposed) return;
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "low-power" });
       renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
@@ -32,8 +33,10 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" }) {
       const thoughts = world === "about" ? wordTexture(1024, true) : null;
       const digital = world === "work" ? createDigitalGlobe() : null;
       const personal = thoughts ? createPersonalWorld(1, thoughts) : null;
-      const planet = (digital ?? personal)!;
+      const contact = world === "contact" ? createContactGlobe() : null;
+      const planet = (digital ?? personal ?? contact)!;
       if (digital) { digital.root.scale.setScalar(1.15); digital.resize(32, renderer.getPixelRatio()); }
+      if (contact) { contact.root.scale.setScalar(1.15); contact.resize(32, renderer.getPixelRatio()); }
       scene.add(planet.root);
       scene.add(new THREE.AmbientLight(0xa7bbd0, .6));
       const light = new THREE.DirectionalLight(0xffedda, 3.5);
@@ -45,6 +48,7 @@ export function MindPlanetIcon({ world }: { world: "about" | "work" }) {
         planet.root.rotation.y = elapsed * .13;
         digital?.update(1, elapsed);
         personal?.update(elapsed, 1);
+        contact?.update(elapsed, 1);
         renderer.render(scene, camera);
         element.dataset.ready = "true";
       };

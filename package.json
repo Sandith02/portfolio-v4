@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:contact": "node --test tests/contact-api.test.cjs"
   },
   "dependencies": {
     "@fontsource-variable/archivo": "latest",
