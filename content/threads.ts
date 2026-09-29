@@ -11,6 +11,29 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "someone-designed-your-idea-of-expensive",
+    title: "Someone designed your idea of expensive.",
+    description: "On the visual cues that make something feel premium, the expectations websites create, and what happens when a brand has to live up to them.",
+    published: "2026-09-29",
+    sharingHeadline: "Someone designed\nyour idea of\nexpensive.",
+    paragraphs: [
+      "Imagine a small bottle of perfume on a white page.",
+      "There’s one photograph. A name you’re not sure how to pronounce. Plenty of empty space. You have to scroll to find the price.",
+      "You’re already expecting it to cost a lot.",
+      "Now picture that same bottle inside a bright product card. Five stars, three badges, a crossed-out price, and a countdown above “BUY NOW.”",
+      "Suddenly, you’re looking for a deal.",
+      "I find that a little uncomfortable. We haven’t smelled anything yet.",
+      "Somewhere along the way, we learned to associate certain typefaces, colours, and layouts with certain kinds of value. A brand can borrow those visual cues before it has earned any trust.",
+      "That gives designers an interesting amount of power.",
+      "In web development, we turn those cues into behaviour. We decide how slowly a product reveals itself, how much screen space a photograph deserves, and whether a button asks politely or practically shouts.",
+      "Even the mobile layout carries those decisions. Squeeze everything together to fit the screen, and the carefully composed brand might start feeling like a completely different business.",
+      "But there’s a limit to what all that presentation can hold up.",
+      "Eventually, someone receives the bottle. Uses the product. Tries to get help. The experience starts answering the expectations the website created.",
+      "I think that’s where branding gets interesting: when you have to live up to the feeling you designed.",
+      "How much of what you call “premium” comes from the thing itself, and how much comes from the way you were introduced to it?",
+    ],
+  },
+  {
     slug: "it-works-why-cant-i-leave-it-alone",
     title: "It works. Why can’t I leave it alone?",
     description: "On frontend details, perfectionism and learning when another adjustment makes the work better, and when it’s time to close the laptop.",
