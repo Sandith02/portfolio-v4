@@ -55,6 +55,7 @@ body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #th
 .nav-home:hover { border-color: #ffffff66; color: #f4f4f6; }
 .nav-progress { display: grid; place-items: center; width: 42px; height: 32px; border-radius: 999px; background: #303036; color: #ededf0; font: 400 .67rem/1 var(--hero-body); font-variant-numeric: tabular-nums; }
 .nav-panel { position: absolute; top: 100%; left: 0; width: 100%; margin-top: 7px; padding: 12px; border: 1px solid #ffffff15; border-radius: 20px; background: #0c0b12; color: #f4f4f6; box-shadow: 0 20px 60px #0005; }
+.nav-panel { max-height: calc(100dvh - 90px); overflow-y: auto; overscroll-behavior: contain; }
 .nav-panel nav { display: grid; }
 .nav-panel nav a { display: flex; justify-content: space-between; align-items: center; min-height: 48px; padding: 0 9px; border-radius: 8px; font-size: 1.05rem; letter-spacing: -.025em; }
 .nav-panel nav a:hover, .nav-panel nav a[aria-current="page"] { background: #ffffff09; }
@@ -62,6 +63,8 @@ body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #th
 .nav-panel nav a:hover svg { opacity: 1; }
 .nav-contact { display: flex; align-items: center; justify-content: space-between; min-height: 48px; margin-top: 20px; padding: 10px 9px 0; border-top: 1px solid #ffffff20; color: #a9a9b3; font-size: .7rem; }
 .nav-contact:hover { color: #f4f4f6; }
+.nav-privacy { display: grid; margin-top: 12px; padding: 8px 9px 0; border-top: 1px solid #ffffff15; }
+.nav-privacy a, .nav-privacy button { display: flex; align-items: center; min-height: 36px; padding: 0; border: 0; background: transparent; color: #a9a9b3; text-align: left; font: 400 11px/1.5 var(--hero-body); cursor: pointer; }
 .site-header :focus-visible { outline: 2px solid #f4f4f6; outline-offset: 2px; }
 
 :where(a, button, input, select, textarea, summary):focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 4px; }

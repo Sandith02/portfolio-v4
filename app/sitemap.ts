@@ -8,5 +8,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     ...Object.values(seoPages).filter(page => page.index).map(page => ({ url: `${SITE_URL}${page.path}` })),
     ...threads.map(thread => ({ url: `${SITE_URL}${threadPath(thread)}` })),
+    { url: `${SITE_URL}/cookies` },
   ];
 }

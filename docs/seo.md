@@ -48,3 +48,9 @@ Turn the existing work entries into individual case studies when there is approv
 Run `npm run build`, then `npm run start -- --port 3001` in another terminal. Run `npm run test:seo` against that production server. Set `SEO_TEST_URL=https://www.sandithdev.com` to repeat the HTTP checks after deployment. These checks verify server HTML, identity JSON, canonicals, indexing policy, sitemap, robots, image bytes/dimensions and real 404 behavior. Browser checks should also cover menu links, internal Home skipping the splash, and JavaScript-disabled navigation.
 
 References: [Google JavaScript SEO](https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics), [canonical URLs](https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls), [ProfilePage guidance](https://developers.google.com/search/docs/appearance/structured-data/profile-page).
+
+### Analytics consent
+
+`/cookies` explains Google Analytics cookies, Vercel measurement and the first-party preference record. Cookie settings can be reopened from the site menu or policy page. On production, analytics start by default after the saved browser choice is checked; a remembered rejection prevents the analytics scripts from loading. Accept dismisses the notice, while Decline turns analytics off. Rejecting disables GA with its measurement-ID opt-out flag, removes accessible `_ga` cookies and blocks Vercel events through `beforeSend`. Advertising consent stays denied.
+
+The local-storage key `sandith-cookie-choice-v1` stores the choice for 180 days. Browser storage failures fall back to an in-memory choice for the current visit. There are no new environment variables. Verify changes against a production-mode build; development and preview builds intentionally do not load analytics.

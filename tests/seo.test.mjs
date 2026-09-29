@@ -47,7 +47,7 @@ test("only finished canonical pages appear in the sitemap; robots allows renderi
   assert.match(response.headers.get("content-type"), /xml/);
   const xml = await response.text();
   const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => new URL(m[1]).href).sort();
-  assert.deepEqual(urls, [...pages.filter(p => p[2]).map(p => new URL(canonical + p[0]).href), canonical + "/blogs/is-there-a-galaxy-inside-your-head", canonical + "/blogs/would-i-still-make-this-if-nobody-could-see-it", canonical + "/blogs/why-do-we-save-things-we-never-return-to", canonical + "/blogs/how-much-of-this-actually-happened", canonical + "/blogs/what-if-we-stop-having-something-to-say", canonical + "/blogs/it-works-why-cant-i-leave-it-alone"].sort());
+  assert.deepEqual(urls, [...pages.filter(p => p[2]).map(p => new URL(canonical + p[0]).href), canonical + "/blogs/is-there-a-galaxy-inside-your-head", canonical + "/blogs/would-i-still-make-this-if-nobody-could-see-it", canonical + "/blogs/why-do-we-save-things-we-never-return-to", canonical + "/blogs/how-much-of-this-actually-happened", canonical + "/blogs/what-if-we-stop-having-something-to-say", canonical + "/blogs/it-works-why-cant-i-leave-it-alone", canonical + "/cookies"].sort());
   const robots = await fetch(base + "/robots.txt"); assert.equal(robots.status, 200);
   const rules = await robots.text();
   assert.match(rules, /Allow: \//); assert.match(rules, /Disallow: \/api\//);

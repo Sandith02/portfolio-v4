@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, HouseSimple, X } from "@phosphor-icons/react";
 import { skipIntroOnNavigation } from "@/lib/intro-navigation";
+import { openCookieSettings } from "@/lib/cookie-consent";
 
 const links = [["Work", "/work"], ["About", "/about"], ["Contact", "/contact"], ["Why", "/why"], ["Threads", "/blogs"]];
 
@@ -66,6 +67,10 @@ export function SiteHeader() {
           {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
         </nav>
         <Link className="nav-contact" href="/contact#contact-form" onClick={() => setOpen(false)}>Let’s connect <ArrowUpRight size={14} /></Link>
+        <div className="nav-privacy">
+          <Link href="/cookies" onClick={() => setOpen(false)}>Cookie policy</Link>
+          <button type="button" onClick={() => { setOpen(false); requestAnimationFrame(openCookieSettings); }}>Cookie settings</button>
+        </div>
       </motion.div>
     </header>
   );

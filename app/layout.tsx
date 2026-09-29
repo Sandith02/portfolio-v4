@@ -8,8 +8,7 @@ import "@fontsource/megrim/latin-400.css";
 import "@fontsource-variable/manrope";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
-import { GoogleAnalytics } from "@/components/google-analytics";
-import { SiteInsights } from "@/components/site-insights";
+import { CookieControls } from "@/components/cookie-controls";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { WorldReturnTransition } from "@/components/world-return-transition";
 
@@ -41,7 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteHeader />
         {children}
         <WorldReturnTransition />
-        {process.env.VERCEL_ENV === "production" && <><SiteInsights /><GoogleAnalytics /></>}
+        <CookieControls production={process.env.VERCEL_ENV === "production"} />
       </body>
     </html>
   );

@@ -1,0 +1,24 @@
+.panel { position: fixed; z-index: 96; left: 50%; bottom: calc(36px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; align-items: center; gap: 16px; width: max-content; max-width: calc(100vw - 32px); height: 44px; padding: 5px 5px 5px 20px; border: 1px solid #ffffff26; border-radius: 999px; background: #0e0f11; color: #e4e9e6; box-shadow: 0 8px 32px #0006; font-family: var(--hero-body); }
+:global(html[data-splash="active"]) .panel { visibility: hidden; }
+.copy { min-width: 0; }
+.panel p { margin: 0; color: #b7bbc3; font-size: 12px; line-height: 1.5; white-space: nowrap; }
+.policy { margin-left: 4px; color: #d8dedc; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.actions { display: flex; flex: none; gap: 6px; }
+.actions button { display: inline-flex; align-items: center; justify-content: center; height: 32px; padding: 0 14px; border: 1px solid #ffffff30; border-radius: 999px; background: #020108; color: #e4e9e6; font: 400 12px/1 var(--hero-body); cursor: pointer; }
+.actions .accept { background: #303036; border-color: #303036; color: #ededf0; }
+.close { position: absolute; top: -8px; left: -8px; display: grid; place-items: center; width: 20px; height: 20px; padding: 0; border: 1px solid #ffffff30; border-radius: 50%; background: #0e0f11; color: #b7bbc3; cursor: pointer; }
+.close::before { content: ""; position: absolute; inset: -6px; border-radius: 50%; }
+.close svg { width: 12px; height: 12px; }
+.panel :is(a, button):focus-visible { outline: 2px solid #c4d9d1; outline-offset: 2px; }
+:global(body):has(.panel) :global(nav[aria-label="Thread actions"]),
+:global(body):has(.panel) :global(a.inner-linkedin[href^="/#"]) { bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+@media (max-width: 800px) {
+  .panel { bottom: calc(33px + env(safe-area-inset-bottom, 0px)); gap: 8px; padding-left: 12px; }
+  .description { display: none; }
+  .policy { margin-left: 0; }
+}
+@media (max-width: 360px) {
+  .panel { gap: 6px; }
+  .panel p, .actions button { font-size: 11px; }
+  .actions button { padding: 0 10px; }
+}
