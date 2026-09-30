@@ -4,7 +4,7 @@ Canonical site: **https://www.sandithdev.com/**. The apex already redirects to w
 
 ## Positioning
 
-Sandith Sithmaka, design engineer and creative frontend developer based in Sri Lanka. Search and sharing copy describe the work and expertise, with no job-seeking messaging. Project and collaboration inquiries have a dedicated contact page.
+Sandith Sithmaka Thenuwara (also known as Sandith Sithmaka), design engineer and creative frontend developer based in Sri Lanka. Search and sharing copy describe the work and expertise, with no job-seeking messaging. Project and collaboration inquiries have a dedicated contact page.
 
 | Page | Search purpose | Indexed |
 | --- | --- | --- |
@@ -35,7 +35,8 @@ Threads and its published articles are indexed. Add new articles to `content/thr
 2. Submit `https://www.sandithdev.com/sitemap.xml` in Search Console. Use URL Inspection on the home, About and Work URLs to check rendered content and request indexing once.
 3. Validate `/about` with [Google’s Rich Results Test](https://search.google.com/test/rich-results), and inspect the other schemas with [Schema.org Validator](https://validator.schema.org/). Valid markup does not guarantee a special search appearance.
 4. Check a shared URL using [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) to refresh any cached older preview. Each route has a distinct image.
-5. Monitor indexing, actual search queries, impressions and Core Web Vitals in Search Console. A WebGL-heavy experience needs real mobile performance data; metadata alone does not solve performance or guarantee rankings.
+5. Link to `https://www.sandithdev.com/` from your LinkedIn and GitHub profiles using your name consistently. Where appropriate, add a genuine portfolio credit on projects you developed.
+6. Monitor indexing, actual search queries, impressions and Core Web Vitals in Search Console. A WebGL-heavy experience needs real mobile performance data; metadata alone does not solve performance or guarantee rankings.
 
 No Search Console property was verified or sitemap submitted automatically. These changes must be deployed before Google can see them.
 

@@ -34,7 +34,11 @@ test("production HTML exposes unique metadata, canonical URLs, crawlable links a
     const schemas = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m => JSON.parse(m[1]));
     assert.equal(schemas.length, 2);
     const person = schemas[0]["@graph"].find(node => node["@type"] === "Person");
-    assert.equal(person.name, "Sandith Sithmaka");
+    assert.equal(person.name, "Sandith Sithmaka Thenuwara");
+    assert(person.alternateName.includes("Sandith Sithmaka"));
+    assert(title.includes(person.name), `${path}: full name in title`);
+    assert.equal(meta.author, person.name);
+    assert.equal(meta["og:site_name"], person.name);
     assert.equal(schemas[1].about["@id"], person["@id"]);
     if (path === "/about") assert.equal(schemas[1]["@type"], "ProfilePage");
     for (const route of ["/work", "/about", "/contact", "/why", "/blogs"]) assert(html.includes(`href="${route}"`), `${path}: missing navigation to ${route}`);
@@ -53,6 +57,32 @@ test("only finished canonical pages appear in the sitemap; robots allows renderi
   assert.match(rules, /Allow: \//); assert.match(rules, /Disallow: \/api\//);
   assert(rules.includes(`Sitemap: ${canonical}/sitemap.xml`));
   assert.doesNotMatch(rules, /Disallow: \/(_next|about|work)/);
+});
+
+test("every thread consistently identifies its author in search metadata and structured data", async () => {
+  const sitemap = await (await fetch(base + "/sitemap.xml")).text();
+  const paths = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)]
+    .map(match => new URL(match[1]).pathname).filter(path => path.startsWith("/blogs/"));
+  assert(paths.length > 0);
+  for (const path of paths) {
+    const response = await fetch(base + path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    const meta = Object.fromEntries([...html.matchAll(/<meta\s[^>]+>/g)].map(m => attrs(m[0])).map(a => [a.name || a.property, a.content]));
+    const schemas = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].flatMap(m => {
+      const schema = JSON.parse(m[1]);
+      return schema["@graph"] || [schema];
+    });
+    const person = schemas.find(schema => schema["@type"] === "Person");
+    const article = schemas.find(schema => schema["@type"] === "BlogPosting");
+    assert.equal(meta.author, "Sandith Sithmaka Thenuwara", path);
+    assert.equal(article.author.name, person.name, path);
+    assert.equal(article.author["@id"], person["@id"], path);
+    assert.equal(article.author.url, canonical + "/about", path);
+    assert.match(html, /<title>[^<]+ \| Sandith Sithmaka Thenuwara<\/title>/);
+    assert.equal(meta["og:site_name"], person.name, path);
+    assert(meta.robots.startsWith("index"), path);
+  }
 });
 
 test("every sharing image is a real 1200 by 630 PNG", async () => {

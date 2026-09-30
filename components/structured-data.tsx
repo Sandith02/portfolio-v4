@@ -1,3 +1,4 @@
+import { AUTHOR_NAME, AUTHOR_ALIASES } from "@/lib/identity";
 import { PERSON_ID, WEBSITE_ID, SITE_URL, seoPages, type SeoPage } from "@/lib/seo";
 import { type Thread, threadPath } from "@/content/threads";
 
@@ -10,16 +11,16 @@ export function SiteStructuredData() {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "Person", "@id": PERSON_ID, name: "Sandith Sithmaka",
-        alternateName: ["Sandith Sithmaka Thenuwara", "Sandith Dev"], url: `${SITE_URL}/about`,
+        "@type": "Person", "@id": PERSON_ID, name: AUTHOR_NAME,
+        alternateName: AUTHOR_ALIASES, url: `${SITE_URL}/about`,
         jobTitle: "Design Engineer and Creative Frontend Developer",
         homeLocation: { "@type": "Country", name: "Sri Lanka" },
         sameAs: ["https://www.linkedin.com/in/sandith02/", "https://github.com/Sandith02"],
         knowsAbout: ["Frontend development", "Design engineering", "UI/UX design", "Next.js", "React", "TypeScript", "Three.js", "Visual identity"],
       },
       {
-        "@type": "WebSite", "@id": WEBSITE_ID, url: `${SITE_URL}/`, name: "Sandith Sithmaka",
-        alternateName: "Sandith Dev", description: seoPages.home.description, inLanguage: "en",
+        "@type": "WebSite", "@id": WEBSITE_ID, url: `${SITE_URL}/`, name: AUTHOR_NAME,
+        alternateName: AUTHOR_ALIASES, description: seoPages.home.description, inLanguage: "en",
         publisher: { "@id": PERSON_ID },
       },
     ],
@@ -53,7 +54,7 @@ export function ThreadStructuredData({ thread }: { thread: Thread }) {
         "@type": "BlogPosting", "@id": `${url}#article`, url,
         headline: thread.title, description: thread.description, inLanguage: "en",
         datePublished: thread.published,
-        author: { "@type": "Person", "@id": PERSON_ID, name: "Sandith Sithmaka Thenuwara", url: `${SITE_URL}/about` },
+        author: { "@type": "Person", "@id": PERSON_ID, name: AUTHOR_NAME, url: `${SITE_URL}/about` },
         publisher: { "@id": PERSON_ID },
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         isPartOf: { "@id": WEBSITE_ID },

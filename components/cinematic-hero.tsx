@@ -45,7 +45,7 @@ export function CinematicHero() {
         <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
         <div className="inner-vignette" aria-hidden="true" />
         <div className="inner-topline"><span>I’m Sandith Sithmaka<span className="inner-topline-role">Creative developer</span></span></div>
-        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka, design engineer and creative frontend developer. Quiet outside. Worlds within.</h1>
+        <h1 className="inner-accessible-title" id="hero-title">Sandith Sithmaka Thenuwara, design engineer and creative frontend developer. Quiet outside. Worlds within.</h1>
         <div className="inner-story">
           <div className="inner-chapter inner-chapter-first">
             <div className="inner-chapter-left"><ConstructedTitle lines={["Quiet", "outside."]} /><p className="inner-title-note">I leave a lot unsaid.<br />A curious mind might find the rest.</p></div>
@@ -90,7 +90,7 @@ export function CinematicHero() {
             </Link>
           </div>
           <div className="galaxy-footer-bottom">
-            <span className="galaxy-footer-signature">© {new Date().getFullYear()} Sandith Sithmaka</span>
+            <span className="galaxy-footer-signature">© {new Date().getFullYear()} Sandith Sithmaka Thenuwara</span>
             <nav aria-label="Final scene links">
               <a href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Sandith on LinkedIn (opens in a new tab)">LinkedIn <ArrowUpRight size={13} aria-hidden="true" /></a>
               <button type="button" onClick={() => root.current?.dispatchEvent(new Event("return-to-surface"))}>Back to the surface <ArrowUpRight size={13} aria-hidden="true" /></button>

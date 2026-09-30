@@ -23,7 +23,7 @@ export default function AboutPage() {
         </header>
 
         <div className={styles.prose}>
-          <p className={styles.introduction}>I’m Sandith, a design engineer and creative frontend developer based in Sri Lanka.</p>
+          <p className={styles.introduction}>I’m Sandith Sithmaka Thenuwara, a design engineer and creative frontend developer based in Sri Lanka.</p>
           <p>I’m usually quiet. Making things is how a lot of my thoughts find their way out through an interface, a visual identity, a small interaction or a strange idea that becomes an entire website.</p>
           <p>I’ve worked on corporate platforms, internal tools, brands and campaigns. Across all of them, I’m drawn to the point where an idea starts becoming something you can see, use and feel.</p>
           <p>I like exploring how something could look, move and respond. Trying a direction, questioning it and working through the details until it feels right. Sometimes that means building something unexpected. Sometimes it means knowing what to leave out.</p>

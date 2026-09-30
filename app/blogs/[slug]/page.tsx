@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { threads, getThread, threadReadingTime, threadDate, threadPath } from "@/content/threads";
 import { SITE_URL, threadMetadata } from "@/lib/seo";
+import { AUTHOR_NAME } from "@/lib/identity";
 import { ThreadDock } from "@/components/thread-dock";
 import { ThreadStructuredData } from "@/components/structured-data";
 import { WorldSky } from "@/components/world-sky";
@@ -31,7 +32,7 @@ export default async function ThreadPage({ params }: { params: Promise<{ slug: s
           <header className={styles.articleHeader}>
             <h1 id="thread-title">{thread.title}</h1>
             <div className={styles.articleByline}>
-              <Link href="/about" rel="author">Sandith Sithmaka Thenuwara</Link>
+              <Link href="/about" rel="author">{AUTHOR_NAME}</Link>
               <div className={styles.meta}>
                 <time dateTime={thread.published}>{threadDate(thread)}</time>
                 <span>{threadReadingTime(thread)}</span>

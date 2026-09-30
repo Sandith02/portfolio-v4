@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import { SITE_URL } from "@/lib/seo";
+import { AUTHOR_NAME } from "@/lib/identity";
+import { SITE_URL, seoPages } from "@/lib/seo";
 import { SiteStructuredData } from "@/components/structured-data";
 import "@fontsource-variable/archivo";
 import "@fontsource/ibm-plex-mono/400.css";
@@ -14,10 +15,10 @@ import { WorldReturnTransition } from "@/components/world-return-transition";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Sandith Sithmaka | Design Engineer & Creative Developer",
-  applicationName: "Sandith Sithmaka",
-  authors: [{ name: "Sandith Sithmaka", url: `${SITE_URL}/about` }],
-  creator: "Sandith Sithmaka",
+  title: seoPages.home.title,
+  applicationName: AUTHOR_NAME,
+  authors: [{ name: AUTHOR_NAME, url: `${SITE_URL}/about` }],
+  creator: AUTHOR_NAME,
   verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
 

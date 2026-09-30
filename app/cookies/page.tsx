@@ -7,7 +7,7 @@ import worldStyles from "@/components/mind-world.module.css";
 import styles from "./cookies.module.css";
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Sandith Sithmaka",
+  title: "Cookie Policy | Sandith Sithmaka Thenuwara",
   description: "How this portfolio uses cookies, local storage and optional analytics, and how to change your preferences.",
   alternates: { canonical: `${SITE_URL}/cookies` },
   robots: { index: !isPreview, follow: true },

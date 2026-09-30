@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { seoPages, type SeoPage } from "@/lib/seo";
 import { threads, getThread } from "@/content/threads";
+import { AUTHOR_NAME } from "@/lib/identity";
 
 export const dynamic = "force-static";
 export const dynamicParams = false;
@@ -14,7 +15,7 @@ export function generateStaticParams() {
 export async function GET(_request: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const thread = getThread(slug);
-  const page = thread ? { headline: thread.sharingHeadline, label: "Threads · By Sandith Sithmaka Thenuwara" } : Object.hasOwn(seoPages, slug) ? seoPages[slug as SeoPage] : null;
+  const page = thread ? { headline: thread.sharingHeadline, label: `Threads · By ${AUTHOR_NAME}` } : Object.hasOwn(seoPages, slug) ? seoPages[slug as SeoPage] : null;
   if (!page) return new Response("Not found", { status: 404 });
   const [displayFont, bodyFont] = await Promise.all([
     readFile(join(process.cwd(), "node_modules/@fontsource/megrim/files/megrim-latin-400-normal.woff")),
@@ -40,7 +41,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
         </g>
       </svg>
       <div style={{ display: "flex", flexDirection: "column", padding: "58px 68px", width: "100%", position: "relative" }}>
-        <div style={{ display: "flex", fontSize: 25, letterSpacing: "-.6px" }}>Sandith Sithmaka</div>
+        <div style={{ display: "flex", fontSize: 25, letterSpacing: "-.6px" }}>{AUTHOR_NAME}</div>
         <div style={{ display: "flex", flexDirection: "column", marginTop: "auto", marginBottom: "auto" }}>
           {page.headline.split("\n").map(line => <div key={line} style={{ display: "flex", fontFamily: "Megrim", fontSize: 82, lineHeight: 1.12 }}>{line}</div>)}
           <div style={{ display: "flex", fontSize: 18, color: "#a8b6bc", marginTop: 26 }}>{page.label}</div>
