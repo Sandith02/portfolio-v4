@@ -27,6 +27,7 @@ export default function ContactPage() {
           <div className={styles.connections}>
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}<ArrowUpRight size={16} aria-hidden="true" /></a>
             <a href="https://www.linkedin.com/in/sandith02/" target="_blank" rel="noopener noreferrer" aria-label="Connect on LinkedIn (opens in a new tab)">Connect on LinkedIn<ArrowUpRight size={16} aria-hidden="true" /></a>
+            <a href="https://github.com/Sandith02" target="_blank" rel="noopener noreferrer" aria-label="View my GitHub (opens in a new tab)">View my GitHub<ArrowUpRight size={16} aria-hidden="true" /></a>
           </div>
           <p className={styles.place}>Based in Sri Lanka. Open to conversations everywhere.</p>
         </header>

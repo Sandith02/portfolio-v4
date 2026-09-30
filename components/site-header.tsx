@@ -65,6 +65,7 @@ export function SiteHeader() {
       <motion.div id="site-menu" className="nav-panel" initial={false} inert={!open} aria-hidden={!open} animate={{ opacity: open ? 1 : 0, y: open ? 0 : -6, visibility: open ? "visible" : "hidden" }} transition={{ duration: reduce ? 0 : .18 }}>
         <nav aria-label="Primary navigation">
           {links.map(([label, href]) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={15} weight="light" /></Link>)}
+          <a href="https://github.com/Sandith02" target="_blank" rel="noopener noreferrer" aria-label="GitHub (opens in a new tab)" onClick={() => setOpen(false)}>GitHub<ArrowUpRight size={15} weight="light" aria-hidden="true" /></a>
         </nav>
         <Link className="nav-contact" href="/contact#contact-form" onClick={() => setOpen(false)}>Let’s connect <ArrowUpRight size={14} /></Link>
         <div className="nav-privacy">
