@@ -60,6 +60,21 @@ const projects = [
     ],
   },
   {
+    id: "lucid-x",
+    name: "Lucid-X",
+    category: "UI/UX concept",
+    context: "IX25 Designathon · Team DM SANS",
+    role: "Collaborative concept development · UI/UX",
+    summary: "What stays human when reality blends? Lucid-X explores a mobile experience for 2050, where physical and digital worlds become one. Our team imagined how an interface could preserve memory, emotion and human connection within that future.",
+    contribution: [
+      "Helped shape the concept through conversations about memory, emotion and what stays human as more of life becomes digital.",
+      "Collaborated with Dinura Sasmitha, Nethum Mihiranga and Senal Rajendra on a mobile interface vision for the theme ‘Life in a Blended Reality’.",
+    ],
+    tools: ["UI/UX", "Mobile experience", "Concept development", "Blended reality"],
+    note: "Designathon concept",
+    links: [{ label: "Explore Lucid-X", href: "https://lnkd.in/d6gEJzAN" }],
+  },
+  {
     id: "brand-campaign",
     name: "Beyond the interface",
     category: "Brand, campaign & digital creative",
