@@ -11,6 +11,32 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "human-made-might-become-a-luxury",
+    title: "Human-made might become a luxury.",
+    description: "On AI, human effort and why evidence that someone paid attention might become the most valuable part of a digital experience.",
+    published: "2026-09-30",
+    sharingHeadline: "Human-made\nmight become\na luxury.",
+    paragraphs: [
+      "You pick up a shirt. You like the colour. It fits.",
+      "Then you check the label.",
+      "“100% cotton.”",
+      "A few words, but somehow they change how you feel about it. You want to know what you’re wearing, even when the difference wasn’t obvious a moment ago.",
+      "I wonder whether we’ll start checking websites like that.",
+      "We get excited when something makes life easier. Cheaper materials. Food ready in minutes. Things we can produce faster and buy without thinking too much.",
+      "But somewhere alongside that convenience, words like “handmade” and “home-cooked” become reasons to choose something.",
+      "Maybe AI will have its own version of this.",
+      "Right now, watching a prompt turn into a website feels impressive. A few sentences become a layout, images, buttons, even a working product. I understand the excitement. I use these tools too.",
+      "But imagine seeing that same kind of website hundreds of times. Different names, familiar layouts, the same polished sentences saying very little.",
+      "Eventually, “I made this in five minutes” might stop being the interesting part.",
+      "Someone might ask why the website looks that way. Whether the designer understood their business. Whether anyone watched a customer struggle with the booking form before deciding it was finished.",
+      "That’s where I think the work will still matter.",
+      "A developer can use AI and spend hours getting one interaction right. A designer can generate options and reject every one because none of them feels right for the brand. The tool can be part of a thoughtful process.",
+      "I can imagine “human-made” becoming a selling point. Although I’d still want to look closer. Someone typing every line themselves doesn’t automatically mean they cared about the result.",
+      "Maybe what we’ll really want is evidence that someone paid attention.",
+      "When making something becomes almost effortless, will knowing that someone made an effort become part of its value?",
+    ],
+  },
+  {
     slug: "someone-designed-your-idea-of-expensive",
     title: "Someone designed your idea of expensive.",
     description: "On the visual cues that make something feel premium, the expectations websites create, and what happens when a brand has to live up to them.",

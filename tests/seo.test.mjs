@@ -47,7 +47,7 @@ test("only finished canonical pages appear in the sitemap; robots allows renderi
   assert.match(response.headers.get("content-type"), /xml/);
   const xml = await response.text();
   const urls = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => new URL(m[1]).href).sort();
-  assert.deepEqual(urls, [...pages.filter(p => p[2]).map(p => new URL(canonical + p[0]).href), canonical + "/blogs/is-there-a-galaxy-inside-your-head", canonical + "/blogs/would-i-still-make-this-if-nobody-could-see-it", canonical + "/blogs/why-do-we-save-things-we-never-return-to", canonical + "/blogs/how-much-of-this-actually-happened", canonical + "/blogs/what-if-we-stop-having-something-to-say", canonical + "/blogs/it-works-why-cant-i-leave-it-alone", canonical + "/cookies", canonical + "/blogs/someone-designed-your-idea-of-expensive"].sort());
+  assert.deepEqual(urls, [...pages.filter(p => p[2]).map(p => new URL(canonical + p[0]).href), canonical + "/blogs/is-there-a-galaxy-inside-your-head", canonical + "/blogs/would-i-still-make-this-if-nobody-could-see-it", canonical + "/blogs/why-do-we-save-things-we-never-return-to", canonical + "/blogs/how-much-of-this-actually-happened", canonical + "/blogs/what-if-we-stop-having-something-to-say", canonical + "/blogs/it-works-why-cant-i-leave-it-alone", canonical + "/cookies", canonical + "/blogs/someone-designed-your-idea-of-expensive", canonical + "/blogs/human-made-might-become-a-luxury"].sort());
   const robots = await fetch(base + "/robots.txt"); assert.equal(robots.status, 200);
   const rules = await robots.text();
   assert.match(rules, /Allow: \//); assert.match(rules, /Disallow: \/api\//);
@@ -56,7 +56,7 @@ test("only finished canonical pages appear in the sitemap; robots allows renderi
 });
 
 test("every sharing image is a real 1200 by 630 PNG", async () => {
-  for (const [, key] of [...pages, ["", "is-there-a-galaxy-inside-your-head"], ["", "would-i-still-make-this-if-nobody-could-see-it"], ["", "why-do-we-save-things-we-never-return-to"], ["", "how-much-of-this-actually-happened"], ["", "what-if-we-stop-having-something-to-say"], ["", "it-works-why-cant-i-leave-it-alone"], ["", "someone-designed-your-idea-of-expensive"]]) {
+  for (const [, key] of [...pages, ["", "is-there-a-galaxy-inside-your-head"], ["", "would-i-still-make-this-if-nobody-could-see-it"], ["", "why-do-we-save-things-we-never-return-to"], ["", "how-much-of-this-actually-happened"], ["", "what-if-we-stop-having-something-to-say"], ["", "it-works-why-cant-i-leave-it-alone"], ["", "someone-designed-your-idea-of-expensive"], ["", "human-made-might-become-a-luxury"]]) {
     const response = await fetch(`${base}/og/${key}`);
     assert.equal(response.status, 200, key); assert.match(response.headers.get("content-type"), /image\/png/);
     const bytes = Buffer.from(await response.arrayBuffer());
