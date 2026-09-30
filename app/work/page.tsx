@@ -60,6 +60,20 @@ const projects = [
     ],
   },
   {
+    id: "tourithm",
+    name: "Tourithm",
+    category: "Business website",
+    context: "Tourithm · 2025",
+    role: "Full website development",
+    summary: "A website for a Sri Lankan tourism technology business, bringing its services and story into a digital home. I handled the full development in 2025, building the experience that introduces Tourithm to travel businesses and connects them with the team.",
+    contribution: [
+      "Handled the complete website development, from implementation through to the finished site.",
+      "Built the web experience around Tourithm’s services, company information and contact options.",
+    ],
+    tools: ["Web development"],
+    links: [{ label: "Visit website", href: "https://tourithm.lk/" }],
+  },
+  {
     id: "lucid-x",
     name: "Lucid-X",
     category: "UI/UX concept",
