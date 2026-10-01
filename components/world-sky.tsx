@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { isMobileRendering, mobilePixelRatio } from "@/lib/render-budget";
+import { isMobileRendering, mobilePixelRatio, preferLightweightLoading } from "@/lib/render-budget";
 import styles from "./mind-world.module.css";
 
 export function WorldSky() {
@@ -10,7 +10,7 @@ export function WorldSky() {
     let disposed = false;
     let cleanup: (() => void) | undefined;
     const element = host.current;
-    if (!element) return;
+    if (!element || preferLightweightLoading()) return;
     const compact = isMobileRendering();
     Promise.all([import("three"), import("@/lib/galaxy-field")]).then(([THREE, { GALAXY_FIELD_GLSL }]) => {
       if (disposed) return;
@@ -37,20 +37,8 @@ export function WorldSky() {
           }`,
       });
       scene.add(new THREE.Mesh(geometry, material));
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-      let frame = 0, last = 0;
       const render = () => renderer.render(scene, camera);
-      const draw = (now: number) => {
-        if (last) material.uniforms.uTime.value += Math.min((now - last) / 1000, .05);
-        last = now;
-        render();
-        frame = requestAnimationFrame(draw);
-      };
-      const sync = () => {
-        cancelAnimationFrame(frame); last = 0;
-        if (!document.hidden && !reduced.matches && !compact) frame = requestAnimationFrame(draw);
-        else if (!document.hidden) render();
-      };
+      // The shader uses a constant time: this image only changes on resize.
       const resize = () => {
         if (compact) renderer.setPixelRatio(mobilePixelRatio(element.clientWidth, element.clientHeight));
         renderer.setSize(element.clientWidth, element.clientHeight);
@@ -59,13 +47,11 @@ export function WorldSky() {
       };
       const observer = new ResizeObserver(resize);
       observer.observe(element);
-      document.addEventListener("visibilitychange", sync);
-      reduced.addEventListener("change", sync);
-      resize(); sync();
+      renderer.domElement.addEventListener("webglcontextrestored", render);
+      resize();
       cleanup = () => {
-        cancelAnimationFrame(frame); observer.disconnect();
-        document.removeEventListener("visibilitychange", sync);
-        reduced.removeEventListener("change", sync);
+        observer.disconnect();
+        renderer.domElement.removeEventListener("webglcontextrestored", render);
         geometry.dispose(); material.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
       };
     }).catch(() => { /* Keep the charcoal atmospheric fallback if WebGL is unavailable. */ });

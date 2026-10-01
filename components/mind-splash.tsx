@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { worldReturn } from "@/lib/world-navigation";
 import { ConstructedTitle } from "@/components/constructed-title";
 import { hasEnteredThisDocument, skipIntroOnNavigation } from "@/lib/intro-navigation";
+import { preferLightweightLoading } from "@/lib/render-budget";
 
 export function MindSplash() {
   const [visible, setVisible] = useState(() => !hasEnteredThisDocument());
@@ -16,7 +17,7 @@ export function MindSplash() {
     if (!element || !host) return;
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Retain the decision across Strict Mode's effect replay.
-    if (skipIntro.current === null) skipIntro.current = reduced || !!worldReturn(window.location.hash) || hasEnteredThisDocument();
+    if (skipIntro.current === null) skipIntro.current = reduced || preferLightweightLoading() || !!worldReturn(window.location.hash) || hasEnteredThisDocument();
     skipIntroOnNavigation();
     if (skipIntro.current) {
       element.hidden = true;
@@ -50,8 +51,8 @@ export function MindSplash() {
     }).catch(() => { element.dataset.ready = "fallback"; });
     const timer = window.setInterval(() => {
       const age = performance.now() - started;
-      const heroReady = document.querySelector('.inner-viewport[data-ready="true"]');
-      if ((age > 5200 && heroReady) || age > 9000) close();
+      // The poster is usable even if the 3D download is still pending.
+      if (age > 5200) close();
     }, 150);
     return () => {
       disposed = true;

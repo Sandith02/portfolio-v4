@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { createDigitalGlobe } from "./digital-globe";
 import { isMobileRendering } from "./render-budget";
+import { type RenderQuality } from "./adaptive-quality";
 import { createPersonalWorld } from "./personal-worlds";
 import { createInnerGalaxyLife } from "./inner-galaxy-life";
 import { createGalaxyFinale, GALAXY_ARRIVAL_END } from "./galaxy-finale";
@@ -160,6 +161,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
   function resize(w: number, h: number) {
     width = w; height = h; mobile = w < 768;
     life.resize(w);
+    starMaterial.uniforms.pixelRatio.value = renderer.getPixelRatio();
     finale.resize(w,h);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     // Every world sits beside the flight path, at a different longitudinal
@@ -178,6 +180,9 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
   }
   return {
     resize,
+    setQuality(quality: RenderQuality) {
+      starGeometry.setDrawRange(0, quality === "high" ? starCount : quality === "balanced" ? 520 : 390);
+    },
     setEnvironment(texture: THREE.Texture) { planets.forEach(planet=>{planet.personal?.setEnvironment(texture);planet.digital?.setEnvironment(texture);}); },
     draw(progress: number, time: number) {
       const reveal = selected >= 0 ? 1 : THREE.MathUtils.smoothstep(progress, 2.55, 3.3);
@@ -204,7 +209,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         footer.inert = footerReveal < .9;
         footer.setAttribute("aria-hidden", footerReveal < .02 ? "true" : "false");
       }
-      if (!compact || progress > 18) finale.prepare();
+      if (progress > 18) finale.prepare();
       finale.update(time, finaleAge, Math.max(0, progress - 3));
       // Ease into forward travel while the tunnel dissolves into the galaxy.
       const travel = Math.max(0, progress - PLANET_JOURNEY_START) * PLANET_TRAVEL_PER_SCREEN
@@ -272,7 +277,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         planet.globe.rotation.set(planet.turnX, planet.turnY, 0);
         const depth = camera.position.z - planet.group.position.z;
         const visibility = 1 - THREE.MathUtils.smoothstep(depth, 82, 120);
-        if (compact) planet.group.visible = finaleAge < 0 && depth > -planet.radius * 2 && visibility > .001;
+        planet.group.visible = finaleAge < 0 && depth > -planet.radius * 2 && visibility > .001;
         planet.surface.opacity = reveal * visibility;
         if (planet.group.visible) {
           planet.digital?.update(reveal * visibility, time);

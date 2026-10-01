@@ -142,7 +142,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-linkedin:hover .inner-linkedin-arrow { background: #414149; }
 .inner-credits { position: absolute; bottom: 0; right: var(--pad); min-height: 23px; display: flex; align-items: center; color: #697a76; font: 400 .43rem/1 var(--mono); }
 .inner-hero :focus-visible { outline-color: #d8dedc; }
-.inner-hero[data-fallback="true"] { height: 100svh; --inner-first: 1 !important; --inner-second: 0 !important; --inner-last: 0 !important; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) { height: 100svh; --inner-first: 1 !important; --inner-second: 0 !important; --inner-last: 0 !important; }
 
 /* Shared inner pages */
 .display-sm { margin: 0; font-size: clamp(2.6rem, 5vw, 5.5rem); font-stretch: 72%; font-weight: 780; letter-spacing: -.06em; line-height: .84; }
@@ -225,7 +225,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 }
 
 .inner-scroll { color: inherit; cursor: pointer; }
-.inner-hero[data-fallback="true"] {
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) {
   height: 100svh !important;
   --planet-reveal: 0 !important;
   --idea-shake-x: 0px !important;
@@ -234,12 +234,12 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
   --idea-shake-scale: 1 !important;
 }
 /* The static image contains only the scene. All copy stays in the live HTML. */
-.inner-hero[data-fallback="true"] .inner-poster { opacity: 1 !important; transition: none; }
-.inner-hero[data-fallback="true"] :is(.inner-story, .inner-topline, .inner-opportunity, .inner-bottom, .inner-credits) { visibility: visible !important; opacity: 1; }
-.inner-hero[data-fallback="true"] :is(.inner-viewport canvas, .inner-chapter-second, .mind-invitation, .planet-navigation, .mind-boundary, .galaxy-footer, .planet-entry-veil) { display: none; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) .inner-poster { opacity: 1 !important; transition: none; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) :is(.inner-story, .inner-topline, .inner-opportunity, .inner-bottom, .inner-credits) { visibility: visible !important; opacity: 1; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) :is(.inner-viewport canvas, .inner-chapter-second, .mind-invitation, .planet-navigation, .mind-boundary, .galaxy-footer, .planet-entry-veil) { display: none; }
 
 .nav-progress[data-infinite="true"] { font-size: 1.1rem; }
-.inner-hero[data-fallback="true"] .inner-scroll { display: none; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) .inner-scroll { display: none; }
 @media (prefers-reduced-motion: reduce) { .inner-scroll { display: none; } }
 
 .planet-label { opacity: 0; transition: opacity 350ms ease; }

@@ -9,6 +9,7 @@ import { ArrowDown, ArrowUpRight } from "@phosphor-icons/react";
 import type { InnerWorldScene } from "@/lib/inner-world-scene";
 import { worldReturn } from "@/lib/world-navigation";
 import { createReturnToSurface } from "@/lib/return-to-surface";
+import { preferLightweightLoading } from "@/lib/render-budget";
 
 
 export function CinematicHero() {
@@ -23,24 +24,35 @@ export function CinematicHero() {
     if (!host || !hero) return;
     const destination = worldReturn(window.location.hash);
     if (destination) hero.dataset.returnWorld = destination.world;
+    if (preferLightweightLoading()) { hero.dataset.fallback = "true"; return; }
+    hero.dataset.renderLoading = "true";
+    delete hero.dataset.fallback;
     const abort = new AbortController();
+    const loadTimeout = window.setTimeout(() => {
+      hero.dataset.fallback = "true";
+      abort.abort();
+    }, 8000);
     const returnToSurface = createReturnToSurface(hero);
     const entered = (event: Event) => { router.push((event as CustomEvent<string>).detail); };
     hero.addEventListener("planet-entered", entered);
     import("@/lib/inner-world-scene")
-      .then(({ createInnerWorldScene }) => createInnerWorldScene(host, hero, abort.signal))
+      .then(({ createInnerWorldScene }) => {
+        if (abort.signal.aborted) throw new DOMException("Aborted", "AbortError");
+        return createInnerWorldScene(host, hero, abort.signal);
+      })
       .then(scene => {
         if (abort.signal.aborted) { scene.dispose(); return; }
         controller.current = scene;
+        delete hero.dataset.renderLoading;
       })
       .catch(error => {
         if (error.name !== "AbortError") { host.dataset.ready = "false"; hero.dataset.fallback = "true"; }
-      });
-    return () => { returnToSurface.dispose(); hero.removeEventListener("planet-entered", entered); abort.abort(); controller.current?.dispose(); controller.current = null; };
+      }).finally(() => window.clearTimeout(loadTimeout));
+    return () => { window.clearTimeout(loadTimeout); returnToSurface.dispose(); hero.removeEventListener("planet-entered", entered); abort.abort(); controller.current?.dispose(); controller.current = null; };
   }, [router]);
 
   return (
-    <section className="cinematic-hero inner-hero" ref={root} aria-labelledby="hero-title">
+    <section className="cinematic-hero inner-hero" ref={root} aria-labelledby="hero-title" data-render-loading="true">
       <div className="cinematic-stage">
         <div className="inner-viewport" ref={viewport} aria-hidden="true"><div className="inner-poster" /></div>
         <div className="inner-vignette" aria-hidden="true" />

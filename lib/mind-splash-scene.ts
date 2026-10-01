@@ -1,4 +1,4 @@
-import { isMobileRendering, mobilePixelRatio } from "./render-budget";
+import { isMobileRendering, renderPixelRatio } from "./render-budget";
 import * as THREE from "three";
 import { HERO_BACKGROUND_FRAGMENT } from "./hero-atmosphere";
 
@@ -6,7 +6,7 @@ import { HERO_BACKGROUND_FRAGMENT } from "./hero-atmosphere";
 export function createMindSplashScene(host: HTMLElement) {
   const compact = isMobileRendering();
   const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
-  renderer.setPixelRatio(compact ? mobilePixelRatio(host.clientWidth, host.clientHeight) : Math.min(window.devicePixelRatio, 1.5));
+  renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, compact ? "high" : "balanced"));
   renderer.setClearColor(0x141417, 1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -33,14 +33,22 @@ export function createMindSplashScene(host: HTMLElement) {
   const observer = new ResizeObserver(resize);
   observer.observe(host); resize();
   const start = performance.now();
-  let frame = 0;
-  const draw = () => {
-    time.value = (performance.now() - start) / 1000;
-    renderer.render(scene, camera);
+  let frame = 0, last = 0;
+  const draw = (now: number) => {
     frame = requestAnimationFrame(draw);
+    if (last && now - last < 1000 / 30 - 1) return;
+    last = now;
+    time.value = (now - start) / 1000;
+    renderer.render(scene, camera);
   };
-  if (!compact) draw();
+  const sync = () => {
+    cancelAnimationFrame(frame); last = 0;
+    if (!compact && !document.hidden) frame = requestAnimationFrame(draw);
+  };
+  document.addEventListener("visibilitychange", sync);
+  sync();
   return { dispose() {
+    document.removeEventListener("visibilitychange", sync);
     cancelAnimationFrame(frame); observer.disconnect();
     geometry.dispose(); material.dispose(); renderer.dispose(); renderer.forceContextLoss(); renderer.domElement.remove();
   } };
