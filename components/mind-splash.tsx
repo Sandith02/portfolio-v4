@@ -33,12 +33,11 @@ export function MindSplash() {
     background.forEach(node => { node.inert = true; });
     document.body.style.overflow = "hidden";
     document.documentElement.dataset.splash = "active";
-    const started = performance.now();
     const close = () => {
       if (leaving || disposed) return;
       leaving = true;
       element.dataset.leaving = "true";
-      closeTimer = window.setTimeout(() => setVisible(false), 850);
+      closeTimer = window.setTimeout(() => setVisible(false), 700);
     };
     element.focus({ preventScroll: true });
     const escape = (event: KeyboardEvent) => {
@@ -49,14 +48,11 @@ export function MindSplash() {
     import("@/lib/mind-splash-scene").then(({ createMindSplashScene }) => {
       if (!disposed && !leaving) { scene = createMindSplashScene(host); element.dataset.ready = "true"; }
     }).catch(() => { element.dataset.ready = "fallback"; });
-    const timer = window.setInterval(() => {
-      const age = performance.now() - started;
-      // The poster is usable even if the 3D download is still pending.
-      if (age > 5200) close();
-    }, 150);
+    // Let the letters assemble and settle before the fade; never wait on 3D.
+    const timer = window.setTimeout(close, 3500);
     return () => {
       disposed = true;
-      window.clearInterval(timer); window.clearTimeout(closeTimer);
+      window.clearTimeout(timer); window.clearTimeout(closeTimer);
       document.removeEventListener("keydown", escape);
       document.body.style.overflow = oldOverflow;
       delete document.documentElement.dataset.splash;
@@ -70,13 +66,8 @@ export function MindSplash() {
   return (
     <div className="mind-splash" ref={root} role="dialog" tabIndex={-1} aria-modal="true" aria-label="Quiet outside. Worlds within. Opening Sandith’s portfolio." data-lenis-prevent>
       <div className="mind-splash-canvas" ref={canvas} aria-hidden="true" />
-      <picture className="mind-splash-art">
-        <source media="(max-width: 600px)" srcSet="/images/mind-splash-glass-mobile.webp" />
-        {/* Art-directed portrait source keeps both hands visible on mobile. */}
-        <img src="/images/mind-splash-glass.webp" alt="" width="1672" height="941" fetchPriority="high" decoding="async" />
-      </picture>
       <div className="mind-splash-shade" aria-hidden="true" />
-      <div className="mind-splash-caption"><p aria-label="Sandith Sithmaka"><ConstructedTitle lines={["Sandith Sithmaka"]} offset={450} /></p><span>Quiet outside. Worlds within.</span></div>
+      <div className="mind-splash-caption"><p><span className="inner-accessible-title">Sandith Sithmaka</span><ConstructedTitle lines={["Sandith Sithmaka"]} offset={150} /></p><span>Quiet outside. Worlds within.</span></div>
       <noscript><style>{`.mind-splash{display:none}`}</style></noscript>
     </div>
   );

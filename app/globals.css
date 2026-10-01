@@ -332,24 +332,19 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .blogs-empty { border-top: 1px solid #c7a77c33; padding-top: 1.5rem; }
 .blogs-empty .body-xl { margin: 1rem 0 .6rem; }
 
-/* A quiet presence behind glass; replayed on refresh during testing. */
-.mind-splash { position: fixed; inset: 0; z-index: 10000; overflow: hidden; outline: none; background: #141417; color: #dce2df; opacity: 1; transition: opacity 850ms ease, visibility 850ms; }
+/* A brief introduction in the same galaxy as the inner worlds. */
+.mind-splash { position: fixed; inset: 0; z-index: 10000; overflow: hidden; outline: none; background: #0b0d0f; color: #dce2df; opacity: 1; transition: opacity 700ms ease, visibility 700ms; }
 .mind-splash[hidden] { display: none; }
 .mind-splash[data-leaving="true"] { opacity: 0; visibility: hidden; pointer-events: none; }
-.mind-splash-canvas { position: absolute; inset: 0; background: #141417; }
-.mind-splash-canvas canvas { display: block; width: 100%; height: 100%; animation: splash-materialize 1.4s ease both; }
-.mind-splash-art { position: absolute; inset: 0; display: block; opacity: .76; mask-image: radial-gradient(ellipse at 50% 44%,#000 32%,#000b 65%,#0003 100%); animation: splash-glass-reveal 1.8s ease both; }
-.mind-splash-art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(.64) saturate(.35); animation: splash-glass-drift 10s ease-out both; }
+.mind-splash-canvas { position: absolute; inset: 0; background: radial-gradient(ellipse at 58% 45%,#171a1d,#0b0d0f 65%); }
+.mind-splash-canvas canvas { display: block; width: 100%; height: 100%; animation: splash-materialize 600ms ease both; }
 .mind-splash-shade { position: absolute; inset: 0; pointer-events: none; }
-.mind-splash-caption { position: absolute; top: 50%; left: 50%; width: min(90%, 760px); transform: translate(-50%,-50%); text-align: center; text-shadow: 0 2px 24px #07090bb3; animation: splash-copy-reveal 1.6s .45s ease both; }
+.mind-splash-caption { position: absolute; top: 50%; left: 50%; width: min(90%, 760px); transform: translate(-50%,-50%); text-align: center; text-shadow: 0 2px 24px #07090bb3; }
 .mind-splash-caption p { margin: 0 0 16px; font: 400 clamp(2rem,3.8vw,3.8rem)/1.15 var(--hero-display); text-transform: uppercase; letter-spacing: .04em; }
 .mind-splash-caption .inner-headline { color: inherit; font: inherit; letter-spacing: inherit; text-shadow: inherit; }
 .mind-splash-caption > span { color: #b0b8b9; font: 400 clamp(.72rem,1vw,.85rem)/1.5 var(--hero-body); text-transform: none; letter-spacing: .04em; }
-@keyframes splash-materialize { from { opacity: 0; transform: scale(1.06); } to { opacity: 1; transform: scale(1); } }
-@keyframes splash-glass-reveal { from { opacity: 0; filter: blur(8px); } to { opacity: .76; filter: blur(0); } }
-@keyframes splash-glass-drift { from { transform: scale(1.035); } to { transform: scale(1); } }
-@keyframes splash-copy-reveal { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
-@media (max-width: 600px) { .mind-splash-art img { object-fit: contain; } .mind-splash-caption { width: calc(100% - 36px); } .mind-splash-caption p { font-size: clamp(1.7rem,7vw,2.5rem); letter-spacing: .015em; margin-bottom: 12px; } }
+@keyframes splash-materialize { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 600px) { .mind-splash-caption { width: calc(100% - 36px); } .mind-splash-caption p { font-size: clamp(1.7rem,7vw,2.5rem); letter-spacing: .015em; margin-bottom: 12px; } }
 @media (prefers-reduced-motion: reduce) { .mind-splash { display: none; } }
 
 /* Mobile keeps the type reveal, without hundreds of looping clipped layers. */
@@ -357,13 +352,8 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
   .constructed-title[data-construct="true"] .constructed-piece { display: none; animation: none; }
   .constructed-title[data-construct="true"] .constructed-piece > span { animation: none; }
   .constructed-title[data-construct="true"] .constructed-letter-final { display: inline-block; animation: mobile-letter-arrival 900ms ease both; animation-delay: var(--build-delay); }
-  .mind-splash-art { animation-name: mobile-splash-reveal; }
-  .mind-splash-caption { animation-name: mobile-copy-reveal; }
-  .mind-splash-art img { animation: none; }
 }
 @keyframes mobile-letter-arrival { from { opacity: .25; transform: translateY(.06em); } to { opacity: 1; transform: none; } }
-@keyframes mobile-copy-reveal { from { opacity: 0; } to { opacity: 1; } }
-@keyframes mobile-splash-reveal { from { opacity: 0; } to { opacity: .76; } }
 @media (prefers-reduced-motion: reduce) {
   .constructed-title[data-construct="true"] .constructed-letter-final { animation: none; }
 }

@@ -25,12 +25,12 @@ export const GALAXY_FIELD_GLSL = `
         return mix(vec3(.7,.78,.86),vec3(.95,.89,.78),h)
           *(point+halo)*step(1.-presence,h)*twinkle*(.3+h*h);
       }
-      vec3 galaxyField(vec2 p,float journey,float formation,float flow){
+      vec3 galaxyField(vec2 p,float journey,float formation,float flow,float starDensity,float fineStars){
         // Keep the destination worlds prominent during the voyage. The shared
         // cloud field gradually regains its light as it gathers into the finale.
         float cloudStrength=mix(.44,1.,formation);
         float starStrength=mix(.55,1.,formation);
-        float starPresence=mix(.12,.22,formation);
+        float starPresence=mix(.12,.22,formation)*starDensity;
         vec2 drift=vec2(uTime*.0015+journey*.004,sin(uTime*.06)*.006+journey*.002);
         p+=drift;
         // A slow, dark current bends the apparent star field around a quiet void.
@@ -65,9 +65,12 @@ export const GALAXY_FIELD_GLSL = `
         color+=galaxyStars(p*1.025,71.,31.,starPresence)*.36*starStrength;
         color+=galaxyStars(p*1.06,29.,71.,starPresence)*.42*starStrength;
         // More distant, unresolved stars collect along the galactic plane.
-        color+=vec3(.24,.255,.27)*pow(galaxyNoise(p*1100.),18.)*band*cloudStrength;
+        color+=vec3(.24,.255,.27)*pow(galaxyNoise(p*1100.),18.)*band*cloudStrength*fineStars;
         color+=galaxyStars(flowing,160.,113.,starPresence)*band*formation*.16;
         color*=1.-darkCurrent*(.3+wisps*.35)*(1.-formation);
         return color;
+      }
+      vec3 galaxyField(vec2 p,float journey,float formation,float flow){
+        return galaxyField(p,journey,formation,flow,1.,1.);
       }
 `;
