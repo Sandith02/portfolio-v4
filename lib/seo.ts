@@ -8,7 +8,7 @@ export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const isPreview = process.env.VERCEL_ENV === "preview";
 
 // A new URL lets share crawlers refresh artwork independently of the page URL.
-export const sharingImageUrl = (slug: string) => `${SITE_URL}/og/${slug}?v=galaxy-2`;
+export const sharingImageUrl = (slug: string) => `${SITE_URL}/og/${slug}?v=galaxy-3`;
 
 export const seoPages = {
   home: {

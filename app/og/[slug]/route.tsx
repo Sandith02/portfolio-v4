@@ -22,6 +22,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
   const thread = getThread(slug);
   const page = Object.hasOwn(seoPages, slug) ? seoPages[slug as SeoPage] : null;
   if (!thread && !page) return new Response("Not found", { status: 404 });
+  const headline = thread?.title ?? page!.headline.replace(/\n/g, " ");
+  const section = thread ? "Threads" : sectionNames[slug as SeoPage];
 
   const [displayFont, bodyFont, galaxy] = await Promise.all([
     readFile(join(process.cwd(), "node_modules/@fontsource/megrim/files/megrim-latin-400-normal.woff")),
@@ -37,8 +39,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
       <div style={{ display: "flex", position: "absolute", inset: 0, background: "linear-gradient(90deg, rgba(11,13,15,0.72), rgba(11,13,15,0.3) 65%, rgba(11,13,15,0.12))" }} />
       <div style={{ display: "flex", flexDirection: "column", padding: "48px 64px 40px", width: "100%", position: "relative" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 48 }}>
-          <div style={{ display: "flex", fontFamily: thread ? "Megrim" : "Manrope", fontSize: thread ? 40 : 23, color: "#b7c1c3" }}>
-            {thread ? "THREADS" : sectionNames[slug as SeoPage]}
+          <div style={{ display: "flex", fontFamily: "Megrim", fontSize: 40, color: "#b7c1c3" }}>
+            {section.toUpperCase()}
           </div>
           <svg width="48" height="48" viewBox="0 0 64 64">
             <ellipse cx="32" cy="32" rx="26" ry="8" transform="rotate(-32 32 32)" fill="none" stroke="#b7c1c3" strokeWidth="2" />
@@ -47,16 +49,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ slu
           </svg>
         </div>
         <div style={{ display: "flex", flexDirection: "column", flex: 1, justifyContent: "center", paddingBottom: 16 }}>
-          {thread ? (
-            <div style={{ display: "flex", fontSize: thread.title.length > 52 ? 72 : 80, lineHeight: 1.13, letterSpacing: "-3px", maxWidth: 1000 }}>
-              {thread.title}
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
-              {page!.headline.split("\n").map(line => <div key={line} style={{ display: "flex", fontFamily: "Megrim", fontSize: 108, lineHeight: 1.04, letterSpacing: "-2px" }}>{line.toUpperCase()}</div>)}
-              <div style={{ display: "flex", fontSize: 22, color: "#aeb8bd", marginTop: 24 }}>{page!.label}</div>
-            </div>
-          )}
+          <div style={{ display: "flex", fontSize: headline.length > 52 ? 72 : 80, lineHeight: 1.13, letterSpacing: "-3px", maxWidth: 1000 }}>
+            {headline}
+          </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(202,215,217,0.24)", paddingTop: 24 }}>
           <div style={{ display: "flex", fontSize: 24 }}>{AUTHOR_NAME}</div>

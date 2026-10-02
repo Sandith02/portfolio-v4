@@ -30,7 +30,7 @@ test("production HTML exposes unique metadata, canonical URLs, crawlable links a
     assert.equal(new URL(meta["og:url"]).href, expected);
     assert.equal(meta.robots.startsWith("index"), index);
     assert.equal(meta["twitter:card"], "summary_large_image");
-    assert.equal(meta["og:image"], `${canonical}/og/${image}?v=galaxy-2`);
+    assert.equal(meta["og:image"], `${canonical}/og/${image}?v=galaxy-3`);
     const schemas = [...html.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(m => JSON.parse(m[1]));
     assert.equal(schemas.length, 2);
     const person = schemas[0]["@graph"].find(node => node["@type"] === "Person");
@@ -89,7 +89,7 @@ test("every thread consistently identifies its author in search metadata and str
 
 test("every sharing image is a real 1200 by 630 PNG", async () => {
   for (const [, key] of [...pages, ["", "is-there-a-galaxy-inside-your-head"], ["", "would-i-still-make-this-if-nobody-could-see-it"], ["", "why-do-we-save-things-we-never-return-to"], ["", "how-much-of-this-actually-happened"], ["", "what-if-we-stop-having-something-to-say"], ["", "it-works-why-cant-i-leave-it-alone"], ["", "someone-designed-your-idea-of-expensive"], ["", "human-made-might-become-a-luxury"], ["", "maybe-we-needed-permission-to-see-it"], ["", "youve-been-collecting-ideas-without-noticing"]]) {
-    const response = await fetch(`${base}/og/${key}?v=galaxy-2`);
+    const response = await fetch(`${base}/og/${key}?v=galaxy-3`);
     assert.equal(response.status, 200, key); assert.match(response.headers.get("content-type"), /image\/png/);
     const bytes = Buffer.from(await response.arrayBuffer());
     assert.equal(bytes.subarray(1, 4).toString(), "PNG");
