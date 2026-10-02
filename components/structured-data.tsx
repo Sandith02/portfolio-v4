@@ -1,5 +1,5 @@
 import { AUTHOR_NAME, AUTHOR_ALIASES } from "@/lib/identity";
-import { PERSON_ID, WEBSITE_ID, SITE_URL, seoPages, type SeoPage } from "@/lib/seo";
+import { PERSON_ID, WEBSITE_ID, SITE_URL, seoPages, sharingImageUrl, type SeoPage } from "@/lib/seo";
 import { type Thread, threadPath } from "@/content/threads";
 
 function JsonLd({ data }: { data: Record<string, unknown> }) {
@@ -58,7 +58,7 @@ export function ThreadStructuredData({ thread }: { thread: Thread }) {
         publisher: { "@id": PERSON_ID },
         mainEntityOfPage: { "@type": "WebPage", "@id": url },
         isPartOf: { "@id": WEBSITE_ID },
-        image: [`${SITE_URL}/og/${thread.slug}`],
+        image: [sharingImageUrl(thread.slug)],
       },
       {
         "@type": "BreadcrumbList", itemListElement: [

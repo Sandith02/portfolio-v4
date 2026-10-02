@@ -7,6 +7,9 @@ export const PERSON_ID = `${SITE_URL}/#sandith`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 export const isPreview = process.env.VERCEL_ENV === "preview";
 
+// A new URL lets share crawlers refresh artwork independently of the page URL.
+export const sharingImageUrl = (slug: string) => `${SITE_URL}/og/${slug}?v=galaxy-2`;
+
 export const seoPages = {
   home: {
     path: "/", title: `${AUTHOR_NAME} | Design Engineer`,
@@ -45,7 +48,7 @@ export type SeoPage = keyof typeof seoPages;
 export function pageMetadata(key: SeoPage): Metadata {
   const page = seoPages[key];
   const index = page.index && !isPreview;
-  const image = { url: `${SITE_URL}/og/${key}`, width: 1200, height: 630, alt: `${page.title}. ${page.headline.replace("\n", " ")}` };
+  const image = { url: sharingImageUrl(key), width: 1200, height: 630, alt: `${page.title}. ${page.headline.replace("\n", " ")}` };
   return {
     title: page.title,
     description: page.description,
@@ -59,7 +62,7 @@ export function pageMetadata(key: SeoPage): Metadata {
 export function threadMetadata(thread: Thread): Metadata {
   const title = `${thread.title} | ${AUTHOR_NAME}`;
   const url = `${SITE_URL}${threadPath(thread)}`;
-  const image = { url: `${SITE_URL}/og/${thread.slug}`, width: 1200, height: 630, alt: thread.title };
+  const image = { url: sharingImageUrl(thread.slug), width: 1200, height: 630, alt: thread.title };
   return {
     title, description: thread.description,
     authors: [{ name: AUTHOR_NAME, url: `${SITE_URL}/about` }],
