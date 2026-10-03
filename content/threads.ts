@@ -5,11 +5,36 @@ export type Thread = {
   published: string;
   sharingHeadline: string;
   paragraphs: readonly string[];
+  emphasizeQuestion?: boolean;
 };
 
 // Add new articles here. Pages, metadata, sharing images and sitemap entries
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
+  {
+    slug: "i-dont-like-it-anymore-nothing-changed",
+    title: "I don’t like it anymore. Nothing changed.",
+    description: "On revisiting old designs, changing taste and learning to tell the difference between creative growth and following what we see around us.",
+    published: "2026-10-03",
+    sharingHeadline: "I don’t like it\nanymore.\nNothing changed.",
+    emphasizeQuestion: true,
+    paragraphs: [
+      "You find an old design in a folder.",
+      "You remember choosing those colours. Moving that heading around. Finally looking at it and thinking, yes, this feels right.",
+      "Now you open it and wonder why you made half those decisions.",
+      "The strange part is that nothing happened to the design while you were away. It’s exactly what you left there.",
+      "Something happened to the person looking at it.",
+      "Maybe you’ve learned more. You notice spacing you couldn’t see before. You understand why the page feels crowded. You can explain what you’d change.",
+      "That sounds like growing.",
+      "But sometimes the explanation is harder to find. You just don’t like it anymore.",
+      "I wonder how much of that comes from what we’ve been looking at recently. Spend a few weeks seeing the same kind of typography, colours and layouts, and something you once liked can start feeling wrong.",
+      "Would you have wanted to change it if you hadn’t seen those other things?",
+      "I don’t think being influenced is a problem. We’re going to change as we see more of the world. But I’d like to understand what changed, rather than immediately assume my old choices were bad.",
+      "Maybe that design had something I’ve stopped appreciating. Maybe it really does need work.",
+      "Before replacing everything, I think it’s worth remembering why it felt right the first time.",
+      "How do you know when your taste is growing, and when it’s just following?",
+    ],
+  },
   {
     slug: "youve-been-collecting-ideas-without-noticing",
     title: "You’ve been collecting ideas without noticing.",

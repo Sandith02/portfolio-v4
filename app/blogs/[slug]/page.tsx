@@ -41,7 +41,9 @@ export default async function ThreadPage({ params }: { params: Promise<{ slug: s
           </header>
           <div className={styles.storyColumn}>
             <div className={styles.prose}>
-              {thread.paragraphs.map((paragraph, i) => <p key={i}>{paragraph}</p>)}
+              {thread.paragraphs.map((paragraph, i) => (
+                <p key={i}>{thread.emphasizeQuestion && i === thread.paragraphs.length - 1 ? <strong>{paragraph}</strong> : paragraph}</p>
+              ))}
             </div>
             <footer className={styles.articleFooter}>
             {nextThread !== thread && <aside className={styles.nextThread} aria-labelledby="next-thread-title">
