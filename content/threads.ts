@@ -12,6 +12,32 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "the-same-eyes-like-both",
+    title: "The same eyes like both.",
+    description: "On finding beauty in unsettling art and familiar scenery, and making room for the different things that catch our attention.",
+    published: "2026-10-04",
+    sharingHeadline: "The same eyes\nlike both.",
+    emphasizeQuestion: true,
+    paragraphs: [
+      "Sometimes I joke that I could design a character for a horror movie.",
+      "I like imagining something a little unsettling. A face with one detail that feels wrong. A shape you can’t quite understand. Something you’d look at twice, even if the second look made you uncomfortable.",
+      "I enjoy that kind of art.",
+      "Then there are the pictures I take.",
+      "Sunrises. Sunsets. People, animals, scenery. Something familiar from an angle that makes me want to stop and look at it again.",
+      "Put those interests beside each other and they might seem like they belong to different people.",
+      "They feel quite natural together to me.",
+      "I can find something interesting in a disturbing image, then spend time looking at the colours in an evening sky. I don’t feel much need to explain the change.",
+      "But it makes me wonder what I’m actually drawn to.",
+      "Sometimes it’s a mood. Sometimes it’s a detail I can’t stop looking at. Sometimes I couldn’t tell you why I took the picture, only that I wanted to keep what I was seeing.",
+      "“Beautiful” feels like a small word for all of that.",
+      "There are things I enjoy looking at that I wouldn’t want anywhere near me. There are ordinary things I’d happily photograph again tomorrow, even though I already have several pictures of them.",
+      "I like having room for both.",
+      "It would be strange to walk past something that caught my attention because it didn’t match the rest of what I liked.",
+      "Maybe a collection of those things would introduce me better than a few words could. You’d see what I kept stopping for, and probably have a few questions.",
+      "Would everything that catches your eye look like it belonged to the same person?",
+    ],
+  },
+  {
     slug: "i-dont-like-it-anymore-nothing-changed",
     title: "I don’t like it anymore. Nothing changed.",
     description: "On revisiting old designs, changing taste and learning to tell the difference between creative growth and following what we see around us.",
