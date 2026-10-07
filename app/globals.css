@@ -21,7 +21,7 @@
 html { scroll-behavior: auto; background: var(--black); }
 body {
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   color: var(--white);
   background: var(--black);
   font-family: var(--display);
@@ -188,7 +188,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 }
 
 /* Sandith’s inner universe: world-space spheres and projected HTML controls. */
-.inner-hero { height: 3100svh; }
+.inner-hero { --journey-screens: 31; height: calc(100svh * var(--journey-screens)); }
 .planet-navigation { position: absolute; inset: 0; z-index: 3; opacity: var(--planet-reveal, 0); pointer-events: none; color: #e4e9e6; }
 .planet-navigation[inert] { visibility: hidden; }
 .planet-introduction { position: absolute; top: 13%; left: var(--pad); }
@@ -214,7 +214,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-hero[data-entering="true"] .planet-link { pointer-events: none; }
 @media (max-width: 767px) {
   .planet-introduction { top: 13%; right: var(--pad); text-align: center; }
-  .inner-hero { height: 3100svh; }
+  .inner-hero { height: calc(100svh * var(--journey-screens)); }
   .planet-label > span { font-size: 1.5rem; }
   .planet-label small { font-size: .6rem; }
 }
@@ -237,6 +237,15 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) .inner-poster { opacity: 1 !important; transition: none; }
 .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) :is(.inner-story, .inner-topline, .inner-opportunity, .inner-bottom, .inner-credits) { visibility: visible !important; opacity: 1; }
 .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) :is(.inner-viewport canvas, .inner-chapter-second, .mind-invitation, .planet-navigation, .mind-boundary, .galaxy-footer, .planet-entry-veil) { display: none; }
+
+/* Fill the viewport as mobile browser bars retract, while keeping the long
+   scroll track in stable small-viewport units. Clip never creates a second
+   scrolling ancestor for the sticky stage. */
+@media (max-width: 767px), (pointer: coarse) and (max-width: 1366px) {
+  html { overscroll-behavior-y: none; }
+  .cinematic-stage { height: 100dvh; min-height: 0; }
+  .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) { height: 100dvh !important; }
+}
 
 .nav-progress[data-infinite="true"] { font-size: 1.1rem; }
 .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) .inner-scroll { display: none; }

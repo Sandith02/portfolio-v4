@@ -10,6 +10,7 @@ import type { InnerWorldScene } from "@/lib/inner-world-scene";
 import { worldReturn } from "@/lib/world-navigation";
 import { createReturnToSurface } from "@/lib/return-to-surface";
 import { preferLightweightLoading } from "@/lib/render-budget";
+import { journeyViewportHeight } from "@/lib/journey-viewport";
 
 
 export function CinematicHero() {
@@ -120,7 +121,7 @@ export function CinematicHero() {
           </a>
           <button className="inner-scroll" type="button" aria-label="Scroll inward" title="Scroll inward" onClick={() => {
             const hero = root.current;
-            if (hero) window.scrollTo({ top: hero.offsetTop + (viewport.current?.clientHeight ?? window.innerHeight) * 3.4, behavior: "smooth" });
+            if (hero) window.scrollTo({ top: hero.offsetTop + journeyViewportHeight(hero) * 3.4, behavior: "smooth" });
           }}><ArrowDown size={18} /></button>
         </div>
         <a className="inner-credits" href="/models/inner-world-credits.txt" target="_blank" rel="noreferrer">Figure: Lee Perry-Smith / CC BY 3.0</a>

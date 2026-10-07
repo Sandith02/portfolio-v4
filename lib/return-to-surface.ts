@@ -1,4 +1,5 @@
 import { RETURN_DURATION_MS } from "./journey-stops";
+import { journeyViewportHeight } from "./journey-viewport";
 
 // Return directly through the worlds from 95% to the opening galaxy view.
 export function createReturnToSurface(hero: HTMLElement) {
@@ -61,7 +62,7 @@ export function createReturnToSurface(hero: HTMLElement) {
   };
   const rewindToGalaxy = () => {
     if (automatic || disposed || document.querySelector('.mind-splash:not([hidden])')) return;
-    const galaxyOpening = hero.offsetTop + 3.3 * viewportHeight();
+    const galaxyOpening = hero.offsetTop + 3.3 * journeyViewportHeight(hero);
     if (reduced.matches) { goTo(galaxyOpening); return; }
     finish(); automatic = true; rewindFrom = window.scrollY;
     destination = galaxyOpening;

@@ -77,3 +77,21 @@ test('resolution preserves high quality and bounds pixel work on large screens',
     assert.equal(mobile, 1);
   } finally { global.window = previousWindow; }
 });
+
+test('mobile scene sharpness increases only at high quality and stays within the pixel budget', () => {
+  const previousWindow = global.window;
+  global.window = { devicePixelRatio: 3 };
+  try {
+    assert.equal(renderPixelRatio(390, 844, true, 'high', 1.25), 1.25);
+    for (const quality of ['balanced', 'low']) {
+      assert.equal(renderPixelRatio(390, 844, true, quality, 1.25), renderPixelRatio(390, 844, true, quality));
+    }
+    for (const [width, height] of [[390, 844], [430, 932], [1024, 1366]]) {
+      const ratio = renderPixelRatio(width, height, true, 'high', 1.25);
+      assert(width * height * ratio ** 2 <= 700_001);
+    }
+    assert.equal(renderPixelRatio(1920, 1080, false, 'high', 1.25), 1.5);
+    global.window.devicePixelRatio = 1;
+    assert.equal(renderPixelRatio(390, 844, true, 'high', 1.25), 1);
+  } finally { global.window = previousWindow; }
+});

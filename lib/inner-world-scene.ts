@@ -2,6 +2,7 @@ import { isMobileRendering, renderPixelRatio } from "./render-budget";
 import { createAdaptiveQuality } from "./adaptive-quality";
 import * as THREE from "three";
 import { worldReturn } from "./world-navigation";
+import { journeyViewportHeight } from "./journey-viewport";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { mergeVertices } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -124,7 +125,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   let renderer: THREE.WebGLRenderer;
   try { renderer = new THREE.WebGLRenderer({ antialias: !compact, alpha: false, powerPreference: "high-performance" }); }
   catch (error) { geometry.dispose(); outerGeometry.dispose(); throw error; }
-  renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality));
+  renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality, 1.25));
   renderer.setClearColor(0x141417);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -312,7 +313,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   let arrival = 0;
   let mobile = host.clientWidth < 768;
   const measure = () => {
-    const screen = Math.max(1, host.clientHeight);
+    const screen = journeyViewportHeight(hero);
     const distance = Math.max(0, -hero.getBoundingClientRect().top);
     targetProgress = reduced.matches ? (returnDestination?.progress ?? 0) : distance / screen;
   };
@@ -335,7 +336,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     }
     const arrivalState = arrival >= 1 ? "complete" : arrivalStarted === null ? "waiting" : "entering";
     if (host.dataset.arrival !== arrivalState) host.dataset.arrival = arrivalState;
-    const baseY = (mobile ? .05 : -.2) + Math.sin(elapsed*.43)*.008;
+    const baseY = (mobile ? -.6 : -.2) + Math.sin(elapsed*.43)*.008;
     figure.position.set(Math.sin(elapsed*.31)*.012, baseY - (1 - arrival) * (mobile ? 6 : 5.2), 0);
     figure.rotation.set(-.015 + lookY*.05 + Math.sin(elapsed*.29)*.004, lookX*.1 + Math.sin(elapsed*.12)*.012, Math.sin(elapsed*.23)*.002);
     const cameraY = THREE.MathUtils.lerp(.25, .94 + baseY, approach);
@@ -374,7 +375,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     // The intro covers the hero. Keep its prepared first frame, not two live skies.
     if (document.documentElement.dataset.splash === "active" && !document.querySelector('.mind-splash[data-leaving="true"]')) { lastFrame = now; quality.reset(now); return; }
     if (quality.sample(now)) {
-      renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality));
+      renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality, 1.25));
       planets.setQuality(quality.quality);
       planets.resize(host.clientWidth, host.clientHeight);
       host.dataset.quality = quality.quality;
@@ -388,7 +389,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     draw();
   };
   const sync = () => { cancelAnimationFrame(frame); lastFrame = 0; quality.reset(performance.now()); if (!paused && !reduced.matches && visible && !document.hidden && !destroyed) frame = requestAnimationFrame(animate); else if (!destroyed && !document.hidden && visible) draw(); };
-  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality)); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); quality.reset(performance.now()); measure(); draw(); };
+  const resize = () => { mobile = host.clientWidth < 768; camera.aspect = host.clientWidth / host.clientHeight; galaxy.aspect.value = hazeAspect.value = camera.aspect; camera.updateProjectionMatrix(); renderer.setPixelRatio(renderPixelRatio(host.clientWidth, host.clientHeight, compact, quality.quality, 1.25)); renderer.setSize(host.clientWidth, host.clientHeight); planets.resize(host.clientWidth, host.clientHeight); quality.reset(performance.now()); measure(); draw(); };
   const pointer = (event: PointerEvent) => { if (event.pointerType === "mouse" && !paused && !reduced.matches) { pointerX = event.clientX / window.innerWidth - .5; pointerY = event.clientY / window.innerHeight - .5; } };
   const leave = () => { pointerX = 0; pointerY = 0; };
   const preference = () => { measure(); if (reduced.matches) { hero.style.height = ""; progress = targetProgress; lookX = 0; lookY = 0; } sync(); };
@@ -400,7 +401,7 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   renderer.domElement.addEventListener("webglcontextlost", lost);
   delete hero.dataset.renderLoading;
   if (returnDestination && !reduced.matches) {
-    const top = hero.offsetTop + host.clientHeight * returnDestination.progress;
+    const top = hero.offsetTop + journeyViewportHeight(hero) * returnDestination.progress;
     window.dispatchEvent(new Event("mind-native-return"));
     window.scrollTo({ top, behavior: "instant" });
     window.dispatchEvent(new CustomEvent("mind-rewind-scroll", { detail: top }));

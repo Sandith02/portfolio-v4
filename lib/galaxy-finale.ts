@@ -53,7 +53,11 @@ export function createGalaxyFinale(scene: THREE.Scene) {
         float beamWindow=smoothstep(sourceY-.06,sourceY,p.y)
           *(1.-smoothstep(beamTip-.012,beamTip+.015,p.y));
         float width=mix(.00065,.0016,smoothstep(5.1,8.4,uElapsed));
-        float shaft=exp(-pow(p.x/width,2.))*beamWindow*beamDraw;
+        // Filter the narrow core to the actual pixel footprint so it remains
+        // smooth when mobile quality steps down, without another render pass.
+        float pixelWidth=fwidth(p.x);
+        float filteredWidth=sqrt(width*width+pixelWidth*pixelWidth/6.);
+        float shaft=exp(-pow(p.x/filteredWidth,2.))*(width/filteredWidth)*beamWindow*beamDraw;
         float gatheringArc=sin(beamDraw*3.14159)*(1.-landing);
         float strandOffset=sin((p.y-sourceY)*8.)*.025*gatheringArc;
         float strands=(exp(-pow((p.x-strandOffset)/.004,2.))
