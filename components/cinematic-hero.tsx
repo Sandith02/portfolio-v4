@@ -86,7 +86,10 @@ export function CinematicHero() {
               <span className="planet-label"><span>{label}<ArrowUpRight size={16} /></span><small>{description}</small></span>
             </a>
           ))}
-          <p className="planet-controls" id="planet-controls">Scroll to wander <span>·</span> Drag to turn <span>·</span> Click to enter<span className="inner-accessible-title">. When a planet is focused, use the arrow keys to turn it or Enter to go inside.</span></p>
+          <p className="planet-controls" id="planet-controls">
+            <span className="planet-controls-touch">Scroll to wander · Tap to enter</span>
+            <span className="planet-controls-desktop">Scroll to wander <span>·</span> Drag to turn <span>·</span> Click to enter<span className="inner-accessible-title">. When a planet is focused, use the arrow keys to turn it or Enter to go inside.</span></span>
+          </p>
         </nav>
         <div className="mind-boundary" aria-hidden="true">
           <p>You’ve seen a part of me.</p>

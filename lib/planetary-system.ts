@@ -22,12 +22,14 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
   scene.add(sun);
   const nav = hero.querySelector<HTMLElement>(".planet-navigation")!;
   const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>(".planet-link"));
+  const manualRotation = window.matchMedia("(min-width: 768px) and (pointer: fine)");
   const materials: THREE.Material[] = [];
   const geometries: THREE.BufferGeometry[] = [];
   let width = 1, height = 1, mobile = false;
   let selected = -1, enteredAt = 0, hovered = -1, routeTimer = 0;
   let lastTime = 0, dragging = -1, downX = 0, downY = 0, lastX = 0, lastY = 0, moved = false;
   let suppressClickUntil = 0;
+  let capturedPointer: number | undefined;
   const startCamera = new THREE.Vector3();
   const destination = new THREE.Vector3();
   const projected = new THREE.Vector3();
@@ -108,11 +110,12 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
     enter(links.indexOf(event.currentTarget as HTMLAnchorElement));
   };
   const onDown = (event: PointerEvent) => {
-    if (event.button !== 0 || selected >= 0 || nav.inert) return;
+    if (!manualRotation.matches || event.pointerType === "touch" || event.button !== 0 || selected >= 0 || nav.inert) return;
     dragging = links.indexOf(event.currentTarget as HTMLAnchorElement);
     downX = lastX = event.clientX; downY = lastY = event.clientY; moved = false;
     planets[dragging].velocity = 0;
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    capturedPointer = event.pointerId;
   };
   const onMove = (event: PointerEvent) => {
     if (dragging < 0) return;
@@ -133,6 +136,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
     const target = event.currentTarget as HTMLElement;
     if (target.hasPointerCapture(event.pointerId)) target.releasePointerCapture(event.pointerId);
     dragging = -1;
+    capturedPointer = undefined;
     delete hero.dataset.rotating;
   };
   const onKey = (event: KeyboardEvent) => {
@@ -145,13 +149,37 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
   };
   const onHover = (event: Event) => { hovered = links.indexOf(event.currentTarget as HTMLAnchorElement); };
   const onLeave = () => { hovered = -1; };
+  const syncManualRotation = () => {
+    // Touch screens keep native scroll/tap gestures: no drag capture or inertia.
+    if (!manualRotation.matches) {
+      if (dragging >= 0 && capturedPointer !== undefined && links[dragging].hasPointerCapture(capturedPointer)) {
+        links[dragging].releasePointerCapture(capturedPointer);
+      }
+      dragging = -1;
+      capturedPointer = undefined;
+      suppressClickUntil = 0;
+      planets.forEach(planet => { planet.velocity = 0; });
+      delete hero.dataset.rotating;
+    }
+    links.forEach(link => {
+      link.removeEventListener("pointerdown", onDown);
+      link.removeEventListener("pointermove", onMove);
+      link.removeEventListener("pointerup", onUp);
+      link.removeEventListener("pointercancel", onUp);
+      link.removeEventListener("keydown", onKey);
+      if (manualRotation.matches) {
+        link.addEventListener("pointerdown", onDown);
+        link.addEventListener("pointermove", onMove);
+        link.addEventListener("pointerup", onUp);
+        link.addEventListener("pointercancel", onUp);
+        link.addEventListener("keydown", onKey);
+      }
+    });
+  };
+  manualRotation.addEventListener("change", syncManualRotation);
+  syncManualRotation();
   links.forEach(link => {
     link.addEventListener("click", onClick);
-    link.addEventListener("pointerdown", onDown);
-    link.addEventListener("pointermove", onMove);
-    link.addEventListener("pointerup", onUp);
-    link.addEventListener("pointercancel", onUp);
-    link.addEventListener("keydown", onKey);
     link.addEventListener("pointerenter", onHover);
     link.addEventListener("focus", onHover);
     link.addEventListener("pointerleave", onLeave);
@@ -308,6 +336,7 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
       renderer.autoClear = false; renderer.clearDepth(); renderer.render(scene, camera); renderer.autoClear = true;
     },
     dispose() {
+      manualRotation.removeEventListener("change", syncManualRotation);
       window.clearTimeout(routeTimer);
       planets.forEach(planet=>{planet.personal?.dispose();planet.digital?.dispose();});
       life.dispose();

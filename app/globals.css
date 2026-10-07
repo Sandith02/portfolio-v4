@@ -195,7 +195,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .planet-introduction h2 { margin: 0; font: 400 clamp(1.6rem, 2.5vw, 2.8rem)/1.1 var(--hero-display); text-transform: uppercase; }
 .planet-introduction .inner-headline { font: inherit; letter-spacing: inherit; }
 .planet-introduction p { margin: .65rem 0 0; color: #969fa8; font: 400 .75rem/1.5 var(--hero-body); }
-.planet-link { position: absolute; display: block; transform: translate(-50%, -50%); pointer-events: auto; border-radius: 50%; color: inherit; text-align: center; -webkit-tap-highlight-color: transparent; touch-action: pan-y; cursor: grab; user-select: none; }
+.planet-link { position: absolute; display: block; transform: translate(-50%, -50%); pointer-events: auto; border-radius: 50%; color: inherit; text-align: center; -webkit-tap-highlight-color: transparent; touch-action: pan-y pinch-zoom; cursor: pointer; user-select: none; }
 .planet-label { position: absolute; top: var(--planet-label-top); left: 50%; width: max-content; transform: translateX(-50%); }
 .planet-label > span { display: flex; align-items: center; justify-content: center; gap: .65rem; font: 400 clamp(1.5rem, 2vw, 2.1rem)/1 var(--hero-display); text-transform: uppercase; }
 .planet-label svg { opacity: 0; width: 0; transition: width 220ms, opacity 220ms; }
@@ -203,7 +203,13 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .planet-link:hover .planet-label svg, .planet-link:focus-visible .planet-label svg { opacity: 1; width: 16px; }
 .planet-link:focus-visible { outline: 1px solid #b8cadf; outline-offset: 12px; }
 .planet-controls { position: absolute; bottom: 3.5rem; left: 0; width: 100%; text-align: center; font: 400 .65rem/1.4 var(--hero-body); color: #929aa2; }
-.planet-controls > span:not(.inner-accessible-title) { margin: 0 .65rem; color: #525b64; }
+.planet-controls-desktop { display: none; }
+.planet-controls-desktop > span:not(.inner-accessible-title) { margin: 0 .65rem; color: #525b64; }
+@media (min-width: 768px) and (pointer: fine) {
+  .planet-controls-touch { display: none; }
+  .planet-controls-desktop { display: inline; }
+  .planet-link { cursor: grab; }
+}
 .inner-hero[data-rotating="true"] .planet-link { cursor: grabbing; }
 .inner-topline, .inner-opportunity, .inner-bottom, .inner-credits { opacity: calc(1 - var(--planet-reveal, 0)); }
 .inner-hero:has(.planet-navigation:not([inert])) .inner-opportunity,
