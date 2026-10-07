@@ -12,6 +12,28 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "good-on-their-own-why-not-together",
+    title: "Good on their own. Why not together?",
+    description: "On connecting typography, motion and visual themes, and judging design choices by how well they support each other.",
+    published: "2026-10-06",
+    sharingHeadline: "Good on their own.\nWhy not together?",
+    paragraphs: [
+      "I think we sometimes give the most noticeable parts of a website too much credit.",
+      "A gradient catches your eye. An animation makes you pause. A transition feels satisfying. But after that first impression, does the rest of the design hold together?",
+      "That’s the part I’m interested in.",
+      "You can choose a good font and still use it poorly. The heading might have character, but the smaller text feels uncomfortable to read. You can build an interesting animation that changes the mood of the page in a way nothing else supports.",
+      "Each choice might work somewhere. I want to understand why it works here.",
+      "For me, typography deserves as much thought as any effect. It influences how someone reads the page, where they pause, and what they notice first. The spacing around it matters too. Those choices continue working after the novelty of an animation has passed.",
+      "I also want a theme I can follow through the website.",
+      "That doesn’t mean every section should look identical. A page can change its pace, introduce a different colour or become more playful. But I’d like those changes to feel connected to what came before them.",
+      "I enjoy experimental websites. I like unusual interactions and things I haven’t seen before. That’s why I want the surrounding design to give them somewhere to belong.",
+      "It’s something I need to question in my own work too. When I find an effect I like, it’s easy to start looking for somewhere to put it. Sometimes I have to admit that the page was better before I added it.",
+      "I think that judgment should be part of what we expect from design work: understanding what a choice contributes, and being willing to reconsider it.",
+      "A simple website can have a clear idea. A complicated one can have a clear idea too. I care about whether the decisions support each other.",
+      "What connects the choices in your design beyond the fact that you liked each of them?",
+    ],
+  },
+  {
     slug: "what-if-ai-stops-being-the-cheap-option",
     title: "What if AI stops being the cheap option?",
     description: "On the time and effort behind repeated AI attempts, the incentives of usage-based pricing, and knowing when to do a task yourself.",
