@@ -13,7 +13,7 @@ require.extensions['.ts'] = loader;
 function withViewport(mobile, run) {
   const previousWindow = global.window, previousStyle = global.getComputedStyle;
   global.window = { innerHeight: 844, matchMedia: () => ({ matches: mobile }) };
-  global.getComputedStyle = () => ({ getPropertyValue: () => '31' });
+  global.getComputedStyle = () => ({ getPropertyValue: name => name === '--journey-screens' ? '31' : '1' });
   const stage = { clientHeight: 700 };
   const hero = { clientHeight: 21700, dataset: {}, querySelector: () => stage };
   try { run(hero, stage); }
@@ -50,5 +50,23 @@ test('loading, fallback and reduced-motion pages use their visible height', () =
     assert.equal(journeyViewportHeight(hero), 844);
     delete hero.dataset.fallback; hero.clientHeight = 844;
     assert.equal(journeyViewportHeight(hero), 844);
+  });
+});
+
+test('shorter mobile track preserves every destination and the complete ending', () => {
+  withViewport(true, (hero, stage) => {
+    global.getComputedStyle = () => ({ getPropertyValue: name => name === '--journey-screens' ? '31' : '.55' });
+    hero.clientHeight = 700 * 17.5;
+    const unit = journeyViewportHeight(hero);
+    assert.equal(unit, 700 * .55);
+    assert(Math.abs((hero.clientHeight - stage.clientHeight) / unit - 30) < 1e-10);
+    for (const progress of [3.3, 7.6, 13.1, 19.35, 24.35, 28.5]) {
+      const destination = progress * unit;
+      assert(Math.abs(destination / unit - progress) < 1e-10);
+      assert(destination < hero.clientHeight - stage.clientHeight);
+    }
+    stage.clientHeight = 844;
+    assert.equal(journeyViewportHeight(hero), unit);
+    assert((hero.clientHeight - stage.clientHeight) / unit > 28.5);
   });
 });

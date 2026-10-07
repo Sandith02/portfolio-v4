@@ -188,7 +188,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 }
 
 /* Sandith’s inner universe: world-space spheres and projected HTML controls. */
-.inner-hero { --journey-screens: 31; height: calc(100svh * var(--journey-screens)); }
+.inner-hero { --journey-screens: 31; --journey-scroll-scale: 1; height: calc(100svh * (1 + (var(--journey-screens) - 1) * var(--journey-scroll-scale))); }
 .planet-navigation { position: absolute; inset: 0; z-index: 3; opacity: var(--planet-reveal, 0); pointer-events: none; color: #e4e9e6; }
 .planet-navigation[inert] { visibility: hidden; }
 .planet-introduction { position: absolute; top: 13%; left: var(--pad); }
@@ -220,7 +220,6 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-hero[data-entering="true"] .planet-link { pointer-events: none; }
 @media (max-width: 767px) {
   .planet-introduction { top: 13%; right: var(--pad); text-align: center; }
-  .inner-hero { height: calc(100svh * var(--journey-screens)); }
   .planet-label > span { font-size: 1.5rem; }
   .planet-label small { font-size: .6rem; }
 }
@@ -248,6 +247,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
    scroll track in stable small-viewport units. Clip never creates a second
    scrolling ancestor for the sticky stage. */
 @media (max-width: 767px), (pointer: coarse) and (max-width: 1366px) {
+  .inner-hero { --journey-scroll-scale: .55; }
   html { overscroll-behavior-y: none; }
   .cinematic-stage { height: 100dvh; min-height: 0; }
   .inner-hero:is([data-fallback="true"], [data-render-loading="true"]) { height: 100dvh !important; }

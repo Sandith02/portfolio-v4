@@ -5,7 +5,13 @@ import { isMobileRendering } from "./render-budget";
 export function journeyViewportHeight(hero: HTMLElement) {
   const stageHeight = hero.querySelector<HTMLElement>(".cinematic-stage")?.clientHeight ?? window.innerHeight;
   if (!isMobileRendering() || hero.dataset.fallback === "true" || hero.dataset.renderLoading === "true") return Math.max(1, stageHeight);
-  const screens = Number.parseFloat(getComputedStyle(hero).getPropertyValue("--journey-screens"));
+  const style = getComputedStyle(hero);
+  const screens = Number.parseFloat(style.getPropertyValue("--journey-screens"));
   if (!Number.isFinite(screens) || screens <= 1 || hero.clientHeight <= stageHeight) return Math.max(1, stageHeight);
-  return Math.max(1, hero.clientHeight / screens);
+  const configuredScale = Number.parseFloat(style.getPropertyValue("--journey-scroll-scale"));
+  const scale = Number.isFinite(configuredScale) && configuredScale > 0 ? configuredScale : 1;
+  // Keep one full viewport for the sticky stage; shorten only the scrollable
+  // distance. Every scene stop and return link shares this same logical unit.
+  const physicalScreens = 1 + (screens - 1) * scale;
+  return Math.max(1, hero.clientHeight / physicalScreens * scale);
 }
