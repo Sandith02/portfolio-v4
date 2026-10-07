@@ -12,6 +12,33 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "what-if-ai-stops-being-the-cheap-option",
+    title: "What if AI stops being the cheap option?",
+    description: "On the time and effort behind repeated AI attempts, the incentives of usage-based pricing, and knowing when to do a task yourself.",
+    published: "2026-10-05",
+    sharingHeadline: "What if AI stops\nbeing the\ncheap option?",
+    emphasizeQuestion: true,
+    paragraphs: [
+      "I sometimes wonder how much of the way we use AI depends on what it costs right now.",
+      "Suppose the tools you use became expensive enough that you had to think before opening them.",
+      "Would you use them for the same things?",
+      "And would you count the cost of the answer, or the cost of finally getting one you could use?",
+      "Let’s say the first answer is wrong. You explain again. The second one misses something. You correct it. A few more attempts, and the eighth answer finally does what you wanted.",
+      "You got there. But it took eight attempts, your explanations, and enough understanding of the task to recognise seven answers that weren’t good enough.",
+      "If you were paying for every attempt, that would be the cost of getting the result.",
+      "Even without that bill, you’ve spent time reading, checking and correcting.",
+      "I think we sometimes overlook this when we talk about how useful a model is. Someone spends ten or twelve messages getting a simple task done and comes away impressed that the AI eventually managed it.",
+      "I’d want to ask how long the task would have taken without it.",
+      "Some work is complicated enough to deserve that back and forth. But if I’m repeatedly explaining a small change I could have made myself, I should probably notice when the explanation has become more work than the change.",
+      "That’s also what makes me wonder about the business model.",
+      "If a service earns more each time I try again, what incentive does it have to help me finish in fewer attempts? I’d want that question considered before repeated attempts become something we accept without thinking.",
+      "I’m not predicting that every AI service will suddenly become unaffordable. A higher price might simply make us examine habits we’re currently comfortable with.",
+      "We did things before these tools existed. Sometimes I think we forget that a little too quickly. Asking AI becomes the first step, even when we already know how to do the task.",
+      "I’d still pay for help that saved me hours. I’d think twice about paying to spend twenty minutes explaining something I could have done in ten.",
+      "If every attempt had a noticeable cost, when would you stop asking and do it yourself?",
+    ],
+  },
+  {
     slug: "the-same-eyes-like-both",
     title: "The same eyes like both.",
     description: "On finding beauty in unsettling art and familiar scenery, and making room for the different things that catch our attention.",
