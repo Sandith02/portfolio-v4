@@ -12,10 +12,35 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "what-if-good-enough-becomes-what-everyone-expects",
+    title: "What if “good enough” becomes what everyone expects?",
+    description: "On AI-made work becoming ordinary, changing creative expectations, and whether there will still be room to pursue something better than good enough.",
+    published: "2026-10-13",
+    sharingHeadline: "What if “good enough”\nbecomes what\neveryone expects?",
+    emphasizeQuestion: true,
+    paragraphs: [
+      "I’m worried about what happens to creatives when AI-made work becomes ordinary.",
+      "A company needs a website. Someone generates one. The company likes it, customers can use it, and it goes live.",
+      "I could point out the awkward typography, the sections that don’t belong together, or the animation that adds nothing. But if everyone involved is happy, who am I trying to convince?",
+      "That’s the part that scares me.",
+      "I know how much thought can go into a design. But knowing that doesn’t mean someone else will notice it, or want to pay for it.",
+      "And I can’t expect people to appreciate something just because it took effort. I don’t ask how many hours went into everything I buy either.",
+      "So where does that leave us?",
+      "If someone grows up seeing the same generated layouts, images and writing everywhere, those things might become their reference for what finished work looks like. Something I find repetitive could look perfectly normal to them.",
+      "Would they feel anything was missing?",
+      "I think we sometimes reassure ourselves too quickly by saying people will always want human creativity. I want to believe that. But I’d still ask: which people, for which work, and how often?",
+      "Someone might care deeply about the artwork they hang in their bedroom and barely care about the banner for their business. The same person can value creativity in one place and choose the cheapest acceptable option somewhere else.",
+      "That makes this harder than deciding whether AI work is good or bad.",
+      "I want a future where there’s room to try an unusual idea, develop it, and make something people haven’t already seen a hundred times. I’m afraid that space could get smaller if the first acceptable result becomes where every project ends.",
+      "We might still have plenty of things to make. I wonder how much room we’ll have to question what they should become.",
+      "If everyone is satisfied with “good enough,” who still gets the time to find something better?",
+    ],
+  },
+  {
     slug: "good-on-their-own-why-not-together",
     title: "Good on their own. Why not together?",
     description: "On connecting typography, motion and visual themes, and judging design choices by how well they support each other.",
-    published: "2026-10-06",
+    published: "2026-10-11",
     sharingHeadline: "Good on their own.\nWhy not together?",
     paragraphs: [
       "I think we sometimes give the most noticeable parts of a website too much credit.",
@@ -37,7 +62,7 @@ export const threads: readonly Thread[] = [
     slug: "what-if-ai-stops-being-the-cheap-option",
     title: "What if AI stops being the cheap option?",
     description: "On the time and effort behind repeated AI attempts, the incentives of usage-based pricing, and knowing when to do a task yourself.",
-    published: "2026-10-05",
+    published: "2026-10-10",
     sharingHeadline: "What if AI stops\nbeing the\ncheap option?",
     emphasizeQuestion: true,
     paragraphs: [
@@ -64,7 +89,7 @@ export const threads: readonly Thread[] = [
     slug: "the-same-eyes-like-both",
     title: "The same eyes like both.",
     description: "On finding beauty in unsettling art and familiar scenery, and making room for the different things that catch our attention.",
-    published: "2026-10-04",
+    published: "2026-10-08",
     sharingHeadline: "The same eyes\nlike both.",
     emphasizeQuestion: true,
     paragraphs: [
@@ -90,7 +115,7 @@ export const threads: readonly Thread[] = [
     slug: "i-dont-like-it-anymore-nothing-changed",
     title: "I don’t like it anymore. Nothing changed.",
     description: "On revisiting old designs, changing taste and learning to tell the difference between creative growth and following what we see around us.",
-    published: "2026-10-03",
+    published: "2026-10-06",
     sharingHeadline: "I don’t like it\nanymore.\nNothing changed.",
     emphasizeQuestion: true,
     paragraphs: [
@@ -114,7 +139,7 @@ export const threads: readonly Thread[] = [
     slug: "youve-been-collecting-ideas-without-noticing",
     title: "You’ve been collecting ideas without noticing.",
     description: "On developing an eye for ideas in everyday life, building a library of references, and why creative judgment still matters alongside AI tools.",
-    published: "2026-10-02",
+    published: "2026-10-05",
     sharingHeadline: "You’ve been\ncollecting ideas\nwithout noticing.",
     paragraphs: [
       "You might notice the way light hits a building on your way to work. A strange typeface on a poster. The shape of a car light. The way a scene in a movie is framed, or how an animation moves while you’re scrolling.",
@@ -140,7 +165,7 @@ export const threads: readonly Thread[] = [
     slug: "maybe-we-needed-permission-to-see-it",
     title: "Maybe we needed permission to see it.",
     description: "On reputation, creative judgment and how knowing who made something can change the time and attention we give their work.",
-    published: "2026-10-01",
+    published: "2026-10-03",
     sharingHeadline: "Maybe we needed\npermission\nto see it.",
     paragraphs: [
       "Imagine opening a website made by a student you’ve never heard of.",
@@ -166,7 +191,7 @@ export const threads: readonly Thread[] = [
     slug: "human-made-might-become-a-luxury",
     title: "Human-made might become a luxury.",
     description: "On AI, human effort and why evidence that someone paid attention might become the most valuable part of a digital experience.",
-    published: "2026-09-30",
+    published: "2026-10-01",
     sharingHeadline: "Human-made\nmight become\na luxury.",
     paragraphs: [
       "You pick up a shirt. You like the colour. It fits.",
@@ -192,7 +217,7 @@ export const threads: readonly Thread[] = [
     slug: "someone-designed-your-idea-of-expensive",
     title: "Someone designed your idea of expensive.",
     description: "On the visual cues that make something feel premium, the expectations websites create, and what happens when a brand has to live up to them.",
-    published: "2026-09-29",
+    published: "2026-09-30",
     sharingHeadline: "Someone designed\nyour idea of\nexpensive.",
     paragraphs: [
       "Imagine a small bottle of perfume on a white page.",
@@ -215,7 +240,7 @@ export const threads: readonly Thread[] = [
     slug: "it-works-why-cant-i-leave-it-alone",
     title: "It works. Why can’t I leave it alone?",
     description: "On frontend details, perfectionism and learning when another adjustment makes the work better, and when it’s time to close the laptop.",
-    published: "2026-09-29",
+    published: "2026-09-28",
     sharingHeadline: "It works.\nWhy can’t I\nleave it alone?",
     paragraphs: [
       "You’re about to close the laptop.",
@@ -239,7 +264,7 @@ export const threads: readonly Thread[] = [
     slug: "what-if-we-stop-having-something-to-say",
     title: "What if we stop having something to say?",
     description: "A reflection on AI, creative patience and the small effort of finding our own words before asking a tool what to say.",
-    published: "2026-09-28",
+    published: "2026-09-27",
     sharingHeadline: "What if we stop\nhaving something\nto say?",
     paragraphs: [
       "Imagine writing a birthday message for someone you’ve known for ten years.",
