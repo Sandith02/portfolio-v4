@@ -11,6 +11,28 @@ export type Thread = {
 // are generated from this content at build time.
 export const threads: readonly Thread[] = [
   {
+    slug: "how-many-opinions-before-you-stop-trusting-your-own",
+    title: "How many opinions before you stop trusting your own?",
+    description: "On asking for approval too early, weighing creative feedback, and protecting the idea that made you excited in the first place.",
+    published: "2026-10-15",
+    paragraphs: [
+      "You have an idea you’re excited about. There’s something unusual in it, and you want to find out whether it could work.",
+      "So you show someone.",
+      "They like it, but suggest making it simpler. The next person thinks it needs something familiar. Another understands what you’re trying to do, but wonders whether people will get it.",
+      "Each comment sounds reasonable. You make a few changes.",
+      "By the time you’ve worked through everyone’s suggestions, the idea is easier to explain. There’s less to question. You’re also finding it harder to remember why you were excited.",
+      "I think that can happen when we ask for approval before an idea has had time to become something.",
+      "We’re showing people a beginning and asking them to judge it like a finished thing. They fill in the missing parts using what they already know. Sometimes we haven’t figured out enough ourselves to explain why their suggestion takes it somewhere else.",
+      "So we agree.",
+      "I don’t think protecting an idea means treating every criticism as a misunderstanding. Someone can see a problem you’ve become too attached to notice. You need room for that.",
+      "But I’d want to ask what each change improves, and whether it still serves the thing I wanted to explore.",
+      "Otherwise, it’s easy to keep removing whatever makes someone hesitate. An unusual interaction. An uncomfortable image. A choice that needs a little more time to make sense.",
+      "Eventually, there’s very little left to disagree with.",
+      "That might feel reassuring. I’m less sure it means the idea got better.",
+      "If nobody objects to what you made, did you get it right, or did you remove everything worth having an opinion about?",
+    ],
+  },
+  {
     slug: "what-if-good-enough-becomes-what-everyone-expects",
     title: "What if “good enough” becomes what everyone expects?",
     description: "On AI-made work becoming ordinary, changing creative expectations, and whether there will still be room to pursue something better than good enough.",
