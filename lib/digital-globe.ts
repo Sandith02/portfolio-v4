@@ -130,7 +130,7 @@ export function createDigitalGlobe() {
   glow.renderOrder=2;
   root.add(glow);
   return {
-    root, material,
+    root,
     resize(height: number, pixelRatio: number) { glowUniforms.uHeight.value=height*pixelRatio; },
     update(alpha: number, time: number) {
       material.opacity = coreMaterial.opacity = alpha;

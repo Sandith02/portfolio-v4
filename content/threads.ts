@@ -3,7 +3,6 @@ export type Thread = {
   title: string;
   description: string;
   published: string;
-  sharingHeadline: string;
   paragraphs: readonly string[];
   emphasizeQuestion?: boolean;
 };
@@ -16,7 +15,6 @@ export const threads: readonly Thread[] = [
     title: "What if “good enough” becomes what everyone expects?",
     description: "On AI-made work becoming ordinary, changing creative expectations, and whether there will still be room to pursue something better than good enough.",
     published: "2026-10-13",
-    sharingHeadline: "What if “good enough”\nbecomes what\neveryone expects?",
     emphasizeQuestion: true,
     paragraphs: [
       "I’m worried about what happens to creatives when AI-made work becomes ordinary.",
@@ -41,7 +39,6 @@ export const threads: readonly Thread[] = [
     title: "Good on their own. Why not together?",
     description: "On connecting typography, motion and visual themes, and judging design choices by how well they support each other.",
     published: "2026-10-11",
-    sharingHeadline: "Good on their own.\nWhy not together?",
     paragraphs: [
       "I think we sometimes give the most noticeable parts of a website too much credit.",
       "A gradient catches your eye. An animation makes you pause. A transition feels satisfying. But after that first impression, does the rest of the design hold together?",
@@ -63,7 +60,6 @@ export const threads: readonly Thread[] = [
     title: "What if AI stops being the cheap option?",
     description: "On the time and effort behind repeated AI attempts, the incentives of usage-based pricing, and knowing when to do a task yourself.",
     published: "2026-10-10",
-    sharingHeadline: "What if AI stops\nbeing the\ncheap option?",
     emphasizeQuestion: true,
     paragraphs: [
       "I sometimes wonder how much of the way we use AI depends on what it costs right now.",
@@ -90,7 +86,6 @@ export const threads: readonly Thread[] = [
     title: "The same eyes like both.",
     description: "On finding beauty in unsettling art and familiar scenery, and making room for the different things that catch our attention.",
     published: "2026-10-08",
-    sharingHeadline: "The same eyes\nlike both.",
     emphasizeQuestion: true,
     paragraphs: [
       "Sometimes I joke that I could design a character for a horror movie.",
@@ -116,7 +111,6 @@ export const threads: readonly Thread[] = [
     title: "I don’t like it anymore. Nothing changed.",
     description: "On revisiting old designs, changing taste and learning to tell the difference between creative growth and following what we see around us.",
     published: "2026-10-06",
-    sharingHeadline: "I don’t like it\nanymore.\nNothing changed.",
     emphasizeQuestion: true,
     paragraphs: [
       "You find an old design in a folder.",
@@ -140,7 +134,6 @@ export const threads: readonly Thread[] = [
     title: "You’ve been collecting ideas without noticing.",
     description: "On developing an eye for ideas in everyday life, building a library of references, and why creative judgment still matters alongside AI tools.",
     published: "2026-10-05",
-    sharingHeadline: "You’ve been\ncollecting ideas\nwithout noticing.",
     paragraphs: [
       "You might notice the way light hits a building on your way to work. A strange typeface on a poster. The shape of a car light. The way a scene in a movie is framed, or how an animation moves while you’re scrolling.",
       "Most people see these things too.",
@@ -166,7 +159,6 @@ export const threads: readonly Thread[] = [
     title: "Maybe we needed permission to see it.",
     description: "On reputation, creative judgment and how knowing who made something can change the time and attention we give their work.",
     published: "2026-10-03",
-    sharingHeadline: "Maybe we needed\npermission\nto see it.",
     paragraphs: [
       "Imagine opening a website made by a student you’ve never heard of.",
       "The navigation is unusual. The heading takes up almost the whole screen. There’s an animation you don’t completely understand.",
@@ -192,7 +184,6 @@ export const threads: readonly Thread[] = [
     title: "Human-made might become a luxury.",
     description: "On AI, human effort and why evidence that someone paid attention might become the most valuable part of a digital experience.",
     published: "2026-10-01",
-    sharingHeadline: "Human-made\nmight become\na luxury.",
     paragraphs: [
       "You pick up a shirt. You like the colour. It fits.",
       "Then you check the label.",
@@ -218,7 +209,6 @@ export const threads: readonly Thread[] = [
     title: "Someone designed your idea of expensive.",
     description: "On the visual cues that make something feel premium, the expectations websites create, and what happens when a brand has to live up to them.",
     published: "2026-09-30",
-    sharingHeadline: "Someone designed\nyour idea of\nexpensive.",
     paragraphs: [
       "Imagine a small bottle of perfume on a white page.",
       "There’s one photograph. A name you’re not sure how to pronounce. Plenty of empty space. You have to scroll to find the price.",
@@ -241,7 +231,6 @@ export const threads: readonly Thread[] = [
     title: "It works. Why can’t I leave it alone?",
     description: "On frontend details, perfectionism and learning when another adjustment makes the work better, and when it’s time to close the laptop.",
     published: "2026-09-28",
-    sharingHeadline: "It works.\nWhy can’t I\nleave it alone?",
     paragraphs: [
       "You’re about to close the laptop.",
       "Then you notice it. The heading feels slightly too far from the paragraph.",
@@ -265,7 +254,6 @@ export const threads: readonly Thread[] = [
     title: "What if we stop having something to say?",
     description: "A reflection on AI, creative patience and the small effort of finding our own words before asking a tool what to say.",
     published: "2026-09-27",
-    sharingHeadline: "What if we stop\nhaving something\nto say?",
     paragraphs: [
       "Imagine writing a birthday message for someone you’ve known for ten years.",
       "You open AI.",
@@ -291,7 +279,6 @@ export const threads: readonly Thread[] = [
     title: "How much of this actually happened?",
     description: "On the stories we build around short messages, seen labels and typing indicators, and what those assumptions mean for the people designing interfaces.",
     published: "2026-09-26",
-    sharingHeadline: "How much of this\nactually happened?",
     paragraphs: [
       "Someone replies, “Okay.”",
       "You look at it again.",
@@ -315,7 +302,6 @@ export const threads: readonly Thread[] = [
     title: "Why do we save things we never return to?",
     description: "A reflection on saved places, memories and the people behind them, and the quiet assumption built into every bookmark button: that we’ll come back.",
     published: "2026-09-25",
-    sharingHeadline: "Why do we save\nthings we never\nreturn to?",
     paragraphs: [
       "Somewhere in your phone, there might be a place you saved for two people.",
       "A small café. A beach. Somewhere someone once said, “We should go there.”",
@@ -340,7 +326,6 @@ export const threads: readonly Thread[] = [
     title: "Would I still make this if nobody could see it?",
     description: "On the satisfaction of making things, the pull of an audience, and whether the hope of a reaction starts choosing what we create next.",
     published: "2026-09-23",
-    sharingHeadline: "Would I still\nmake this if nobody\ncould see it?",
     paragraphs: [
       "You publish something, close the tab, and get on with your day.",
       "A few minutes later, you’re back.",
@@ -364,7 +349,6 @@ export const threads: readonly Thread[] = [
     title: "Is there a galaxy inside your head?",
     description: "A reflection on memory, connected thoughts and imagining the mind as a galaxy, through the eyes of a designer who builds interfaces.",
     published: "2026-09-22",
-    sharingHeadline: "Is there a galaxy\ninside your head?",
     paragraphs: [
       "You hear a song you haven’t heard in years.",
       "For a moment, you remember a room. Someone who used to sit beside you. A conversation you thought you’d forgotten. You were just choosing something to listen to, and somehow you ended up somewhere else.",

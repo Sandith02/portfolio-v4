@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 // Sandith's chosen words and phrases, preserved verbatim.
-export const thoughtWords = [
+const thoughtWords = [
   "SANDITH", "SITHMAKA", "UNSAID", "UNREAD", "QUIET", "STILL", "WITHIN", "RESTLESS",
   "WATCHFUL", "UNFINISHED", "BECOMING", "WONDER", "IMAGINE", "FREEDOM", "EXPRESSION", "POSSIBILITY",
   "WHAT IF", "LOOK CLOSER", "MORE THAN I SHOW", "THINKING IN PIXELS", "ROOM TO CREATE",
@@ -10,7 +10,6 @@ export const thoughtWords = [
   "THIS IS WHERE THE QUIET GOES", "SANDITH WAS HERE", "MY MIND"
 ];
 
-export const THOUGHT_WORD_COUNT = 128 * 80;
 const singleWords = thoughtWords.filter(word => !word.includes(" "));
 
 export function wordTexture(size: number, uniformSize = false, compact = false) {

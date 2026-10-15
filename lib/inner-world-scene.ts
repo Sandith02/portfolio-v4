@@ -11,10 +11,9 @@ import { createPlanetarySystem } from "./planetary-system";
 import { createMindGateway } from "./mind-gateway";
 import { atmosphericEvents, HERO_BACKGROUND_FRAGMENT } from "./hero-atmosphere";
 
-export type InnerWorldScene = { setPaused: (value: boolean) => void; dispose: () => void };
+export type InnerWorldScene = { dispose: () => void };
 
 import { wordTexture } from "./thought-texture";
-export { thoughtWords, THOUGHT_WORD_COUNT } from "./thought-texture";
 
 function disposeObject(object: THREE.Object3D) {
   const textures = new Set<THREE.Texture>();
@@ -363,7 +362,6 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
     red.intensity = 7 + Math.sin(elapsed * .18) * .5 + p * 6;
     hero.style.setProperty("--inner-first", Math.max(0, 1 - p * 3.5).toFixed(3));
     hero.style.setProperty("--inner-second", Math.max(0, 1 - Math.abs(p - .47) * 5.5).toFixed(3));
-    hero.style.setProperty("--inner-last", (THREE.MathUtils.smoothstep(p, .72, .85) * (1 - THREE.MathUtils.smoothstep(p, .83, .94))).toFixed(3));
     renderer.render(scene, camera);
     planets.draw(progress, elapsed);
     if (returnDestination && hero.dataset.returnReady !== "true" && Math.abs(progress - returnDestination.progress) < .05) hero.dataset.returnReady = "true";
@@ -408,7 +406,6 @@ export async function createInnerWorldScene(host: HTMLDivElement, hero: HTMLElem
   }
   resize(); progress = targetProgress; gateway.update(progress); draw(); host.dataset.ready = "true"; sync();
   return {
-    setPaused(value) { paused = value; sync(); },
     dispose() {
       destroyed = true; cancelAnimationFrame(frame); observer.disconnect(); resizeObserver.disconnect();
       window.removeEventListener("scroll", measure); hero.removeEventListener("pointermove", pointer); hero.removeEventListener("pointerleave", leave);

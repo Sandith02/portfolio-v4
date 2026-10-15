@@ -1,8 +1,8 @@
-export const CONSENT_KEY = "sandith-cookie-choice-v1";
-export const CONSENT_EVENT = "sandith-cookie-choice";
+const CONSENT_KEY = "sandith-cookie-choice-v1";
+const CONSENT_EVENT = "sandith-cookie-choice";
 export const SETTINGS_EVENT = "sandith-cookie-settings";
 export const GA_ID = "G-0DX5RCBC2Q";
-export const CONSENT_DAYS = 180;
+const CONSENT_DAYS = 180;
 export type CookieChoice = "accepted" | "rejected" | "unknown";
 type StoredChoice = { choice: Exclude<CookieChoice, "unknown">; expires: number };
 let memory: StoredChoice | null = null;

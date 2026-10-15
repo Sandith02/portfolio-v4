@@ -1,10 +1,7 @@
 :root {
   --black: #090909;
-  --black-soft: #151515;
   --white: #f2f1ec;
   --grey: #a9a9a3;
-  --line-dark: rgba(255, 255, 255, .22);
-  --line-light: rgba(9, 9, 9, .2);
   --cyan: #5ce8ff;
   --selection-bg: #343940;
   --focus-ring: #cbd3d6;
@@ -72,7 +69,7 @@ body:has(.inner-hero, #about-title, #work-title, #contact-title, #why-title, #th
 .link-arrow:hover { color: var(--white); background: var(--black); }
 
 /* Homepage: an inner world */
-.inner-hero { --inner-first: 1; --inner-second: 0; --inner-last: 0; position: relative; height: 400svh; color: #d8dedc; background: #141417; }
+.inner-hero { --inner-first: 1; --inner-second: 0; position: relative; color: #d8dedc; background: #141417; }
 .cinematic-stage { position: sticky; top: 0; height: 100svh; min-height: 640px; overflow: hidden; isolation: isolate; transform: translate(var(--idea-shake-x, 0px), var(--idea-shake-y, 0px)) rotate(var(--idea-shake-roll, 0deg)) scale(var(--idea-shake-scale, 1)); }
 .inner-viewport { position: absolute; inset: 0; z-index: -4; background: #141417; }
 .inner-viewport canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 800ms ease; }
@@ -125,7 +122,6 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-title-note { position: absolute; top: 100%; left: 0; width: 100%; margin: 1.4rem 0 0; color: #afb5b6; font: 400 clamp(.75rem, .95vw, 1rem)/1.7 var(--hero-body); letter-spacing: .005em; }
 .inner-chapter-first { opacity: var(--inner-first); }
 .inner-chapter-second { opacity: var(--inner-second); }
-.inner-chapter-last { opacity: var(--inner-last); }
 .inner-opportunity { position: absolute; right: var(--pad); bottom: 16%; text-align: right; font: 400 clamp(.75rem, .9vw, .95rem)/1.6 var(--hero-body); }
 .inner-opportunity a { display: inline-flex; align-items: center; gap: 1.3rem; min-height: 44px; color: #e4e9e6; border-bottom: 1px solid #8ba49c66; }
 .inner-opportunity a:hover { border-color: #e4e9e6; }
@@ -142,7 +138,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 .inner-linkedin:hover .inner-linkedin-arrow { background: #414149; }
 .inner-credits { position: absolute; bottom: 0; right: var(--pad); min-height: 23px; display: flex; align-items: center; color: #697a76; font: 400 .43rem/1 var(--mono); }
 .inner-hero :focus-visible { outline-color: #d8dedc; }
-.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) { height: 100svh; --inner-first: 1 !important; --inner-second: 0 !important; --inner-last: 0 !important; }
+.inner-hero:is([data-fallback="true"], [data-render-loading="true"]) { height: 100svh; --inner-first: 1 !important; --inner-second: 0 !important; }
 
 /* Shared inner pages */
 .display-sm { margin: 0; font-size: clamp(2.6rem, 5vw, 5.5rem); font-stretch: 72%; font-weight: 780; letter-spacing: -.06em; line-height: .84; }
@@ -158,9 +154,7 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 }
 
 @media (max-width: 767px) {
-  .inner-hero { height: 360svh; }
   .inner-poster { background-image: url("/images/inner-world-background-mobile.webp"); }
-  .cinematic-stage { min-height: 700px; }
   .inner-topline { top: calc(var(--header) + 20px); font-size: .78rem; }
   .inner-topline-role { margin-top: .1rem; font-size: 1.15rem; }
   .inner-chapter-left, .inner-chapter-right { top: auto; bottom: 24%; width: 44%; }
@@ -340,12 +334,6 @@ html[data-world-returning] .inner-viewport[data-ready="true"] canvas { transitio
 }
 @media (prefers-reduced-motion: reduce) { .galaxy-footer { display: none; } }
 
-.blogs-page { font-family: var(--hero-body); }
-.blogs-page .page-hero { background: radial-gradient(ellipse at 85% 15%, #29201755, transparent 60%), #090a0c; }
-.blogs-page .page-hero .eyebrow { color: #c7a77c; }
-.blogs-page h1 { font: 400 clamp(3.3rem, 8vw, 8.5rem)/1.05 var(--hero-display); margin: 0 0 2rem; text-transform: uppercase; }
-.blogs-empty { border-top: 1px solid #c7a77c33; padding-top: 1.5rem; }
-.blogs-empty .body-xl { margin: 1rem 0 .6rem; }
 
 /* A brief introduction in the same galaxy as the inner worlds. */
 .mind-splash { position: fixed; inset: 0; z-index: 10000; overflow: hidden; outline: none; background: #0b0d0f; color: #dce2df; opacity: 1; transition: opacity 700ms ease, visibility 700ms; }

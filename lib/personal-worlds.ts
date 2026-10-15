@@ -5,56 +5,15 @@ import { createAboutRings } from "./about-rings";
 import { createThreadsGlobe } from "./threads-globe";
 import { createWhyGlobe } from "./why-globe";
 
-// Three related materials, three different ways of revealing an inner world.
-const grain = `
-  varying vec3 vWorldSurface;
-  float surfaceNoise(vec3 p){return sin(p.x*4.7+sin(p.z*3.1))*sin(p.y*5.3+p.z*2.7);}
-`;
-function surface(color: number, metalness: number, roughness: number, smoke = false) {
-  const material = new THREE.MeshPhysicalMaterial({
-    color, metalness, roughness, clearcoat: smoke ? .55 : .75, clearcoatRoughness: .28,
-    envMapIntensity: smoke ? .35 : .65, transparent: true, opacity: 1,
-    side: THREE.DoubleSide,
-  });
-  material.onBeforeCompile = shader => {
-    shader.vertexShader = "varying vec3 vWorldSurface;\n" + shader.vertexShader;
-    shader.vertexShader = shader.vertexShader.replace("#include <begin_vertex>", "#include <begin_vertex>\nvWorldSurface=position;");
-    shader.fragmentShader = grain + shader.fragmentShader;
-    shader.fragmentShader = shader.fragmentShader.replace("#include <roughnessmap_fragment>", `
-      #include <roughnessmap_fragment>
-      float veins=surfaceNoise(vWorldSurface*2.3+surfaceNoise(vWorldSurface*4.));
-      roughnessFactor=clamp(roughnessFactor+veins*.045,.12,.65);
-    `);
-    if (smoke) shader.fragmentShader = shader.fragmentShader.replace("#include <color_fragment>", `
-      #include <color_fragment>
-      float cloud=surfaceNoise(vWorldSurface*1.7)*.5+.5;
-      diffuseColor.rgb*=.75+cloud*.35;
-    `);
-    if (smoke) shader.fragmentShader = shader.fragmentShader.replace("#include <opaque_fragment>", `
-      #include <opaque_fragment>
-      float edge=pow(1.-abs(dot(normal,normalize(vViewPosition))),2.);
-      gl_FragColor.a*=.38+edge*.52;
-    `);
-  };
-  material.customProgramCacheKey = () => `inner-material-${smoke}`;
-  return material;
-}
-
 export function createPersonalWorld(index: number, thoughts: THREE.Texture) {
   const compact = isMobileRendering();
   const root = new THREE.Group();
   const sculpture = new THREE.Group();root.add(sculpture);
   const geometries = new Set<THREE.BufferGeometry>();
-  const materials = new Map<THREE.Material, number>();
-  const smoke = surface(0x20313d, .08, .3, true);
-  smoke.depthWrite=false;
-  const silver = surface(0x9daeb6, .8, .32);
-  const inner = surface(0x080f16, .12, .5);
-  inner.envMapIntensity=.18;inner.clearcoat=.12;
-  materials.set(smoke, 1);materials.set(silver, 1);materials.set(inner, 1);
-  function mesh(geometry: THREE.BufferGeometry, material: THREE.Material, parent: THREE.Object3D = sculpture) {
-    geometries.add(geometry);if (!materials.has(material)) materials.set(material, 1);
-    const object = new THREE.Mesh(geometry, material);parent.add(object);return object;
+  const materials = new Set<THREE.MeshPhysicalMaterial>();
+  function mesh(geometry: THREE.BufferGeometry, material: THREE.MeshPhysicalMaterial) {
+    geometries.add(geometry);materials.add(material);
+    const object = new THREE.Mesh(geometry, material);sculpture.add(object);
   }
   const contact = index === 2 ? createContactGlobe() : undefined;
   const threads = index === 4 ? createThreadsGlobe() : undefined;
@@ -111,25 +70,22 @@ export function createPersonalWorld(index: number, thoughts: THREE.Texture) {
   }
 
   return {
-    root, material: smoke,
+    root,
     resize(height: number, pixelRatio: number) { contact?.resize(height,pixelRatio); },
     setEnvironment(texture: THREE.Texture) {
       contact?.setEnvironment(texture);
       threads?.setEnvironment(texture);
       why?.setEnvironment(texture);
-      materials.forEach((_,material)=>{if(material instanceof THREE.MeshStandardMaterial){material.envMap=texture;material.needsUpdate=true;}});
+      materials.forEach(material=>{material.envMap=texture;material.needsUpdate=true;});
     },
     update(time: number, alpha: number) {
       contact?.update(time,alpha);
       threads?.update(time,alpha);
       rings?.update(time,alpha);
       why?.update(time,alpha);
-      materials.forEach((base,material)=>{
-        material.opacity=alpha*base;
-        if (material instanceof THREE.ShaderMaterial && material.uniforms.alpha) material.uniforms.alpha.value=alpha;
-      });
+      materials.forEach(material=>{material.opacity=alpha;});
 
     },
-    dispose(){why?.dispose();threads?.dispose();contact?.dispose();rings?.dispose();geometries.forEach(g=>g.dispose());materials.forEach((_,m)=>m.dispose());},
+    dispose(){why?.dispose();threads?.dispose();contact?.dispose();rings?.dispose();geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());},
   };
 }

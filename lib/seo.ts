@@ -14,32 +14,32 @@ export const seoPages = {
   home: {
     path: "/", title: `${AUTHOR_NAME} | Design Engineer`,
     description: `The portfolio of ${AUTHOR_NAME}, a design engineer and creative frontend developer in Sri Lanka. Explore his projects, design work and Threads.`,
-    headline: "Quiet outside.\nWorlds within.", label: "Design engineer & creative frontend developer", index: true,
+    headline: "Quiet outside.\nWorlds within.", index: true,
   },
   about: {
     path: "/about", title: `About ${AUTHOR_NAME} | Design Engineer`,
     description: `Meet ${AUTHOR_NAME}, a design engineer and creative frontend developer in Sri Lanka. Discover his background, qualifications and creative approach.`,
-    headline: "Ideas I want\nto make real.", label: "About Sandith Sithmaka", index: true,
+    headline: "Ideas I want\nto make real.", index: true,
   },
   work: {
     path: "/work", title: `Selected Work | ${AUTHOR_NAME}`,
     description: `Explore ${AUTHOR_NAME}’s work across websites, product UI/UX, frontend engineering and branding, including Cogent Solutions and Tourithm.`,
-    headline: "Things\nI made.", label: "Selected work · Design & frontend engineering", index: true,
+    headline: "Things\nI made.", index: true,
   },
   contact: {
     path: "/contact", title: `Contact ${AUTHOR_NAME}`,
     description: `Contact ${AUTHOR_NAME} for projects and collaborations in frontend development, UI/UX and brand identity. Based in Sri Lanka.`,
-    headline: "Something\nin mind?", label: "Projects & collaborations", index: true,
+    headline: "Something\nin mind?", index: true,
   },
   why: {
     path: "/why", title: `Why I Create | ${AUTHOR_NAME}`,
     description: `Why ${AUTHOR_NAME} creates: curiosity, making ideas real and finding a form between art and code. The thinking behind his design and development work.`,
-    headline: "Where the\nquiet goes.", label: "The thinking behind the work", index: true,
+    headline: "Where the\nquiet goes.", index: true,
   },
   threads: {
     path: "/blogs", title: `Threads | Design & Code by ${AUTHOR_NAME}`,
     description: `Personal reflections on design, code and the ideas in between by ${AUTHOR_NAME}, a design engineer and creative frontend developer in Sri Lanka.`,
-    headline: "Thoughts\ntaking shape.", label: "Threads · By Sandith Sithmaka", index: true,
+    headline: "Thoughts\ntaking shape.", index: true,
   },
 } as const;
 

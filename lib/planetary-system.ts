@@ -36,19 +36,16 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
 
   const depths = PLANET_DEPTHS;
   let finaleStartedAt = -1;
-  const airColors = [0xa7bec9, 0xc4c3c1, 0x628ca8, 0xc39770, 0xd7a46a];
   const planets = depths.map((depth, index) => {
     const group = new THREE.Group();
     const personal = index > 0 ? createPersonalWorld(index, thoughts) : undefined;
     const digital = index === 0 ? createDigitalGlobe() : undefined;
-    const surface = personal?.material ?? digital!.material;
     const geometry = index === 0 ? new THREE.SphereGeometry(1, compact ? 48 : 128, compact ? 32 : 96) : null;
     if (geometry) geometries.push(geometry);
-    surface.side = personal ? THREE.DoubleSide : THREE.FrontSide;
     const globe = personal?.root ?? digital!.root;
     group.add(globe);
-    const air = new THREE.ShaderMaterial({
-      uniforms: { tint: { value: new THREE.Color(airColors[index]) }, alpha: { value: 0 } },
+    const air = geometry ? new THREE.ShaderMaterial({
+      uniforms: { tint: { value: new THREE.Color(0xa7bec9) }, alpha: { value: 0 } },
       transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
       vertexShader: `varying vec3 n,eye,worldN;
         void main(){vec4 v=modelViewMatrix*vec4(position,1.);n=normalize(normalMatrix*normal);
@@ -57,15 +54,15 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
         void main(){float edge=pow(1.-max(0.,dot(normalize(n),normalize(eye))),4.);
           float day=smoothstep(-.3,.7,dot(normalize(worldN),normalize(vec3(-12.,9.,14.))));
           gl_FragColor=vec4(tint,edge*day*.16*alpha);}`,
-    });
-    materials.push(air);
-    if (geometry) {
+    }) : null;
+    if (geometry && air) {
+      materials.push(air);
       const atmosphere = new THREE.Mesh(geometry, air);
       atmosphere.scale.setScalar(1.016);
       globe.add(atmosphere);
     }
     scene.add(group);
-    return { group, globe, surface, personal, digital, air, depth, radius: 1, turnX: 0, turnY: 0, velocity: 0 };
+    return { group, globe, personal, digital, air, depth, radius: 1, turnX: 0, turnY: 0, velocity: 0 };
   });
 
   const random = (n: number) => THREE.MathUtils.seededRandom(n);
@@ -301,17 +298,15 @@ export function createPlanetarySystem(renderer: THREE.WebGLRenderer, hero: HTMLE
           planet.turnY += delta * (.023 + planet.velocity);
           planet.velocity *= Math.exp(-delta * 2.6);
         }
-        planet.group.visible = finaleAge < 0;
         planet.globe.rotation.set(planet.turnX, planet.turnY, 0);
         const depth = camera.position.z - planet.group.position.z;
         const visibility = 1 - THREE.MathUtils.smoothstep(depth, 82, 120);
         planet.group.visible = finaleAge < 0 && depth > -planet.radius * 2 && visibility > .001;
-        planet.surface.opacity = reveal * visibility;
         if (planet.group.visible) {
           planet.digital?.update(reveal * visibility, time);
           planet.personal?.update(time, reveal * visibility);
         }
-        planet.air.uniforms.alpha.value = i === 3 ? 0 : reveal * visibility * (hovered === i ? 1.3 : 1) * (i === 1 ? .5 : 1);
+        if (planet.air) planet.air.uniforms.alpha.value = reveal * visibility * (hovered === i ? 1.3 : 1);
         projected.copy(planet.group.position).project(camera);
         const radiusPx = planet.radius / (Math.max(.1, depth) * Math.tan(THREE.MathUtils.degToRad(19))) * height / 2;
         const link = links[i];
